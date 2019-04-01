@@ -20,26 +20,22 @@ class User extends Schema{
     public $table = 'users';
 
     private $user_id;
-    private $firstname;
-    private $lastname;
+    private $fullname;
     private $email;
     private $phone;
+    private $accountType;
+    private $status;
     private $password;
 
 
     public $model = array(
         'user_id' => 'id',
-        'firstname' => 'string',
-        'lastname' => 'string',
+        'fullname' => 'string',
         'email' => 'email',
         'phone' => 'string',
-        'address' => 'text',
-        'city' => 'string',
-        'state' => 'string',
-        'country' => 'string',
-        'zip_code' => 'int',
-        'profile_image' => 'string',
-        'password' => 'string'
+        'password' => 'string',
+        'account_type' => 'string',
+        'status' => 'string',
     );
 
 }
