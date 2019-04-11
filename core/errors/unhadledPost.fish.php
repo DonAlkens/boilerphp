@@ -14,7 +14,7 @@
             width: 60%;
             text-align: center;
             padding: 40px 20px;
-            background-color: orange;
+            background-color: #fff;
         }
 
         .center-box p {
@@ -24,8 +24,10 @@
 </head>
 <body>
     <div class="center-box">
-        <h2>404 Page Not Found</h2>
-        <p>the requested page is not found on this domain server.</p>
+        <h2>Unhandled Post Request</h2>
+        <p>This url cannot handle a post request. this may be due to unregistered route. <br>
+            Please make sure all request routes are registered in the route.php file.
+        </p>
         <a href="">learn more.</a>
     </div>
 </body>

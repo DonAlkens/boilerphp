@@ -20,20 +20,7 @@ use App\Core\Engine\Router\Request;
 
 class BaseController extends Controller {
 
-    public function index(){
-        return view("index");
-    }
-
-    public function testing(){
-        Fs::copy(".env","bundles/.env");
-    }
-
-    public function tour($request){
-
-        if(isset($request->param["category"])){
-            return view("build_mode");
-        }
-
-        return view("tour");
+    public function welcome(){
+        return view("base/welcome");
     }
 }

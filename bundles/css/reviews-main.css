@@ -1,0 +1,453 @@
+a, a:hover {text-decoration: none !important;}
+.widgetOuterContainer {
+  position: relative;
+  /*body,
+  html {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden
+  }*/
+  /*    @media screen and (min-width:1640px) {
+          .CarouselWidget .reviewsContainer .reviewWrap {
+              width: 20%
+          }
+      }
+  
+      @media screen and (max-width:1640px) {
+          .CarouselWidget .reviewsContainer .reviewWrap {
+              width: 25%
+          }
+      }*/ }
+  .widgetOuterContainer .CarouselWidget,
+  .widgetOuterContainer .CarouselWidget * {
+    box-sizing: border-box;
+    transition: none; }
+  .widgetOuterContainer .CarouselWidget a.header__content .header__stats:after,
+  .widgetOuterContainer .CarouselWidget a.header__content .reviewsLogoWrap:after,
+  .widgetOuterContainer .CarouselWidget a.header__content .stats__left:after,
+  .widgetOuterContainer .CarouselWidget a.header__content .stats__right:after,
+  .widgetOuterContainer .CarouselWidget a.header__content:after,
+  .widgetOuterContainer .RatingStars:after,
+  .widgetOuterContainer .ReviewsLogo:after,
+  .widgetOuterContainer .cfx:after {
+    content: "";
+    display: table;
+    clear: both; }
+  @media screen and (min-width: 381px) {
+    .widgetOuterContainer .show-mobile {
+      display: none; } }
+  @media screen and (max-width: 380px) {
+    .widgetOuterContainer .hide-mobile {
+      display: none; } }
+  .widgetOuterContainer .blockWrap {
+    display: block; }
+  .widgetOuterContainer .inlineWrap {
+    display: inline-block; }
+  .widgetOuterContainer .vhCenter {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto; }
+  .widgetOuterContainer .CarouselWidget a.header__content .ReviewsLogo,
+  .widgetOuterContainer .vCenter {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto; }
+  .widgetOuterContainer .CarouselWidget a.header__content--withTip:after,
+  .widgetOuterContainer .CarouselWidget a.header__content--withTip:before,
+  .widgetOuterContainer .hCenter {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto; }
+  .widgetOuterContainer .container380,
+  .widgetOuterContainer .container640,
+  .widgetOuterContainer .hRCenter {
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; }
+  .widgetOuterContainer .mBorderRadius {
+    border-radius: 6px; }
+  .widgetOuterContainer .container380 {
+    max-width: 380px;
+    width: 100%; }
+  @media screen and (min-width: 580px) {
+    .widgetOuterContainer .container380 {
+      display: none; } }
+  .widgetOuterContainer .container640 {
+    max-width: 640px;
+    width: 100%; }
+  .widgetOuterContainer .RatingStatisticsWrap {
+    display: inline-block; }
+  .widgetOuterContainer .RatingStatistics {
+    display: inline-block;
+    font-size: 16px;
+    padding: 0 2%; }
+  .widgetOuterContainer .RatingStatistics .RatingStatistics__Number {
+    display: inline-block;
+    color: #000;
+    font-weight: 500; }
+  .widgetOuterContainer .RatingStatistics .RatingStatistics__Text {
+    display: inline-block;
+    color: #a3a3a3;
+    font-weight: lighter; }
+  .widgetOuterContainer .ReviewsLogo {
+    display: inline-block; }
+  .widgetOuterContainer .ReviewsLogo .ReviewsLogo__star {
+    float: left;
+    display: inline-block;
+    margin-right: 5px; }
+  .widgetOuterContainer .ReviewsLogo .ReviewsLogo__star i {
+    color: #12cf6c;
+    font-size: 21px; }
+  .widgetOuterContainer .ReviewsLogo .ReviewsLogo__text {
+    float: left;
+    display: inline-block; }
+  .widgetOuterContainer .ReviewsLogo .ReviewsLogo__text i {
+    color: #000;
+    font-size: 16px;
+    line-height: 24px; }
+  .widgetOuterContainer .ReviewsLogo--small .ReviewsLogo__star i,
+  .widgetOuterContainer .ReviewsLogo--small .ReviewsLogo__text i {
+    font-size: 12px;
+    line-height: 21px; }
+  .widgetOuterContainer .ReviewsLogo--medium .ReviewsLogo__star i {
+    font-size: 21px;
+    line-height: 23px; }
+  .widgetOuterContainer .ReviewsLogo--medium .ReviewsLogo__text i {
+    font-size: 16px;
+    line-height: 24px; }
+  .widgetOuterContainer .ReviewsLogo--large .ReviewsLogo__star {
+    margin-right: 8px; }
+  .widgetOuterContainer .ReviewsLogo--large .ReviewsLogo__star i {
+    font-size: 32px;
+    line-height: 32px; }
+  .widgetOuterContainer .ReviewsLogo--large .ReviewsLogo__text i {
+    font-size: 25px;
+    line-height: 32px; }
+  .widgetOuterContainer .RatingVerdict {
+    font-size: 22px;
+    color: #000;
+    text-align: left;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-right: 10px; }
+  .widgetOuterContainer .RatingStars {
+    display: inline-block; }
+  .widgetOuterContainer .RatingStars i.RatingStars__star {
+    display: inline-block;
+    float: left;
+    color: #11CD6B; }
+  .widgetOuterContainer .RatingStars--small i.RatingStars__star {
+    font-size: 17px;
+    margin: 0 1px; }
+  .widgetOuterContainer .RatingStars--small i.RatingStars__star.ruk-icon-percentage-star-25-01,
+  .widgetOuterContainer .RatingStars--small i.RatingStars__star.ruk-icon-percentage-star-50-01,
+  .widgetOuterContainer .RatingStars--small i.RatingStars__star.ruk-icon-percentage-star-75-01 {
+    font-size: 14px; }
+  .widgetOuterContainer .RatingStars--medium i.RatingStars__star {
+    font-size: 27px;
+    line-height: 24px;
+    margin: 0 1px; }
+  .widgetOuterContainer .RatingStars--medium i.RatingStars__star.ruk-icon-percentage-star-25-01,
+  .widgetOuterContainer .RatingStars--medium i.RatingStars__star.ruk-icon-percentage-star-50-01,
+  .widgetOuterContainer .RatingStars--medium i.RatingStars__star.ruk-icon-percentage-star-75-01 {
+    font-size: 21px;
+    line-height: 20px; }
+  .widgetOuterContainer .RatingStars--large i.RatingStars__star {
+    font-size: 34px;
+    margin: 0 1px; }
+  .widgetOuterContainer .RatingStars--large i.RatingStars__star.ruk-icon-percentage-star-25-01,
+  .widgetOuterContainer .RatingStars--large i.RatingStars__star.ruk-icon-percentage-star-50-01,
+  .widgetOuterContainer .RatingStars--large i.RatingStars__star.ruk-icon-percentage-star-75-01 {
+    font-size: 26px;
+    line-height: 29px; }
+  .widgetOuterContainer .CarouselWidget {
+    z-index: 5;
+    position: relative;
+    width: 100%;
+    padding: 20px 40px 20px 0;
+    min-width: 320px; }
+  @media screen and (max-width: 580px) {
+    .widgetOuterContainer .CarouselWidget {
+      padding: 20px 40px; } }
+  .widgetOuterContainer .CarouselWidget a.header__content {
+    background-color: #FAFAFA;
+    border-radius: 6px;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), 0 5px 1px -3px rgba(0, 0, 0, 0.05);
+    display: block;
+    margin: 0 auto;
+    max-width: 768px;
+    padding: 15px 150px 18px 15px;
+    position: relative;
+    text-decoration: none;
+    text-align: center;
+    width: 100%; }
+  .widgetOuterContainer .CarouselWidget a.header__content--withTip:after,
+  .widgetOuterContainer .CarouselWidget a.header__content--withTip:before {
+    content: "";
+    height: 0;
+    width: 0;
+    border-style: solid;
+    border-width: 10px 12px; }
+  .widgetOuterContainer .CarouselWidget a.header__content:active,
+  .widgetOuterContainer .CarouselWidget a.header__content:hover {
+    text-decoration: none; }
+  .widgetOuterContainer .CarouselWidget a.header__content--withTip:before {
+    bottom: -21px;
+    border-color: #e1e1e1 transparent transparent; }
+  .widgetOuterContainer .CarouselWidget a.header__content--withTip:after {
+    bottom: -20px;
+    border-color: #FAFAFA transparent transparent; }
+  @media screen and (max-width: 767px) {
+    .widgetOuterContainer .CarouselWidget a.header__content {
+      padding-right: 35%; } }
+  .widgetOuterContainer .CarouselWidget a.header__content .header__stats {
+    display: inline-block;
+    width: auto;
+    float: left; }
+  @media screen and (max-width: 540px) {
+    .widgetOuterContainer .CarouselWidget a.header__content {
+      padding-bottom: 20px;
+      padding-right: 10px;
+      padding-left: 10px; }
+    .widgetOuterContainer .CarouselWidget a.header__content .header__stats {
+      float: none; } }
+  .widgetOuterContainer .CarouselWidget a.header__content .stats__left {
+    float: left;
+    display: inline-block;
+    width: 270px;
+    text-align: center; }
+  @media screen and (max-width: 767px) {
+    .widgetOuterContainer .CarouselWidget a.header__content .stats__left {
+      float: none;
+      display: block;
+      width: auto; } }
+  .widgetOuterContainer .CarouselWidget a.header__content .stats__left .RatingVerdict {
+    float: left;
+    display: inline-block;
+    position: relative;
+    top: 3px; }
+  @media screen and (max-width: 540px) {
+    .widgetOuterContainer .CarouselWidget a.header__content .stats__left .RatingVerdict {
+      float: none;
+      margin: 0; } }
+  @media screen and (max-width: 380px) {
+    .widgetOuterContainer .CarouselWidget a.header__content .stats__left .RatingVerdict {
+      text-align: center;
+      width: 100%; } }
+  .widgetOuterContainer .CarouselWidget a.header__content .stats__left .RatingStars {
+    float: left;
+    display: inline-block;
+    position: relative;
+    top: 6px; }
+  @media screen and (max-width: 540px) {
+    .widgetOuterContainer .CarouselWidget a.header__content .stats__left .RatingStars {
+      float: none; } }
+  .widgetOuterContainer .CarouselWidget a.header__content .stats__right {
+    float: left;
+    display: inline-block;
+    width: 290px;
+    padding: 0 1%;
+    text-align: center;
+    position: relative;
+    top: 9px; }
+  @media only screen and (min-width: 540px) and (max-width: 767px) {
+    .widgetOuterContainer .CarouselWidget a.header__content .stats__right {
+      display: block; } }
+  @media screen and (max-width: 767px) {
+    .widgetOuterContainer .CarouselWidget a.header__content .stats__right {
+      float: none;
+      width: auto;
+      top: 5px; }
+    .widgetOuterContainer .CarouselWidget a.header__content .stats__right .RatingStatistics {
+      padding-left: 5px;
+      padding-right: 5px; } }
+  .widgetOuterContainer .CarouselWidget a.header__content .stats__right .RatingStatistics:first-child {
+    float: left; }
+  @media screen and (max-width: 380px) {
+    .widgetOuterContainer .CarouselWidget a.header__content .stats__right {
+      padding-top: 0; }
+    .widgetOuterContainer .CarouselWidget a.header__content .stats__right .RatingStatistics:first-child {
+      float: none; } }
+  .widgetOuterContainer .CarouselWidget a.header__content .stats__right .RatingStatistics:last-child {
+    float: right; }
+  @media screen and (max-width: 380px) {
+    .widgetOuterContainer .CarouselWidget a.header__content .stats__right .RatingStatistics:last-child {
+      float: none; }
+    .widgetOuterContainer .CarouselWidget a.header__content .stats__right .RatingStatistics {
+      padding: 5px; } }
+  .widgetOuterContainer .CarouselWidget a.header__content .ReviewsLogo {
+    right: 15px;
+    height: 23px;
+    width: 130px; }
+  @media screen and (max-width: 540px) {
+    .widgetOuterContainer .CarouselWidget a.header__content .ReviewsLogo {
+      top: initial !important;
+      bottom: 10px !important;
+      left: 0;
+      right: 0;
+      margin: 0 auto; } }
+  .widgetOuterContainer .CarouselWidget .reviewsContainer {
+    position: relative;
+    width: calc(100% - 290px);
+    height: 100%;
+    float: left;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: Arial, sans-serif; }
+  @media screen and (max-width: 580px) {
+    .widgetOuterContainer .CarouselWidget .reviewsContainer {
+      width: 100%;
+      height: 50%; } }
+  .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap {
+    height: 100%;
+    width: 33.333%;
+    display: inline-block;
+    white-space: normal; }
+  @media screen and (max-width: 1200px) {
+    .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap {
+      width: 33.333%; } }
+  @media screen and (max-width: 920px) {
+    .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap {
+      width: 50%; } }
+  @media screen and (max-width: 620px) {
+    .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap {
+      width: 100%; } }
+  .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap .reviewHeader {
+    width: 100%;
+    margin-bottom: 5px;
+    padding: 0 5px; }
+  .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap .reviewHeader .author {
+    color: #636363;
+    float: left;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 13px 5px 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-transform: capitalize;
+    text-overflow: ellipsis;
+    max-width: 110px; }
+  .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap .reviewHeader .reviewStarsWrap {
+    display: inline-block;
+    float: left;
+    margin-top: 10px; }
+  .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap .reviewHeader .reviewStarsWrap i {
+    color: #11CD6B;
+    display: block;
+    float: left;
+    font-size: 24px;
+    margin: 0 1px; }
+  .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap .reviewHeader .reviewStarsWrap i.ruk-icon-percentage-star-25-01,
+  .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap .reviewHeader .reviewStarsWrap i.ruk-icon-percentage-star-50-01,
+  .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap .reviewHeader .reviewStarsWrap i.ruk-icon-percentage-star-75-01 {
+    font-size: 17px;
+    line-height: 22px; }
+  .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap .reviewText p {
+    color: #636363;
+    font-size: 13px;
+    margin: 10px 0;
+    padding: 0 5px; }
+  .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap .reviewMeta {
+    position: absolute;
+    bottom: 0;
+    right: 0; }
+  .widgetOuterContainer .CarouselWidget .reviewsContainer .reviewWrap .reviewMeta p {
+    color: #afafaf;
+    font-size: 12px;
+    text-align: right;
+    margin: 0;
+    padding: 0 5px;
+    white-space: nowrap; }
+  .widgetOuterContainer .scrollBtnWrap {
+    height: 260px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0; }
+  @media screen and (max-width: 380px) {
+    .widgetOuterContainer .scrollBtnWrap {
+      height: 350px; } }
+  .widgetOuterContainer .scrollBtn {
+    z-index: 6;
+    position: absolute;
+    border-radius: 2px;
+    display: inline-block;
+    height: 50px;
+    width: 40px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    text-align: center; }
+  .widgetOuterContainer .scrollBtn i {
+    line-height: 50px;
+    color: #dbdbdb;
+    font-size: 44px;
+    cursor: pointer;
+    -webkit-transition: color .15s ease-in-out;
+    -moz-transition: color .15s ease-in-out;
+    -ms-transition: color .15s ease-in-out;
+    -o-transition: color .15s ease-in-out;
+    transition: color 0.15s ease-in-out; }
+  .widgetOuterContainer .scrollBtn i:active,
+  .widgetOuterContainer .scrollBtn i:hover {
+    color: #c1c1c1; }
+  .widgetOuterContainer .scrollBtn.next {
+    right: 0; }
+  .widgetOuterContainer .scrollBtn.prev {
+    left: 0; }
+  .widgetOuterContainer .scrollBtn.unallowed i {
+    color: #f4f4f4; }
+  .widgetOuterContainer .fullWidth.CarouselWidget {
+    padding-left: 40px; }
+  .widgetOuterContainer .fullWidth.CarouselWidget .reviewsContainer {
+    width: 100%;
+    height: 150px;
+    margin-bottom: 10px; }
+  .widgetOuterContainer .fullWidth.CarouselWidget .cw__header {
+    float: left;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px; }
+  @media screen and (max-width: 580px) {
+    .widgetOuterContainer .scrollBtn {
+      bottom: 90px;
+      top: auto; }
+    .widgetOuterContainer .scrollBtn.prev {
+      left: 0; }
+    .widgetOuterContainer .fullWidth.CarouselWidget .cw__header .reviewsLogoWrap {
+      display: none; } }
+  .widgetOuterContainer .fullWidth .scrollBtn {
+    top: 70px; }
+  @media screen and (max-width: 767px) {
+    .widgetOuterContainer .fullWidth .scrollBtn {
+      top: 150px;
+      bottom: 0; } }
+  @media screen and (max-width: 540px) {
+    .widgetOuterContainer .fullWidth .scrollBtn {
+      top: 210px; } }
+  .widgetOuterContainer .fullWidth .scrollBtn.prev {
+    left: 0; }
+  .widgetOuterContainer .CarouselWidget .footer {
+    text-align: right; }
+  @media screen and (min-width: 580px) {
+    .widgetOuterContainer .CarouselWidget .footer .ReviewsLogo {
+      display: none; } }
+@-moz-document url-prefix() {
+  .widgetOuterContainer .RatingStars--medium i.RatingStars__star.ruk-icon-percentage-star-25-01,
+  .widgetOuterContainer .RatingStars--medium i.RatingStars__star.ruk-icon-percentage-star-50-01,
+  .widgetOuterContainer .RatingStars--medium i.RatingStars__star.ruk-icon-percentage-star-75-01 {
+    line-height: 22px; } }
+
+/*# sourceMappingURL=reviews-main.css.map */

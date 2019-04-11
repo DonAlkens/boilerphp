@@ -18,7 +18,7 @@ class Route {
 
     }
 
-    public function get($path, $controller){
+    static public function get($path, $controller){
         $map = [
             "url" => $path,
             "method" => "get",
@@ -27,7 +27,7 @@ class Route {
         Route::mapRoute($map);
     }
 
-    public function post($path, $controller){
+    static public function post($path, $controller){
         $map = [
             "url" => $path,
             "method" => "post",
@@ -36,7 +36,7 @@ class Route {
         Route::mapRoute($map);
     }
 
-    public function mapRoute(Array $route) {
+    static public function mapRoute(Array $route) {
         $method = strtolower($route["method"]);
         $set = self::$routes[$method];
 
@@ -70,15 +70,20 @@ class Route {
 
     }
 
-    public function listen(){
+    static public function listen(){
         $uri = trim($_SERVER["REQUEST_URI"],"/");
         $method = strtolower($_SERVER["REQUEST_METHOD"]);
 
+        if(strpos($uri,"?")){
+            $uri = preg_replace("/\?(.*)/","",$uri);
+        }
 
         # if uri is empty after trim
         if(empty($uri)) {
             $uri = "index";
         }
+
+
 
         # if uri is registered in method class
         if(array_key_exists($uri, self::$routes[$method])){
@@ -127,6 +132,11 @@ class Route {
                 echo call_user_func($path["action"], $req);
 
                 self::$lastUrl = $path;
+                return;
+            }
+
+            if($method === "post"){
+                echo unhandledPost();
                 return;
             }
 

@@ -19,7 +19,7 @@ $Cores = [
     ],
 
     "dependecies" => [
-        "controller" => "controllers/action/controller.php",
+        "controller" => "core/action/controller.php",
         "template" => "core/engine/template/template.php",
     ],
 
@@ -40,7 +40,8 @@ $dbConnection = [
 ];
 
 
-$temp = "";
+$viewpath = "views";
+$viewEngine = "fish";
 
 
 

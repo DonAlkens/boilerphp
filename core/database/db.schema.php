@@ -230,11 +230,13 @@ class Schema {
 
     private $sn = "int auto_increment not null,";
     private $id = "int(9) not null unique,";
+    private $textid = "varchar(255) not null unique,";
     private $email = "varchar(255) not null unique,";
     private $text = "text not null,";
     private $int = "int(10) not null,";
     private $bool = "tinyint not null";
     private $string = "varchar(255) not null,";
+    private $uniquestring = "varchar(255) not null unique,";
     private $datetime = "datetime default current_timestamp"; 
 
 }

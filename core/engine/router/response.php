@@ -33,3 +33,7 @@ function Redirect($location) {
     $location = "/".$location;
     return header("location:".$location);
 }
+
+function unhandledPost() {
+    return file_get_contents("core/errors/unhadledPost.fish.php");
+}

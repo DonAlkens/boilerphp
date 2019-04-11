@@ -7,3 +7,4 @@
  * @example 'Migration::Register("ModelName")'
 */
 
+Migration::Register("User");

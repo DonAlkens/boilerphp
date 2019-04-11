@@ -29,13 +29,25 @@ class User extends Schema{
 
 
     public $model = array(
-        'user_id' => 'id',
+        'user_id' => 'textid',
         'fullname' => 'string',
         'email' => 'email',
-        'phone' => 'string',
+        'username'=> 'uniquestring',
         'password' => 'string',
         'account_type' => 'string',
         'status' => 'string',
     );
 
+    public function generate_id(){
+
+        $start = uniqid();
+        $rand = rand(23456, 98125);
+        $end = uniqid();
+        return $start."_".$rand."_".$end;
+
+    }
+
+    public function set_password($password){
+        return password_hash($password, PASSWORD_DEFAULT);
+    }
 }

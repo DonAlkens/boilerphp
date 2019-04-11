@@ -22,3 +22,5 @@
  * Route::get("/admin", "AdminController::create_template");
  * Route::post("/admin", "AdminController::create_template");
  * */
+
+Route::get("/", "BaseController::welcome");

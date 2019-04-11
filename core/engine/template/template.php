@@ -15,13 +15,20 @@ class TemplateEngine {
         $fcontent = eval("?>". $fcontent ."<?php");
         return $fcontent;
     }
+
+
+    public function extendFile($fcontent, $content=null) {
+
+        $fcontent = preg_replace("/\{\% extends (.*) \%\}/", '<?php } ?>',$fcontent);
+  
+    }
+
   
     public function editFile($fileContent, $content=null){
         
         $fcontent = $fileContent;
 
-        
-        $fcontent = preg_replace("/\{\% load (.*) \%\}/",'<?php echo TemplateEngine::loadFile("views/".($1).".php", $content); ?>',$fcontent);
+        $fcontent = preg_replace("/\{\% load (.*) \%\}/",'<?php echo TemplateEngine::loadFile("views/".($1).".fish.php", $content); ?>',$fcontent);
         
         $fcontent = TemplateEngine::sessions($fcontent);
         
@@ -121,11 +128,25 @@ class TemplateEngine {
             '<?php  if(array_key_exists("$1", $content)) {
                     for($i = 0; $i < count($content["$1"]); $i++) { ?>'
         ,$fcontent);
-
-        $fcontent = preg_replace("/\{\{ (.*)\[index\] \}\}/", 
-            '<?php echo $content["$1"][$i]; ?>'
+        
+        $fcontent = preg_replace("/\{\{ \[index\+\+\] \}\}/", 
+            '<?php echo $i + 1; ?>'
         ,$fcontent);
-                        
+
+        $fcontent = preg_replace("/\{\{ \[index\] \}\}/", 
+            '<?php echo $i; ?>'
+        ,$fcontent);
+
+        $fcontent = preg_replace("/\{\{ (.*)\[index\] \}\}(.*)\{\{/", 
+            '<?php echo $content["$1"][$i]; ?>$2{{'
+        ,$fcontent);
+
+        $fcontent = preg_replace("/\{\{ (.*)\[index\]\.(.*) \}\}(.*)\{\{/", 
+            '<?php
+                echo $content["$1"][$i]["$2"];
+            ?>$3{{'
+        ,$fcontent);
+        
         $fcontent = preg_replace("/\{\{ (.*)\[index\]\.(.*) \}\}(.*)\{/", 
             '<?php
                 echo $content["$1"][$i]["$2"];
@@ -137,6 +158,12 @@ class TemplateEngine {
                 echo $content["$1"][$i]["$2"];
             ?>'
         ,$fcontent);
+        
+                
+        $fcontent = preg_replace("/\{\{ (.*)\[index\] \}\}/", 
+            '<?php echo $content["$1"][$i]; ?>'
+        ,$fcontent);
+                        
 
         $fcontent = preg_replace("/\{\% endloop \%\}/", 
             '<?php

@@ -8,7 +8,7 @@ class Request {
     public $method;
 
     public function __construct($method) {
-        $this->method = $method;
+        $this->method = strtoupper($method);
         Request::init($method);
     }
 
