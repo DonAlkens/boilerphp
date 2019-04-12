@@ -17,6 +17,14 @@ class TemplateEngine {
     }
 
 
+    public function basic($fcontent) {
+        $fcontent = preg_replace("/logic\{\{(.*)\}\}/", '<?php echo $1; ?>',$fcontent);
+        $fcontent = preg_replace("/\{\{(.*)\"(.*)\"(.*)\}\}/", '<?php echo "$2"; ?>',$fcontent);
+        $fcontent = eval("?>". $fcontent ."<?php");
+        return $fcontent;
+    }
+
+
     public function extendFile($fcontent, $content=null) {
 
         $fcontent = preg_replace("/\{\% extends (.*) \%\}/", '<?php } ?>',$fcontent);
