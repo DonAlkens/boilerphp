@@ -233,8 +233,10 @@ class Schema {
     private $textid = "varchar(255) not null unique,";
     private $email = "varchar(255) not null unique,";
     private $text = "text not null,";
+    private $longtext = "longtext not null,";
     private $int = "int(10) not null,";
-    private $bool = "tinyint not null";
+    private $bool = "tinyint not null,";
+    private $boolean = "tinyint not null,";
     private $string = "varchar(255) not null,";
     private $uniquestring = "varchar(255) not null unique,";
     private $datetime = "datetime default current_timestamp"; 
