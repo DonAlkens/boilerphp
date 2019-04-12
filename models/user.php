@@ -20,22 +20,20 @@ class User extends Schema{
     public $table = 'users';
 
     private $user_id;
-    private $fullname;
+    private $firstname;
+    private $lastname;
     private $email;
-    private $phone;
-    private $accountType;
-    private $status;
+    private $username;
     private $password;
 
 
     public $model = array(
         'user_id' => 'textid',
-        'fullname' => 'string',
+        'firstname' => 'string',
+        'lastname' => 'string',
         'email' => 'email',
         'username'=> 'uniquestring',
         'password' => 'string',
-        'account_type' => 'string',
-        'status' => 'string',
     );
 
     public function generate_id(){
