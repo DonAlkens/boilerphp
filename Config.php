@@ -40,8 +40,9 @@ $dbConnection = [
 ];
 
 
-$viewpath = "views";
+$viewPath = "views";
 $viewEngine = "fish";
+$extension = "html";
 
 
 
