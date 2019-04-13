@@ -1,15 +1,19 @@
 <?php 
 
 function view($filename, $content=null) {
-    $path = "./views/";
-    $filename = $path.$filename.".fish.php";
 
+    include "./Config.php";
+
+    $path = "./".$viewPath."/";
+    $ext = $viewEngine.".".$extension;
+    $filename = $path.$filename.".".$ext;
 
 
     if(file_exists($filename)) {
         $fcontent = file_get_contents($filename);
 
         $template = new TemplateEngine;
+        $fcontent = $template->extendLayout($fcontent, $viewPath, $ext);
         $fcontent = $template->render($fcontent, $content);        
 
         return $fcontent;
