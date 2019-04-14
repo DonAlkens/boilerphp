@@ -18,9 +18,9 @@ class TemplateEngine {
 
 
     public function basic($fcontent) {
-        $fcontent = preg_replace("/logic\{\{(.*)\}\}/", '<?php echo $1; ?>',$fcontent);
-        $fcontent = preg_replace("/\{\{(.*)\"(.*)\"(.*)\}\}/", '<?php echo "$2"; ?>',$fcontent);
-        $fcontent = eval("?>". $fcontent ."<?php");
+        $fcontent = preg_replace("/@\{\{(.*)\}\}/", '<?php echo $1; ?>',$fcontent);
+        $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}/", '<?php echo "$2"; ?>',$fcontent);
+        
         return $fcontent;
     }
 
@@ -54,6 +54,7 @@ class TemplateEngine {
 
         $fcontent = preg_replace("/\{\% load (.*) \%\}/",'<?php echo TemplateEngine::loadFile("views/".($1).".fish.php", $content); ?>',$fcontent);
         
+        $fcontent = TemplateEngine::basic($fcontent);
         $fcontent = TemplateEngine::sessions($fcontent);
         
         # conditional statements
@@ -74,6 +75,7 @@ class TemplateEngine {
     static function loadFile($filename, $content){
         $fcontent = file_get_contents($filename);
 
+        $fcontent = TemplateEngine::basic($fcontent);
         $fcontent = TemplateEngine::sessions($fcontent);
         $fcontent = TemplateEngine::keys($fcontent, $content);
         $fcontent = TemplateEngine::forLoops($fcontent);
