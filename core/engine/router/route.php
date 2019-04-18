@@ -158,8 +158,15 @@ class Route {
             return "index";
         }
 
+        # if not trailing slash anymore but has param identifier [:]
+        else if(!preg_match("/\//",$clean) && strpos($clean,":")){
+            $clean = "index/".$clean;
+            $pp = Route::createPP($clean);
+            return $pp;
+        }
+
         # if param identifier [:]  exists in url
-        else if(strpos($clean,":")) {
+        else if(preg_match("/\//",$clean) && strpos($clean,":")) {
             $pp = Route::createPP($clean);
             return $pp;
         } 
@@ -196,7 +203,7 @@ class Route {
         return [$base, $params];
     }
 
-    private function verifyPattern($uri, $method){
+    public function verifyPattern($uri, $method){
         $split = explode("/",$uri);
         $base = '';
 
@@ -247,6 +254,11 @@ class Route {
             $j++;
         }
 
+        # checking on index thats has parameters 
+        if(empty($pattern)) {
+            $uri = "index/".$uri;
+            $pattern = Route::verifyPattern($uri, $method);
+        }
 
         return $pattern;
     }

@@ -12,7 +12,7 @@ function view($filename, $content=null) {
     if(file_exists($filename)) {
         $fcontent = file_get_contents($filename);
 
-        $template = new TemplateEngine;
+        $template = new TemplateEngine($ext);
         $fcontent = $template->extendLayout($fcontent, $viewPath, $ext);
         $fcontent = $template->render($fcontent, $content);        
 

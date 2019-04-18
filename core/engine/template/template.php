@@ -4,13 +4,15 @@ class TemplateEngine {
 
     public static $content = [];
 
+    public function __construct($ext){
+        $this->ext = $ext;
+    }
+
     public function render($fileContent, $content=null) {
 
         self::$content = $content;
 
         $fcontent = TemplateEngine::editFile($fileContent, $content);
-
-        # echo $fcontent; exit;
 
         $fcontent = eval("?>". $fcontent ."<?php");
         return $fcontent;
@@ -27,7 +29,7 @@ class TemplateEngine {
 
     public function extendLayout($fcontent, $viewPath, $ext) {
 
-        if(str_replace("@{extends","",$fcontent)) {
+        if(preg_match("/@{extends/", $fcontent)) {
 
             $layout = substr($fcontent, strpos($fcontent,"@{extends "), strpos($fcontent, "}"));
             $layout = str_replace("@{extends \"","",$layout);
@@ -38,7 +40,7 @@ class TemplateEngine {
 
             $fcontent = preg_replace("/@\{extends (.*)\}/","",$fcontent);
             
-            $layout = preg_replace("/@\{(.*)content(.*)\}/", $fcontent, $layout);
+            $layout = preg_replace("/@\{\{(.*)content(.*)\}\}/", $fcontent, $layout);
             
             return $layout;
         }
@@ -52,7 +54,7 @@ class TemplateEngine {
         
         $fcontent = $fileContent;
 
-        $fcontent = preg_replace("/\{\% load (.*) \%\}/",'<?php echo TemplateEngine::loadFile("views/".($1).".fish.php", $content); ?>',$fcontent);
+        $fcontent = preg_replace("/\{\% load (.*) \%\}/",'<?php echo TemplateEngine::loadFile("views/".($1).".".$this->ext, $content); ?>',$fcontent);
         
         $fcontent = TemplateEngine::basic($fcontent);
         $fcontent = TemplateEngine::sessions($fcontent);
@@ -72,14 +74,22 @@ class TemplateEngine {
     }
 
 
-    static function loadFile($filename, $content){
+    public function loadFile($filename, $content){
         $fcontent = file_get_contents($filename);
 
+        $fcontent = preg_replace("/\{\% load (.*) \%\}/",'<?php echo TemplateEngine::loadFile("views/".($1).".".$this->ext, $content); ?>',$fcontent);
+        
         $fcontent = TemplateEngine::basic($fcontent);
         $fcontent = TemplateEngine::sessions($fcontent);
-        $fcontent = TemplateEngine::keys($fcontent, $content);
-        $fcontent = TemplateEngine::forLoops($fcontent);
-        $fcontent = TemplateEngine::conditionalStatement($fcontent, $content);
+        
+        if(is_array($content)) {
+            $fcontent = TemplateEngine::keys($fcontent, $content);
+            $fcontent = TemplateEngine::forLoops($fcontent);
+            $fcontent = TemplateEngine::conditionalStatement($fcontent, $content);
+        } else {
+            $fcontent = TemplateEngine::emptyParameter($fcontent);
+        }
+
   
         $fcontent = eval("?>". $fcontent ."");
         return $fcontent;
@@ -97,8 +107,8 @@ class TemplateEngine {
     }
 
     static function emptyParameter($fcontent){
-            $fcontent = preg_replace("/\{\%(.*)if (.*) \%\}/", '<?php function nocall() { ?>',$fcontent);
-            $fcontent = preg_replace("/\{\%(.*)else(.*)\%\}/", '<?php "" ?>',$fcontent);
+            $fcontent = preg_replace("/\{\%(.*)if (.*) \%\}/", '<?php if(!true) { ?>',$fcontent);
+            $fcontent = preg_replace("/\{\%(.*)else(.*)\%\}/", '<?php } else { ?>',$fcontent);
             $fcontent = preg_replace("/\{\{(.*)\}\}/", '<?php "" ?>',$fcontent);
             $fcontent = preg_replace("/\{\%(.*)endif(.*)\%\}/", '<?php } ?>',$fcontent);
 
