@@ -46,8 +46,18 @@ class Schema {
         return false;
     }
 
-    public function fetchAll(){
+    public function fetchAll($props){
         $this->query = "select * from $this->table";
+        if(array_key_exists("order",$props)) {
+            $order = $props["order"]; 
+            $key = $order["key"]; $mode = $order["mode"]; 
+            $this->query .= " order by $key $mode";
+        }
+
+        if(array_key_exists("limit",$props)) {
+            $limit = $props["limit"];
+            $this->query .= " limit 0,$limit";
+        }
         return Schema::sAll();
     }
 
@@ -148,7 +158,11 @@ class Schema {
 
         if($order) {
             $key = $order["key"]; $mode = $order["mode"]; 
-            $map .= "order by $key $mode";
+            $map .= "order by $key $mode ";
+        }
+
+        if($limit) {
+            $map .= " limit 0,$limit";
         }
 
         $this->query = "select * from $this->table where ".$map;

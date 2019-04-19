@@ -20,8 +20,10 @@ class TemplateEngine {
 
 
     public function basic($fcontent) {
+        $fcontent = preg_replace("/@\{\{(.*)\}\}(.*)\@\{/", '<?php echo $1; ?>$2@{',$fcontent);
+        $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}(.*)\@\{/", '<?php echo $2; ?>$4@{',$fcontent);
         $fcontent = preg_replace("/@\{\{(.*)\}\}/", '<?php echo $1; ?>',$fcontent);
-        $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}/", '<?php echo "$2"; ?>',$fcontent);
+        $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}/", '<?php echo $2; ?>',$fcontent);
         
         return $fcontent;
     }

@@ -41,7 +41,7 @@ class Route {
         $set = self::$routes[$method];
 
         # get url
-        $url = $route["url"];
+        $url = "/index".$route["url"];
         # prepare properties
         $properties = array("action" => $route["action"]);
 
@@ -81,8 +81,9 @@ class Route {
         # if uri is empty after trim
         if(empty($uri)) {
             $uri = "index";
+        } else {
+            $uri = "index/".$uri;
         }
-
 
 
         # if uri is registered in method class
@@ -156,13 +157,6 @@ class Route {
         # if empty url [key will be 'index']
         if(empty($clean)){
             return "index";
-        }
-
-        # if not trailing slash anymore but has param identifier [:]
-        else if(!preg_match("/\//",$clean) && strpos($clean,":")){
-            $clean = "index/".$clean;
-            $pp = Route::createPP($clean);
-            return $pp;
         }
 
         # if param identifier [:]  exists in url
@@ -252,12 +246,6 @@ class Route {
             $sub = "";
 
             $j++;
-        }
-
-        # checking on index thats has parameters 
-        if(empty($pattern)) {
-            $uri = "index/".$uri;
-            $pattern = Route::verifyPattern($uri, $method);
         }
 
         return $pattern;
