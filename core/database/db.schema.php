@@ -46,17 +46,19 @@ class Schema {
         return false;
     }
 
-    public function fetchAll($props){
+    public function fetchAll($props=null){
         $this->query = "select * from $this->table";
-        if(array_key_exists("order",$props)) {
-            $order = $props["order"]; 
-            $key = $order["key"]; $mode = $order["mode"]; 
-            $this->query .= " order by $key $mode";
-        }
-
-        if(array_key_exists("limit",$props)) {
-            $limit = $props["limit"];
-            $this->query .= " limit 0,$limit";
+        if(!is_null($props)){
+            if(array_key_exists("order",$props)) {
+                $order = $props["order"]; 
+                $key = $order["key"]; $mode = $order["mode"]; 
+                $this->query .= " order by $key $mode";
+            }
+    
+            if(array_key_exists("limit",$props)) {
+                $limit = $props["limit"];
+                $this->query .= " limit 0,$limit";
+            }
         }
         return Schema::sAll();
     }
@@ -96,6 +98,10 @@ class Schema {
         $i = 1; 
         $len = count($structure);
         $map = '(';
+
+        // if(!array_key_exists("sn",$structure)){
+        //     $map .= "sn ".$this->sn;
+        // }
 
         foreach ($structure as $col => $type) {
             if($i == $len)
@@ -223,10 +229,10 @@ class Schema {
 
     public function fetch(){
         $data = $this->db->query($this->query);
-        if($data->num_rows == 1) {
+        // if($data->num_rows == 1) {
             return $data->fetch_assoc();
-        }
-        return null;
+        // }
+        // return null;
     }
 
     public function sAll(){
@@ -242,7 +248,7 @@ class Schema {
         return null;
     }
 
-    private $sn = "int auto_increment not null,";
+    private $sn = "int(9) auto_increment not null,";
     private $id = "int(9) not null unique,";
     private $textid = "varchar(255) not null unique,";
     private $email = "varchar(255) not null unique,";

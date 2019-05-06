@@ -14,16 +14,14 @@ class TemplateEngine {
 
         $fcontent = TemplateEngine::editFile($fileContent, $content);
 
-        $fcontent = eval("?>". $fcontent ."<?php");
+        $fcontent = eval("?>". $fcontent ."");
         return $fcontent;
     }
 
 
     public function basic($fcontent) {
-        $fcontent = preg_replace("/@\{\{(.*)\}\}(.*)\@\{/", '<?php echo $1; ?>$2@{',$fcontent);
-        $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}(.*)\@\{/", '<?php echo $2; ?>$4@{',$fcontent);
         $fcontent = preg_replace("/@\{\{(.*)\}\}/", '<?php echo $1; ?>',$fcontent);
-        $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}/", '<?php echo $2; ?>',$fcontent);
+        $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}/", '<?php echo "$2"; ?>',$fcontent);
         
         return $fcontent;
     }
@@ -99,8 +97,11 @@ class TemplateEngine {
 
     static function conditionalStatement($fcontent, $content=null){
         $fcontent = preg_replace("/\{\% if (.*) \%\}/", '<?php if(array_key_exists(("$1"),$content) && $content[("$1")]) { ?>',$fcontent);
+            $fcontent = preg_replace("/\{\%(.*)elif \!(.*) (.*)\%\}/", 
+                '<?php } else if(array_key_exists(("$2"),$content) && !$content[("$2")]) { ?>',
+            $fcontent);
         $fcontent = preg_replace("/\{\%(.*)elif (.*) (.*)\%\}/", 
-            '<?php } else if(array_key_exists(("$2"),$content) && !$content[("$2")]) { ?>',
+            '<?php } else if(array_key_exists(("$2"),$content) && $content[("$2")]) { ?>',
         $fcontent);
         $fcontent = preg_replace("/\{\%(.*)else(.*)\%\}/", '<?php } else { ?>',$fcontent);
         $fcontent = preg_replace("/\{\%(.*)endif(.*)\%\}/", '<?php } ?>',$fcontent);
@@ -109,6 +110,7 @@ class TemplateEngine {
     }
 
     static function emptyParameter($fcontent){
+            $fcontent = preg_replace("/\{\%(.*)elif(.*)\%\}/", '<?php "" ?>',$fcontent);
             $fcontent = preg_replace("/\{\%(.*)if (.*) \%\}/", '<?php if(!true) { ?>',$fcontent);
             $fcontent = preg_replace("/\{\%(.*)else(.*)\%\}/", '<?php } else { ?>',$fcontent);
             $fcontent = preg_replace("/\{\{(.*)\}\}/", '<?php "" ?>',$fcontent);
