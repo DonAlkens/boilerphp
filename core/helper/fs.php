@@ -102,8 +102,8 @@ class Fs {
         $filefield = $properties["filename"];
         $path = $properties["path"];
 
-        if(!file_exists(trim($path))){
-            Fs::mkdir(trim($path));
+        if(!file_exists($path)){
+            Fs::mkdir($path);
         }
 
         $new_name = null;

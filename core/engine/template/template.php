@@ -20,8 +20,10 @@ class TemplateEngine {
 
 
     public function basic($fcontent) {
+        $fcontent = preg_replace("/@\{\{(.*)\}\}(.*)\@\{/", '<?php echo $1; ?>$2@{',$fcontent);
+        $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}(.*)\@\{/", '<?php echo $2; ?>$4@{',$fcontent);
         $fcontent = preg_replace("/@\{\{(.*)\}\}/", '<?php echo $1; ?>',$fcontent);
-        $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}/", '<?php echo "$2"; ?>',$fcontent);
+        $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}/", '<?php echo $2; ?>',$fcontent);
         
         return $fcontent;
     }
@@ -97,11 +99,8 @@ class TemplateEngine {
 
     static function conditionalStatement($fcontent, $content=null){
         $fcontent = preg_replace("/\{\% if (.*) \%\}/", '<?php if(array_key_exists(("$1"),$content) && $content[("$1")]) { ?>',$fcontent);
-            $fcontent = preg_replace("/\{\%(.*)elif \!(.*) (.*)\%\}/", 
-                '<?php } else if(array_key_exists(("$2"),$content) && !$content[("$2")]) { ?>',
-            $fcontent);
         $fcontent = preg_replace("/\{\%(.*)elif (.*) (.*)\%\}/", 
-            '<?php } else if(array_key_exists(("$2"),$content) && $content[("$2")]) { ?>',
+            '<?php } else if(array_key_exists(("$2"),$content) && !$content[("$2")]) { ?>',
         $fcontent);
         $fcontent = preg_replace("/\{\%(.*)else(.*)\%\}/", '<?php } else { ?>',$fcontent);
         $fcontent = preg_replace("/\{\%(.*)endif(.*)\%\}/", '<?php } ?>',$fcontent);
@@ -110,7 +109,6 @@ class TemplateEngine {
     }
 
     static function emptyParameter($fcontent){
-            $fcontent = preg_replace("/\{\%(.*)elif(.*)\%\}/", '<?php "" ?>',$fcontent);
             $fcontent = preg_replace("/\{\%(.*)if (.*) \%\}/", '<?php if(!true) { ?>',$fcontent);
             $fcontent = preg_replace("/\{\%(.*)else(.*)\%\}/", '<?php } else { ?>',$fcontent);
             $fcontent = preg_replace("/\{\{(.*)\}\}/", '<?php "" ?>',$fcontent);
@@ -154,6 +152,8 @@ class TemplateEngine {
             '<?php  if(array_key_exists("$1", $content)) {
                     for($i = 0; $i < count($content["$1"]); $i++) { ?>'
         ,$fcontent);
+
+        //$fcontent = preg_replace("/\{\% nextloop (.*) \%\}/");
         
         $fcontent = preg_replace("/\{\{ \[index\+\+\] \}\}/", '<?php echo $i + 1; ?>',$fcontent);
         $fcontent = preg_replace("/\{\{ \[index\] \}\}/",'<?php echo $i; ?>',$fcontent);
@@ -170,13 +170,17 @@ class TemplateEngine {
     }
 
     static function sessions($fcontent){
+
+        if(isset($_SESSION["user"])){
+            $fcontent = preg_replace("/\{\% if user.isauthenticated \%\}/", 
+            '<?php if(array_key_exists("isauthenticated",$_SESSION["user"]) && $_SESSION["user"]["isauthenticated"]) { ?>',$fcontent);
+        }
         
         foreach($_SESSION as $key => $value) {
-
             if(!is_array($value)){
-                $fcontent = preg_replace("/\{\{(.*)".$key."(.*)\}\}/", $value, $fcontent);
+                // $fcontent = preg_replace("/\{\{(.*)".$key."(.*)\}\}/", $value, $fcontent);
             } 
-
+            
             if(is_array($value)){
                 foreach ($value as $k => $v) {
                     # code...
