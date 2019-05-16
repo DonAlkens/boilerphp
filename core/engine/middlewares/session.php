@@ -25,7 +25,6 @@ class Session {
 }
 
 
-
 function HasPermission($sessionKey, $redirectUrl=null){
     if(isset($_SESSION[$sessionKey])){
         $logger = true;

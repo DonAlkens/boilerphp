@@ -23,6 +23,10 @@ class Schema {
         $this->pass = $dbConnection["PASSWORD"];
         $this->dbname = $dbConnection["DBNAME"];
 
+
+        $this->resultType = "";
+        $this->queryMode = "";
+
         Schema::connect();
     }
 
@@ -46,7 +50,7 @@ class Schema {
         return false;
     }
 
-    public function fetchAll($props=null){
+    public function all($props=null){
         $this->query = "select * from $this->table";
         if(!is_null($props)){
             if(array_key_exists("order",$props)) {
@@ -63,35 +67,31 @@ class Schema {
         return Schema::sAll();
     }
 
-    public function select($params, $order=null, $limit=null){
+    public function select($params){
         if($params) {
-            $this->select_map($params, $order, $limit);
-            return Schema::fetch();
+            $this->queryMode = "fetch";
+            $this->select_map($params);
         } 
-        return null;
+        return $this;
     }
 
-    public function selectAll($params, $order=null, $limit=null){
-        if($params) {
-            $this->select_map($params, $order, $limit);
-            return Schema::sAll();
-        } 
-        return null;
+    public function selectAll($params){
+        $this->resultType = "multiple";
+        return $this->select($params);
     }
     
-    public  function update($ref, $data) {
-        if(!empty($ref) && is_array($data)) {
-            $this->update_map($ref, $data);
-            return Schema::run();
+    public  function update($data) {
+        if(is_array($data)) {
+            $this->queryMode = "run";
+            $this->update_map($data);
         }
-        return false;
+        return $this;
     }
     
-    public function delete($ref) {
-        if(is_array($ref) && !is_null($ref)){
-            $this->delete_map($ref);
-            return Schema::run();
-        }
+    public function delete() {
+        $this->queryMode = "run";
+        $this->delete_map();
+        return $this;
     }
     
     public function table_map($name, $structure){
@@ -151,30 +151,45 @@ class Schema {
     }
 
     
-    public function select_map($params, $order, $limit){
+    public function select_map($params){
         $i = 1; 
         $len = count($params);
         $map = '';
 
+        foreach ($params as $col => $value) {
+            if($i == $len) { $map .= $value; break; }
+            $map .= $value.",";
+            $i++;
+        }
+
+        $this->query = "select $map from $this->table where ";
+    }
+
+
+    public function where($params){
+        $i = 1; 
+        $len = count($params);
+        $map = '';
         foreach ($params as $col => $value) {
             if($i == $len) { $map .= $col." = "."'".$value."'"; break; }
             $map .= $col." = "."'".$value."' and ";
             $i++;
         }
 
-        if($order) {
-            $key = $order["key"]; $mode = $order["mode"]; 
-            $map .= "order by $key $mode ";
-        }
-
-        if($limit) {
-            $map .= " limit 0,$limit";
-        }
-
-        $this->query = "select * from $this->table where ".$map;
+        $this->query .= $map;
+        $mode = $this->queryMode;
+        return Schema::$mode();
     }
 
-    public function update_map($ref, $data) {
+    public function order() {
+
+    }
+
+    public function limit(){
+        
+    }
+
+    public function update_map($data) {
         $i = 1; $len = count($data); $map = '';
         foreach ($data as $col => $value) {
             if($i == $len) {
@@ -184,29 +199,12 @@ class Schema {
             $i++;
         }
 
-        $i = 1; $len = count($ref); $_ref = '';
-        foreach($ref as $col => $value){
-            if($i == $len) {
-                $_ref .= $col." = '".$value."' "; break;
-            }
-            $_ref .= $col." = '".$value."' and ";
-            $i++;
-        }
-        $this->query = "update $this->table set ".$map." where ".$_ref;
+        $this->query = "update $this->table set ".$map." where ";
     }
 
 
-    public function delete_map($ref) {
-        $i = 1; $len = count($ref); $map = '';
-        foreach ($ref as $col => $value) {
-            if($i === $len){
-                $map .=  $col." = '".$value."'";
-                break;
-            }
-            $map .=  $col." = '".$value."' and ";
-            $i++;
-        }
-        $this->query = "delete from $this->table where ".$map;
+    public function delete_map() {
+        $this->query = "delete from $this->table where ";
     }
 
     public function run() {
@@ -229,21 +227,20 @@ class Schema {
 
     public function fetch(){
         $data = $this->db->query($this->query);
-        // if($data->num_rows == 1) {
-            return $data->fetch_assoc();
-        // }
-        // return null;
-    }
-
-    public function sAll(){
-        $data = $this->db->query($this->query);
-        if($data->num_rows > 0) {
-            $result = [];
-            while($row = $data->fetch_assoc()) {
-                array_push($result,$row);
-
+        if($this->resultType === "multiple"){
+            if($data->num_rows > 0) {
+                $result = [];
+                while($row = $data->fetch_assoc()) {
+                    array_push($result,$row);
+    
+                }
+                return $result;
             }
-            return $result;
+        }
+        else {
+            if($data->num_rows > 0) {
+                return $data->fetch_assoc();
+            }
         }
         return null;
     }

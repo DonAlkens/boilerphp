@@ -17,8 +17,9 @@ use App\Core\Database\Schema;
 
 class User extends Schema{
 
-    public $table = 'users';
+    public $table = '';
 
+    private $sn;
     private $user_id;
     private $firstname;
     private $lastname;
@@ -28,6 +29,7 @@ class User extends Schema{
 
 
     public $model = array(
+        "sn"=>"sn",
         'user_id' => 'textid',
         'firstname' => 'string',
         'lastname' => 'string',
@@ -37,7 +39,6 @@ class User extends Schema{
     );
 
     public function generate_id(){
-
         $start = uniqid();
         $rand = rand(23456, 98125);
         $end = uniqid();
@@ -47,5 +48,9 @@ class User extends Schema{
 
     public function set_password($password){
         return password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    public function confirm_password($password, $hash){
+        return password_verify($password, $hash);
     }
 }

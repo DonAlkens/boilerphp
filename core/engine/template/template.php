@@ -14,14 +14,17 @@ class TemplateEngine {
 
         $fcontent = TemplateEngine::editFile($fileContent, $content);
 
-        $fcontent = eval("?>". $fcontent ."");
+        $fcontent = eval("?>". $fcontent);
         return $fcontent;
     }
 
 
     public function basic($fcontent) {
+        
+        
         $fcontent = preg_replace("/@\{\{(.*)\}\}(.*)\@\{/", '<?php echo $1; ?>$2@{',$fcontent);
         $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}(.*)\@\{/", '<?php echo $2; ?>$4@{',$fcontent);
+        $fcontent = preg_replace("/@\{\{\"(.*)\"\}\}/", '<?php echo "$1"; ?>',$fcontent);
         $fcontent = preg_replace("/@\{\{(.*)\}\}/", '<?php echo $1; ?>',$fcontent);
         $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}/", '<?php echo $2; ?>',$fcontent);
         
@@ -29,48 +32,55 @@ class TemplateEngine {
     }
 
 
+    public function ConditionalStatement($fcontent){
+        
+        $fcontent = preg_replace("/\@if\((.*)\)/", '<?php if($1){ ?>',$fcontent);
+        $fcontent = preg_replace("/\@else/", '<?php } else { ?>',$fcontent);
+        $fcontent = preg_replace("/\@endif/", '<?php } ?>',$fcontent);
+
+        return $fcontent;
+    }
+
+    public function ToLoopContents($fcontent){
+        
+        $fcontent = preg_replace("/\@foreach\((.*)\)/", '<?php foreach($1){ ?>',$fcontent);
+        $fcontent = preg_replace("/\@endforeach/", '<?php } ?>',$fcontent);
+
+        $fcontent = preg_replace("/\@for\((.*)\)/", '<?php for($1){ ?>',$fcontent);
+        $fcontent = preg_replace("/\@endfor/", '<?php } ?>',$fcontent);
+
+        return $fcontent;
+    }
+
+
     public function extendLayout($fcontent, $viewPath, $ext) {
 
         if(preg_match("/@{extends/", $fcontent)) {
-
             $layout = substr($fcontent, strpos($fcontent,"@{extends "), strpos($fcontent, "}"));
             $layout = str_replace("@{extends \"","",$layout);
             $cleaned = str_replace("\"","",trim($layout," "));
             $layoutPath = $viewPath."/".$cleaned."."."$ext";
 
             $layout = file_get_contents($layoutPath);
-
             $fcontent = preg_replace("/@\{extends (.*)\}/","",$fcontent);
-            
             $layout = preg_replace("/@\{\{(.*)content(.*)\}\}/", $fcontent, $layout);
-            
             return $layout;
         }
-
         return $fcontent;
-  
     }
 
   
     public function editFile($fileContent, $content=null){
         
         $fcontent = $fileContent;
-
         $fcontent = preg_replace("/\{\% load (.*) \%\}/",'<?php echo TemplateEngine::loadFile("views/".($1).".".$this->ext, $content); ?>',$fcontent);
         
-        $fcontent = TemplateEngine::basic($fcontent);
         $fcontent = TemplateEngine::sessions($fcontent);
-        
-        # conditional statements
-        if(is_array($content)){
-            
-            $fcontent = TemplateEngine::conditionalStatement($fcontent, $content);
-            $fcontent = TemplateEngine::keys($fcontent, $content);
-            $fcontent = TemplateEngine::forLoops($fcontent);
-
-        } else {
-            $fcontent = TemplateEngine::emptyParameter($fcontent);
-        }
+        $fcontent = TemplateEngine::keys($fcontent, $content);
+        $fcontent = TemplateEngine::emptyParameter($fcontent);  
+        $fcontent = TemplateEngine::ConditionalStatement($fcontent);
+        $fcontent = TemplateEngine::ToLoopContents($fcontent);        
+        $fcontent = TemplateEngine::basic($fcontent);
 
         return $fcontent;
     }
@@ -81,40 +91,22 @@ class TemplateEngine {
 
         $fcontent = preg_replace("/\{\% load (.*) \%\}/",'<?php echo TemplateEngine::loadFile("views/".($1).".".$this->ext, $content); ?>',$fcontent);
         
-        $fcontent = TemplateEngine::basic($fcontent);
         $fcontent = TemplateEngine::sessions($fcontent);
-        
-        if(is_array($content)) {
-            $fcontent = TemplateEngine::keys($fcontent, $content);
-            $fcontent = TemplateEngine::forLoops($fcontent);
-            $fcontent = TemplateEngine::conditionalStatement($fcontent, $content);
-        } else {
-            $fcontent = TemplateEngine::emptyParameter($fcontent);
-        }
-
+        $fcontent = TemplateEngine::keys($fcontent, $content);
+        $fcontent = TemplateEngine::emptyParameter($fcontent);
+        $fcontent = TemplateEngine::ConditionalStatement($fcontent);
+        $fcontent = TemplateEngine::ToLoopContents($fcontent);        
+        $fcontent = TemplateEngine::basic($fcontent);
   
         $fcontent = eval("?>". $fcontent ."");
         return $fcontent;
     }
 
-    static function conditionalStatement($fcontent, $content=null){
-        $fcontent = preg_replace("/\{\% if (.*) \%\}/", '<?php if(array_key_exists(("$1"),$content) && $content[("$1")]) { ?>',$fcontent);
-        $fcontent = preg_replace("/\{\%(.*)elif (.*) (.*)\%\}/", 
-            '<?php } else if(array_key_exists(("$2"),$content) && !$content[("$2")]) { ?>',
-        $fcontent);
-        $fcontent = preg_replace("/\{\%(.*)else(.*)\%\}/", '<?php } else { ?>',$fcontent);
-        $fcontent = preg_replace("/\{\%(.*)endif(.*)\%\}/", '<?php } ?>',$fcontent);
-
-        return $fcontent;
-    }
-
     static function emptyParameter($fcontent){
-            $fcontent = preg_replace("/\{\%(.*)if (.*) \%\}/", '<?php if(!true) { ?>',$fcontent);
-            $fcontent = preg_replace("/\{\%(.*)else(.*)\%\}/", '<?php } else { ?>',$fcontent);
-            $fcontent = preg_replace("/\{\{(.*)\}\}/", '<?php "" ?>',$fcontent);
-            $fcontent = preg_replace("/\{\%(.*)endif(.*)\%\}/", '<?php } ?>',$fcontent);
-
-
+        $fcontent = preg_replace("/@if\((.*)\~(.*)\~(.*)\)/", '<?php if(false){ ?>' ,$fcontent);
+        $fcontent = preg_replace("/@for\((.*)\~(.*)\~(.*)\)/", '<?php function(){ ?>' ,$fcontent);
+        $fcontent = preg_replace("/@foreach\((.*)\~(.*)\~(.*)\)/", '<?php function(){ ?>' ,$fcontent);
+        $fcontent = preg_replace("/(.*)\~(.*)\~(.*)/", "",$fcontent);
         return $fcontent;
     }
 
@@ -122,15 +114,11 @@ class TemplateEngine {
         if(!is_null($content)){
             foreach ($content as $key => $value) {
                 if(!is_array($value)){
-                    $fcontent = preg_replace("/\{\{ ".$key." \}\}/", $value, $fcontent);
+                    $fcontent = preg_replace("/(.*)\~".$key."\~(.*)/", "$1".$content[$key]."$2" ,$fcontent);
                 } 
                 
                 if(is_array($value)) {
-                    foreach ($value as $k => $v) {
-                        if(!is_array($v)){
-                            $fcontent = preg_replace("/\{\{ ".$key."\.".$k." \}\}/", $v, $fcontent);
-                        }
-                    }
+                    $fcontent = preg_replace("/\~".$key."\~/", '$content["'.$key.'"]',$fcontent);
                 } 
             }
         }
@@ -138,58 +126,16 @@ class TemplateEngine {
         return $fcontent;
     }
 
-    static function forLoops($fcontent){
-        $fcontent = preg_replace("/\{\% foreach (.*) as key \| value \%\}/", 
-            '<?php if(array_key_exists("$1", $content)) {
-                foreach($content[("$1")] as $key => $value) { ?>'
-        ,$fcontent);
-
-        $fcontent = preg_replace("/\{\{ key \}\}/", '<?php echo $key; ?>',$fcontent);
-        $fcontent = preg_replace("/\{\{ value \}\}/", '<?php echo $value; ?>',$fcontent);
-        $fcontent = preg_replace("/\{\% endforeach \%\}/", '<?php } } ?>',$fcontent);
-
-        $fcontent = preg_replace("/\{\% loop (.*) \%\}/",
-            '<?php  if(array_key_exists("$1", $content)) {
-                    for($i = 0; $i < count($content["$1"]); $i++) { ?>'
-        ,$fcontent);
-
-        //$fcontent = preg_replace("/\{\% nextloop (.*) \%\}/");
-        
-        $fcontent = preg_replace("/\{\{ \[index\+\+\] \}\}/", '<?php echo $i + 1; ?>',$fcontent);
-        $fcontent = preg_replace("/\{\{ \[index\] \}\}/",'<?php echo $i; ?>',$fcontent);
-        $fcontent = preg_replace("/\{\{ (.*)\[index\] \}\}(.*)\{\{/", '<?php echo $content["$1"][$i]; ?>$2{{',$fcontent);
-        $fcontent = preg_replace("/\{\{ (.*)\[index\]\.(.*) \}\}(.*)\{\{/", '<?php echo $content["$1"][$i]["$2"]; ?>$3{{',$fcontent);
-        $fcontent = preg_replace("/\{\{ (.*)\[index\]\.(.*) \}\}(.*)\{/", '<?php echo $content["$1"][$i]["$2"]; ?>/{{',$fcontent);
-        $fcontent = preg_replace("/\{\{ (.*)\[index\]\.(.*) \}\}/", '<?php echo $content["$1"][$i]["$2"]; ?>',$fcontent);    
-        $fcontent = preg_replace("/\{\{ (.*)\[index\] \}\}/",'<?php echo $content["$1"][$i]; ?>',$fcontent);
-        $fcontent = preg_replace("/\{\% endloop \%\}/", '<?php } } ?>',$fcontent);
-
-        
-        return $fcontent;
-
-    }
-
-    static function sessions($fcontent){
-
-        if(isset($_SESSION["user"])){
-            $fcontent = preg_replace("/\{\% if user.isauthenticated \%\}/", 
-            '<?php if(array_key_exists("isauthenticated",$_SESSION["user"]) && $_SESSION["user"]["isauthenticated"]) { ?>',$fcontent);
-        }
-        
+    static function sessions($fcontent){        
         foreach($_SESSION as $key => $value) {
             if(!is_array($value)){
-                // $fcontent = preg_replace("/\{\{(.*)".$key."(.*)\}\}/", $value, $fcontent);
+                $fcontent = preg_replace("/(.*)\~".$key."\~(.*)/", "$1".$_SESSION[$key]."$2" ,$fcontent);
             } 
             
-            if(is_array($value)){
-                foreach ($value as $k => $v) {
-                    # code...
-                    $fcontent = preg_replace("/\{\{(.*)".$key."\.".$k."(.*)\}\}/", $v, $fcontent);
-                }
-            }
-        }
-        
-
+            if(is_array($value)) {
+                $fcontent = preg_replace("/\~".$key."\~/", '$_SESSION["'.$key.'"]',$fcontent);
+            } 
+        } 
         return $fcontent;
     }
 
