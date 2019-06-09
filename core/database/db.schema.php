@@ -64,18 +64,19 @@ class Schema {
                 $this->query .= " limit 0,$limit";
             }
         }
-        return Schema::sAll();
+        
+        $this->resultType = "multiple";
+        return Schema::fetch();
+
     }
 
-    public function select($params){
-        if($params) {
-            $this->queryMode = "fetch";
-            $this->select_map($params);
-        } 
+    public function select($params=null){
+        $this->queryMode = "fetch";
+        $this->select_map($params);
         return $this;
     }
 
-    public function selectAll($params){
+    public function selectAll($params=null){
         $this->resultType = "multiple";
         return $this->select($params);
     }
@@ -99,16 +100,16 @@ class Schema {
         $len = count($structure);
         $map = '(';
 
-        // if(!array_key_exists("sn",$structure)){
-        //     $map .= "sn ".$this->sn;
-        // }
-
         foreach ($structure as $col => $type) {
+            if($type == "sn") { $primary = true; $PCol = $col;}
             if($i == $len)
             {
                 if(!array_key_exists('datetime',$structure)){
                     $map .= $col." ".$this->$type;
                     $map .= "created_date ".$this->datetime;
+                    if(isset($primary)) {
+                        $map .=", PRIMARY KEY(".$PCol.")";
+                    }
                     break;
                 } else {
                     $this->$type =  str_replace(",","",$this->$type);
@@ -116,10 +117,6 @@ class Schema {
             }
             $map .= $col." ".$this->$type;
             $i++;
-        }
-
-        if(array_key_exists("sn",$structure)){
-            $map .= ", primary key(sn)";
         }
 
         $map .= ')';
@@ -152,14 +149,19 @@ class Schema {
 
     
     public function select_map($params){
-        $i = 1; 
-        $len = count($params);
-        $map = '';
 
-        foreach ($params as $col => $value) {
-            if($i == $len) { $map .= $value; break; }
-            $map .= $value.",";
-            $i++;
+        $map = "*";
+
+        if($params !== null){
+            $i = 1; 
+            $len = count($params);
+            $map = '';
+    
+            foreach ($params as $col => $value) {
+                if($i == $len) { $map .= $value; break; }
+                $map .= $value.",";
+                $i++;
+            }
         }
 
         $this->query = "select $map from $this->table where ";

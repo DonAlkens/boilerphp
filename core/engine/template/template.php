@@ -13,8 +13,7 @@ class TemplateEngine {
         self::$content = $content;
 
         $fcontent = TemplateEngine::editFile($fileContent, $content);
-
-        $fcontent = eval("?>". $fcontent);
+        $fcontent = eval("?>".$fcontent);
         return $fcontent;
     }
 
@@ -27,6 +26,7 @@ class TemplateEngine {
         $fcontent = preg_replace("/@\{\{\"(.*)\"\}\}/", '<?php echo "$1"; ?>',$fcontent);
         $fcontent = preg_replace("/@\{\{(.*)\}\}/", '<?php echo $1; ?>',$fcontent);
         $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}/", '<?php echo $2; ?>',$fcontent);
+        $fcontent = preg_replace("/\{\{(.*)\}\}/", '<?php $1; ?>',$fcontent);
         
         return $fcontent;
     }
@@ -73,14 +73,14 @@ class TemplateEngine {
     public function editFile($fileContent, $content=null){
         
         $fcontent = $fileContent;
-        $fcontent = preg_replace("/\{\% load (.*) \%\}/",'<?php echo TemplateEngine::loadFile("views/".($1).".".$this->ext, $content); ?>',$fcontent);
+        $fcontent = preg_replace("/@\{\{(.*)load (.*)\}\}/",'<?php echo TemplateEngine::loadFile("views/".($2).".".$this->ext, $content); ?>',$fcontent);
         
         $fcontent = TemplateEngine::sessions($fcontent);
         $fcontent = TemplateEngine::keys($fcontent, $content);
-        $fcontent = TemplateEngine::emptyParameter($fcontent);  
         $fcontent = TemplateEngine::ConditionalStatement($fcontent);
         $fcontent = TemplateEngine::ToLoopContents($fcontent);        
         $fcontent = TemplateEngine::basic($fcontent);
+        $fcontent = TemplateEngine::emptyParameter($fcontent);  
 
         return $fcontent;
     }
@@ -89,24 +89,24 @@ class TemplateEngine {
     public function loadFile($filename, $content){
         $fcontent = file_get_contents($filename);
 
-        $fcontent = preg_replace("/\{\% load (.*) \%\}/",'<?php echo TemplateEngine::loadFile("views/".($1).".".$this->ext, $content); ?>',$fcontent);
+        $fcontent = preg_replace("/@\{\{(.*)load (.*)\}\}/",'<?php echo TemplateEngine::loadFile("views/".($2).".".$this->ext, $content); ?>',$fcontent);
         
         $fcontent = TemplateEngine::sessions($fcontent);
         $fcontent = TemplateEngine::keys($fcontent, $content);
-        $fcontent = TemplateEngine::emptyParameter($fcontent);
         $fcontent = TemplateEngine::ConditionalStatement($fcontent);
         $fcontent = TemplateEngine::ToLoopContents($fcontent);        
         $fcontent = TemplateEngine::basic($fcontent);
-  
+        $fcontent = TemplateEngine::emptyParameter($fcontent);
+
         $fcontent = eval("?>". $fcontent ."");
         return $fcontent;
     }
 
     static function emptyParameter($fcontent){
-        $fcontent = preg_replace("/@if\((.*)\~(.*)\~(.*)\)/", '<?php if(false){ ?>' ,$fcontent);
-        $fcontent = preg_replace("/@for\((.*)\~(.*)\~(.*)\)/", '<?php function(){ ?>' ,$fcontent);
-        $fcontent = preg_replace("/@foreach\((.*)\~(.*)\~(.*)\)/", '<?php function(){ ?>' ,$fcontent);
-        $fcontent = preg_replace("/(.*)\~(.*)\~(.*)/", "",$fcontent);
+        $fcontent = preg_replace("/(.*)if\((.*)\~(.*)\~(.*)\)/", '$1 if(false) ' ,$fcontent);
+        $fcontent = preg_replace("/(.*)for\((.*)\~(.*)\~(.*)\)/", '$1 function() ' ,$fcontent);
+        $fcontent = preg_replace("/(.*)foreach\((.*)\~(.*)\~(.*)\)/", '$1 function() ' ,$fcontent);
+        $fcontent = preg_replace("/(.*)\~(.*)\~(.*)/", "$1"."false"."$3",$fcontent);
         return $fcontent;
     }
 
@@ -114,7 +114,7 @@ class TemplateEngine {
         if(!is_null($content)){
             foreach ($content as $key => $value) {
                 if(!is_array($value)){
-                    $fcontent = preg_replace("/(.*)\~".$key."\~(.*)/", "$1".$content[$key]."$2" ,$fcontent);
+                    $fcontent = preg_replace("/(.*)\~".$key."\~(.*)/", '$1$content["'.$key.'"]$2' ,$fcontent);
                 } 
                 
                 if(is_array($value)) {
@@ -129,7 +129,7 @@ class TemplateEngine {
     static function sessions($fcontent){        
         foreach($_SESSION as $key => $value) {
             if(!is_array($value)){
-                $fcontent = preg_replace("/(.*)\~".$key."\~(.*)/", "$1".$_SESSION[$key]."$2" ,$fcontent);
+                $fcontent = preg_replace("/(.*)\~".$key."\~(.*)/", '$1$_SESSION["'.$key.'"]$2' ,$fcontent);
             } 
             
             if(is_array($value)) {

@@ -41,3 +41,7 @@ function Redirect($location) {
 function unhandledPost() {
     return file_get_contents("core/errors/unhadledPost.fish.php");
 }
+
+function Error404(){
+    return file_get_contents("views/errors/404.fish.html");
+}
