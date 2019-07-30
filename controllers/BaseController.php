@@ -21,6 +21,7 @@ use App\Core\Engine\Router\Request;
 class BaseController extends Controller {
 
     public function welcome(){
+        $data = ["banana"=>"monkey","orange"=>"Apes"];
         return view("base/welcome");
     }
 }

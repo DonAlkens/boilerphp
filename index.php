@@ -13,6 +13,7 @@ Server::start();
 # Registering a listening route
 include "route.php";
 Route::listen();
+#Route::pattern();
 
 include "migrations.php";
 

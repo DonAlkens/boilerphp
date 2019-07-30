@@ -5,30 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="/bundles/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bundles/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/bundles/css/main.css">
 </head>
 <body>
-    <h4>Welcome to Boiler 1.0</h4>
-    @if(strtoupper("~banana~") !== strtolower("~orange~"))
-        @{{"~banana~ is not ~orange~"}}
-    @endif
-
-    @foreach(~apple~ as $key => $value)
-        <span>Say banana</span>
-    @endforeach
-
-    @{{"~banana~"}} and @{{"~orange~"}}
-    @{{10 * 10}}
-
-    @foreach(~apple~ as $key => $value)
-        @{{$key + 1}}
-    @endforeach
-
-    @if("a" == "n")
-        @{{"Console log A"}}
-    @endif
-
-    @if(~user~["isauthenticated"])
-        <span>@{{~user~["username"]}}</span>
-    @endif
+    <div class="container">
+        <div class="wel">
+            <div class="text-center">
+                <img src="" alt="boiler php" width="70px">
+                <h4 class="wel-text">Welcome to Boiler 1.0</h4>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

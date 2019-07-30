@@ -41,7 +41,7 @@ class Route {
         $set = self::$routes[$method];
 
         # get url
-        $url = $route["url"];
+        $url = "/index".$route["url"];
         # prepare properties
         $properties = array("action" => $route["action"]);
 
@@ -81,6 +81,8 @@ class Route {
         # if uri is empty after trim
         if(empty($uri)) {
             $uri = "index";
+        } else {
+            $uri = "index/".$uri;
         }
 
 
