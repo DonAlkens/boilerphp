@@ -11,16 +11,15 @@ class TemplateEngine {
     public function render($fileContent, $content=null) {
 
         self::$content = $content;
-
         $fcontent = TemplateEngine::editFile($fileContent, $content);
+
         $fcontent = eval("?>".$fcontent);
         return $fcontent;
     }
 
 
     public function basic($fcontent) {
-        
-        
+        # framework initials
         $fcontent = preg_replace("/@\{\{(.*)\}\}(.*)\@\{/", '<?php echo $1; ?>$2@{',$fcontent);
         $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}(.*)\@\{/", '<?php echo $2; ?>$4@{',$fcontent);
         $fcontent = preg_replace("/@\{\{\"(.*)\"\}\}/", '<?php echo "$1"; ?>',$fcontent);
@@ -88,16 +87,7 @@ class TemplateEngine {
 
     public function loadFile($filename, $content){
         $fcontent = file_get_contents($filename);
-
-        $fcontent = preg_replace("/@\{\{(.*)load (.*)\}\}/",'<?php echo TemplateEngine::loadFile("views/".($2).".".$this->ext, $content); ?>',$fcontent);
-        
-        $fcontent = TemplateEngine::sessions($fcontent);
-        $fcontent = TemplateEngine::keys($fcontent, $content);
-        $fcontent = TemplateEngine::ConditionalStatement($fcontent);
-        $fcontent = TemplateEngine::ToLoopContents($fcontent);        
-        $fcontent = TemplateEngine::basic($fcontent);
-        $fcontent = TemplateEngine::emptyParameter($fcontent);
-
+        $fcontent = TemplateEngine::editFile($fcontent, $content);
         $fcontent = eval("?>". $fcontent ."");
         return $fcontent;
     }

@@ -246,12 +246,28 @@ class Schema {
         }
         return null;
     }
+	
+	public function query($querystring){
+        if($querystring !== "") {
+            $data = $this->db->query($querystring);
+            return $data->fetch_assoc();
+        } 
+        return null;
+    }
 
     private $sn = "int(9) auto_increment not null,";
     private $id = "int(9) not null unique,";
     private $textid = "varchar(255) not null unique,";
     private $email = "varchar(255) not null unique,";
     private $text = "text not null,";
+    private $float = "float(10,7) not null,";
+    private $floatL1 = "float(10,1) not null,";
+    private $floatL2 = "float(10,2) not null,";
+    private $floatL3 = "float(10,3) not null,";
+    private $floatL4 = "float(10,4) not null,";
+    private $floatL5 = "float(10,5) not null,";
+    private $floatL6 = "float(10,6) not null,";
+    private $floatL7 = "float(10,7) not null,";
     private $longtext = "longtext not null,";
     private $int = "int(10) not null,";
     private $bool = "tinyint not null,";

@@ -14,8 +14,7 @@ function view($filename, $content=null) {
 
         $template = new TemplateEngine($ext);
         $fcontent = $template->extendLayout($fcontent, $viewPath, $ext);
-        $fcontent = $template->render($fcontent, $content);        
-
+        $fcontent = $template->render($fcontent, $content);      
         return $fcontent;
     } 
     else {
