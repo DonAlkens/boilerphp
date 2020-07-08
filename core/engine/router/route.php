@@ -1,21 +1,37 @@
 <?php
 
-# namespace App\Core\Engine;
+namespace App\Core\Engine;
 
-# use Error, Exception;
+use Error, Exception;
 
 
 class Route {
 
     static private $routes = array(
-        "get"=>array(),
-        "post"=>array()
+        "get"   =>  array(),
+        "post"  =>  array()
     );
 
     static private $lastUrl = "";
 
     public function __construct(){
 
+    }
+
+    static public function HttpAction($path, $controller){
+        $map = [
+            "url" => $path,
+            "method" => "get",
+            "action" => $controller
+        ];
+        Route::mapRoute($map);
+
+        $map = [
+            "url" => $path,
+            "method" => "post",
+            "action" => $controller
+        ];
+        Route::mapRoute($map);
     }
 
     static public function get($path, $controller){
@@ -86,11 +102,15 @@ class Route {
         }
 
 
-
         # if uri is registered in method class
         if(array_key_exists($uri, self::$routes[$method])){
 
             $path = self::$routes[$method][$uri];
+
+            $controller = explode("::", $path["action"])[0];
+            //Call Coutroller to Load All MiddleWare and Auth
+            new $controller();
+
             echo call_user_func($path["action"], new Request($method) );
 
             self::$lastUrl = $path;
@@ -102,7 +122,7 @@ class Route {
             # for url that have parameters
             $pattern = Route::verifyPattern($uri, $method);
             
-            # checking it patter exists
+            # checking it pattern exists
             if(array_key_exists($pattern, self::$routes[$method])){
                 $path = self::$routes[$method][$pattern];
 
@@ -131,6 +151,10 @@ class Route {
                 $req->param = self::$routes[$method][$pattern]["param"];
                 $req->map($req->result);
 
+                $controller = explode("::", $path["action"])[0];
+                //Call Coutroller to Load All MiddleWare and Auth
+                new $controller();
+                
                 echo call_user_func($path["action"], $req);
 
                 self::$lastUrl = $path;
@@ -151,7 +175,7 @@ class Route {
         echo json_encode(self::$routes);
     }
 
-    private function interogate($url){
+    static private function interogate($url){
         # cleaning the url
         $clean = trim($url,"/");
 
@@ -176,7 +200,7 @@ class Route {
         return $clean;
     }
 
-    private function createPP($clean){
+    static private function createPP($clean){
         $split = explode("/",$clean);
         $base = $split[0];
         $params = [];
@@ -205,7 +229,7 @@ class Route {
         return [$base, $params];
     }
 
-    public function verifyPattern($uri, $method){
+    static public function verifyPattern($uri, $method){
         $split = explode("/",$uri);
         $base = '';
 

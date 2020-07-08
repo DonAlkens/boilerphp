@@ -1,5 +1,7 @@
 <?php
 
+use App\Core\Engine\Route;
+
 /** 
  * @create all routes here 
  * @using the mapRoute method from the Route Class
@@ -23,4 +25,10 @@
  * Route::post("/admin", "AdminController::create_template");
  * */
 
-Route::get("/", "BaseController::welcome");
+
+Route::get("/","BaseController::home");
+Route::HttpAction("/contact","BaseController::contact");
+
+
+Route::get("/testing", "TestController::testing");
+Route::get("/ipaddress","UserController::getUserIp");

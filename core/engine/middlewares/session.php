@@ -20,17 +20,13 @@ class Session {
     static function get($name){
         if(isset($_SESSION[$name])){
             return $_SESSION[$name];
-        }
+        } 
+        return false;
     }
-}
 
-
-function HasPermission($sessionKey, $redirectUrl=null){
-    if(isset($_SESSION[$sessionKey])){
-        $logger = true;
-    } 
-    else {
-        return Redirect($redirectUrl);
+    static function endall(){
+        $_SESSION == null;
+        session_destroy();
     }
 }
 

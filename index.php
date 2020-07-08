@@ -1,29 +1,36 @@
 <?php
 session_start();
-include "./core/admin/authentication.php";
-# include "./Config.php";
-include "./core/server.php";
+
+require __DIR__."/Core/autoload_modules.php";
+require __DIR__."/Core/server.php";
+
+
+/*
+* -----------------------------------------------------
+* Server Class for App Server
+* -----------------------------------------------------
+*/ 
+
 use App\Core\Server;
+$server = new Server($debug = true);
 
 
-# Starting the App Server 
-Server::start();
+/*
+* -----------------------------------------------------
+* Server will be initialized and modules will be loaded
+* using the load modules function from the server
+* -----------------------------------------------------
+*/ 
+
+$server->load_modules($modules);
 
 
-# Registering a listening route
-include "route.php";
-Route::listen();
-#Route::pattern();
+/*
+* --------------------------------------------------------
+* Routing will be handled by route class using the listen
+* funtion from the Route Class
+* -------------------------------------------------------
+*/ 
 
-include "migrations.php";
+$server->start();
 
-function __autoload($class_name){
-        if(file_exists("./controllers/".$class_name.".php")){
-                include "./controllers/".$class_name.".php";
-        } 
-        else if(file_exists("./models/".$class_name.".php")) {
-                include "./models/".$class_name.".php";
-        }
-}
-
-?>

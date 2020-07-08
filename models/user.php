@@ -11,46 +11,33 @@
  *  #the model structure should be design 
  *  #and assign to the public $model variable
  * }
- * */ 
+ * */
 
-use App\Core\Database\Schema;
+use App\Core\Database\Model;
 
-class User extends Schema{
+class User extends Model {
 
-    public $table = '';
-
-    private $sn;
-    private $user_id;
-    private $firstname;
-    private $lastname;
-    private $email;
-    private $username;
-    private $password;
-
+    public $table = 'users';
 
     public $model = array(
-        "sn"=>"sn",
-        'user_id' => 'textid',
-        'firstname' => 'string',
-        'lastname' => 'string',
-        'email' => 'email',
-        'username'=> 'uniquestring',
+        'sn' => 'increments',
+        'user_id' => 'uniqueInteger',
+        'fullname' => 'string',
+        "username" => "string",
+        'email' => 'uniqueString',
+        'phone' => 'string',
         'password' => 'string',
+        'is_admin' => 'bool',
+        'blocked' => 'bool'
     );
 
-    public function generate_id(){
-        $start = uniqid();
-        $rand = rand(23456, 98125);
-        $end = uniqid();
-        return $start."_".$rand."_".$end;
-
+    
+    public function admin(){
+        return $this->hasOne(Admin::class, "user_id");
     }
 
-    public function set_password($password){
-        return password_hash($password, PASSWORD_DEFAULT);
+    public function address(){
+        return $this->hasMultiple(Address::class, "user_id");
     }
 
-    public function confirm_password($password, $hash){
-        return password_verify($password, $hash);
-    }
 }

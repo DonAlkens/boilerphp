@@ -1,16 +1,27 @@
 <?php 
 
+
+function get_view_path($filename) {
+    
+    include "./config.php";
+    
+    $path = "./".$viewPath."/";
+    $ext = "fish.html";
+    $fullpath = $path.$filename.".".$ext;
+
+    return [ "fullpath" => $fullpath, "viewpath" => $viewPath, "extension" => $ext];
+}
+
 function view($filename, $content=null) {
 
-    include "./Config.php";
+    $path = get_view_path($filename);
+    $fullpath = $path["fullpath"]; 
+    $viewPath = $path["viewpath"];
+    $ext = $path["extension"];
 
-    $path = "./".$viewPath."/";
-    $ext = $viewEngine.".".$extension;
-    $filename = $path.$filename.".".$ext;
-
-
-    if(file_exists($filename)) {
-        $fcontent = file_get_contents($filename);
+    if(file_exists($fullpath)) {
+        
+        $fcontent = file_get_contents($fullpath);
 
         $template = new TemplateEngine($ext);
         $fcontent = $template->extendLayout($fcontent, $viewPath, $ext);
@@ -23,17 +34,21 @@ function view($filename, $content=null) {
 
 }
 
-function Content($text){
+function content($text){
     return $text;
 }
 
-function Json($content){
+function json($content){
     return json_encode($content);
 }
 
-function Redirect($location) {
+function redirect($location) {
     $location = trim($location,"/");
     $location = "/".$location;
+    return header("location:".$location);
+}
+
+function redirectToHost($location) {
     return header("location:".$location);
 }
 

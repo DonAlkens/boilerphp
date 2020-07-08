@@ -1,6 +1,15 @@
 RewriteEngine On
 RewriteBase /
 
+Redirect 301 /Controllers /
+Redirect 301 /Models /
+Redirect 301 /Core /
+Redirect 301 /Notifications /
+Redirect 301 /Notifications /
+
+#RewriteCond %{HTTP_HOST} ^(^.*)\.localhost
+#RewriteRule (.*) index.php?subdomain=$1
+
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.+)$ index.php [QSA,L]

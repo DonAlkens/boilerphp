@@ -8,8 +8,7 @@ class Fs {
 
     static public $filename = ""; 
 
-
-    public function copy($source, $destination){
+    static public function copy($source, $destination){
         if(copy($source, $destination))
         {
             return true;
@@ -17,7 +16,7 @@ class Fs {
         return false;
     }
 
-    public function copyr($source, $dest)
+    static public function copyr($source, $dest)
     {
        // Simple copy for a file
        if (is_file($source)) {
@@ -48,7 +47,7 @@ class Fs {
        return true;
     }
 
-    public function copy_directory($src,$dst) {
+    static public function copy_directory($src,$dst) {
         $dir = opendir($src);
         @mkdir($dst);
         while(false !== ( $file = readdir($dir)) ) {
@@ -64,35 +63,35 @@ class Fs {
         closedir($dir);
     }
 
-    public function mkdir($dirname){
+    static public function mkdir($dirname){
         return mkdir($dirname);
     }
 
-    public function rmdir($dirname){
+    static public function rmdir($dirname){
         rmdir($dirname);
     }
 
-    public function delete($filename){
+    static public function delete($filename){
         if(unlink($filename)){
             return true;
         }
         return false;
     }
 
-    public function exists($filename){
+    static public function exists($filename){
         if(file_exists($filename)){
             return true;
         }
         return false;
     }
 
-    public function filename($index){
+    static public function filename($index){
         $file_name = $_FILES[$index]["name"];
 
         return $file_name;
     }
 
-    public function uploadImage($properties,$extensions=null){
+    static public function uploadImage($properties,$extensions=null){
 
         if(is_null($extensions)) {
             $extensions = ["jpg","png","gif","bmp","jpeg","JPG","PNG","BMP","GIF","JPEG"];
@@ -155,7 +154,7 @@ class Fs {
         }
     }
 
-    public function uploadFile($properties, $extensions=null){
+    static public function uploadFile($properties, $extensions=null){
 
         if(is_null($extensions)){
             $extensions = ["zip","pdf","docx","doc", "cdr","psd","html","css",
@@ -165,7 +164,7 @@ class Fs {
         return Fs::uploadImage($properties, $extensions);
     }
 
-    public function unzip($zipfile, $destination) {
+    static public function unzip($zipfile, $destination) {
         $zip = new ZipArchive;
         if($zip->open($zipfile) === TRUE) {
             $zip->extractTo($destination);
@@ -176,11 +175,11 @@ class Fs {
         return false;
     }
 
-    public function get_filename(){
+    static public function get_filename(){
         return self::$filename;
     }
 
-    public function rename($oldname, $newname){
+    static public function rename($oldname, $newname){
         $rn = rename($oldname, $newname);
         return $rn;
     }

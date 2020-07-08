@@ -1,9 +1,13 @@
 <?php
 
+use App\Admin\Auth;
 use App\Helpers\Fs;
 use App\Action\Urls\Controller;
-use App\Action\Urls\view;
-use App\Core\Engine\Router\Request;
+use App\Helpers\Hash;
+use App\Messages\Notification\ContactNotfication;
+use App\Messages\Notification\OrderNotfication;
+
+# use App\Core\Engine\Router\Request;
 
 # Create all action method in the Controller class
 # all method from the must must return
@@ -20,8 +24,18 @@ use App\Core\Engine\Router\Request;
 
 class BaseController extends Controller {
 
-    public function welcome(){
-        $data = ["banana"=>"monkey","orange"=>"Apes"];
+    public function __construct()
+    {
+        
+    }
+
+    public function home() {
+        
         return view("base/welcome");
     }
+
+    public function contact() {
+        echo $_ENV["FB_APP_SECRET_KEY"];
+    }
+
 }
