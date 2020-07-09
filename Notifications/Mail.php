@@ -7,6 +7,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+use TemplateEngine;
+
 include_once("PHPMailer/src/PHPMailer.php");
 include_once("PHPMailer/src/SMTP.php");
 include_once("PHPMailer/src/Exception.php");
@@ -14,59 +16,58 @@ include_once("PHPMailer/src/Exception.php");
 class Mail {
 
     public $sender;
-
-    public $sender_name = "APRILVINES";
+    public $sender_name = "April Vines";
 
     public $receiver;
-
     public $receiver_name;
 
-    public $reply_mail;
-
     public $subject;
-    
     public $message;
-    
+
+    public $reply_mail = "no-reply@aprilvines.com";    
     public $header;
 
     public $is_smtp = true;
-
     public $port  = 587;
-
     public $smtp_host = "mail.aprilvines.com";
-
     public $smtp_user = "info@aprilvines.com";
-
-    public $smtp_pass = "";
+    public $smtp_pass = "Aprilvines2020!";
 
     public function __construct($sender = null, $receiver = null, $subject = null,$message = null, $header = null)
     {
-        $this->sender = $sender;
-        $this->receiver = $receiver;
-        $this->subject = $subject;
-        $this->message = $message;
-        $this->header = $header;
+        $this->sender = $sender; $this->receiver = $receiver; $this->subject = $subject; $this->message = $message; $this->header = $header;
+        $this->build();
+        $this->config();
     }
 
-    public function send()
+    public function build(){/******/}
+
+    public function config(){/******/}
+
+    public function send($smtp = false)
+    {
+        if($smtp != false) {
+            return $this->smtp_mailer();
+        }
+
+        return $this->default_mailer();
+    }
+
+
+    public function smtp_mailer() 
     {
         $mail = new PHPMailer(true);
 
         try {
             //Server settings
-            // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                   // Enable verbose debug output
+            //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                   // Enable verbose debug output
             $mail->isSMTP();                                         // Send using SMTP
-            // $mail->Host       = $this->smtp_host;                    // Set the SMTP server to send through
-            // $mail->SMTPAuth   = $this->is_smtp;                      // Enable SMTP authentication
-            // $mail->Username   = $this->smtp_user;                    // SMTP username
-            // $mail->Password   = $this->smtp_pass;                    // SMTP password
-            // $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;      // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-            // $mail->Port       = $this->port;                         // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-            
-            $mail->Host = 'localhost';
-            $mail->SMTPAuth = false;
-            $mail->SMTPAutoTLS = false; 
-            $mail->Port = 25;
+            $mail->Host       = $this->smtp_host;                    // Set the SMTP server to send through
+            $mail->SMTPAuth   = $this->is_smtp;                      // Enable SMTP authentication
+            $mail->Username   = $this->smtp_user;                    // SMTP username
+            $mail->Password   = $this->smtp_pass;                    // SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;      // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+            $mail->Port       = $this->port;                         // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
             //Recipients
             $mail->setFrom($this->sender, $this->sender_name);
@@ -96,10 +97,9 @@ class Mail {
             // echo $this->response;
             return false;
         }
-        
     }
     
-    public function send2()
+    public function default_mailer()
     {
         $headers = "MIME-VERSION: 1.0" . " \r\n";
         $headers .= "Content-type: text/html; charset=UTF-8 "."\r\n";
@@ -113,19 +113,10 @@ class Mail {
         }
     }
 
-    public function template($template, $data)
+    public function template($template, $data = null)
     {
-        $template_content = file_get_contents($template);
-        if($template_content !== ""){
-
-            foreach($data as $key => $value){
-                $pass_data = preg_replace('/\{\{'.$key.'\}\}/', $value,  $template_content);
-                $template_content = $pass_data;
-            }
-            $message =  $pass_data;
-            return $message;
-        }
-        return null;
+        $message = mail_view($template, $data);
+        return $message;
     }
 
 

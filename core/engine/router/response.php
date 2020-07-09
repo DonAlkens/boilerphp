@@ -34,6 +34,20 @@ function view($filename, $content=null) {
 
 }
 
+function mail_view($filename, $data) {
+
+    if(file_exists($filename)) {
+        $fcontent = file_get_contents($filename);
+
+        $template = new TemplateEngine;
+        $fcontent = $template->editFile($fcontent, $data);      
+        return $fcontent;
+    } 
+    else {
+        throw new Error($filename." does not exists");
+    }
+}
+
 function content($text){
     return $text;
 }

@@ -4,22 +4,25 @@ namespace App\Messages\Notification;
 
 use App\Messages\Mail;
 
+
 class RegistrationNotfication extends Mail {
 
-    public function __construct($user)
+    public function __construct($email, $data)
     {
-        $this->user = $user;
+        $this->email = $email;
+        $this->data = $data;
+        
+        parent::__construct();
     }
 
-    public function build() {
+    public function build() 
+    {
         
-        $this->subject = "Account Confirmation";
-        $this->message = "You just signup on this platform";
-        $this->receiver = "akinniyiakinpelumi@gmail.com";
-        $this->receiver_name = $this->user->name;
+    }
 
-        $this->send();
-
+    public function config()
+    {
+        
     }
 
 

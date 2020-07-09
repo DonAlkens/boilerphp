@@ -3,7 +3,11 @@
 
 namespace Console;
 
-class Command {
+use Console\Support\Actions;
+
+require_once __DIR__."/src/Actions.php";
+
+class Command extends Actions {
 
     /*
     * ---------------------------------------- 
@@ -19,8 +23,12 @@ class Command {
 
     public function create(...$parameters)
     {
-        $name = null;
-    }
+        $action = isset($parameters[0][0]) ? $parameters[0][0] : null;
+        $name = isset($parameters[0][1]) ? $parameters[0][1] : null; 
 
+        if($action != null) {
+            $this->$action($name);
+        }
+    }
     
 }

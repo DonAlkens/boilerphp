@@ -6,7 +6,7 @@ class TemplateEngine {
 
     public static $content = [];
 
-    public function __construct($ext){
+    public function __construct($ext = null){
         $this->ext = $ext;
     }
 

@@ -16,7 +16,7 @@ use App\Action\Urls\Controller;
  * }
  * */ 
 
-class [Controller] extends Controller {
+class ProductController extends Controller {
 
     public function __construct()
     {
@@ -25,7 +25,7 @@ class [Controller] extends Controller {
 
     public function index()
     {
-        return view("[View]/index");
+        return view("product/index");
     }
 
 }

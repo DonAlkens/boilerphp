@@ -2,7 +2,9 @@
 
 namespace Console\Support;
 
-class Actions {
+require_once __DIR__."/Helpers.php";
+
+class Actions extends Helpers {
 
     /**
      * Create Controllers using command line manager
@@ -11,39 +13,48 @@ class Actions {
     * */
     public function controller($name)
     {
-        if(file_exists("../../controllers/".$name.".php")){
-            echo "Controller already exists";
-            return false;
+        $this->path = "./Controllers/".$name.".php";
+
+        if($this->check_existent($this->path)) {
+            echo "$name already exists"; exit;
         }
 
-        // Configuring the controller components for new controller
-        $readComponnent = file_get_contents("lib/components/controller.component");
-        $Configure = preg_replace("/\[Controller\]/",$name, $readComponnent);
-        $viewFolder = str_replace("Controller","",$name);
-        $Configure = preg_replace("/\[View\]/",$viewFolder, $Configure);
-
-        // Creating Controller File with default configurations
-        $controller = fopen("../../controllers/".$name.".php","w");
-        fwrite($controller, $Configure);
-        fclose($controller);
+        $this->read_controller_component();
+        $this->configure_controller($name);
+        $this->write_module($this->path);
+        
+        echo "$name successfully created!";
     }
 
 
     public function model($name)
     {
-        if(file_exists("../../models/".$name.".php")){
-            echo "Model $name already exists";
-            return false;
+        $this->path = "./Models/".$name.".php";
+
+        if($this->check_existent($this->path)) {
+            echo "Model $name already exists"; exit;
         }
 
-        // Configuring the controller components for new controller
-        $readComponnent = file_get_contents("lib/components/model.component");
-        $Configure = preg_replace("/\[Model\]/",$name, $readComponnent);
+        $this->read_model_component();
+        $this->configure_model($name);
+        $this->write_module($this->path);
+        
+        echo "Model $name successfully created!";
+    }
 
-        // Creating Model File with default configurations
-        $model = fopen("../../models/".$name.".php","w");
-        fwrite($model, $Configure);
-        fclose($model);
+    public function migration($name)
+    {
+        $this->path = "./Migrations/".$name."Migration.php";
+
+        if($this->check_existent($this->path)) {
+            echo "Migrations $name already exists"; exit;
+        }
+
+        $this->read_migration_component();
+        $this->configure_migration($name);
+        $this->write_module($this->path);
+        
+        echo "Migrations $name successfully created!";
     }
 
 }

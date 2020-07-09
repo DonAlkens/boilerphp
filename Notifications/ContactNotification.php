@@ -4,19 +4,25 @@ namespace App\Messages\Notification;
 
 use App\Messages\Mail;
 
+
 class ContactNotfication extends Mail {
 
-    public function __construct()
+    public function __construct($data, $email)
     {
-        // code ...
+        $this->email = $email;
+        $this->data = $data;
+        
+        parent::__construct();
     }
 
-    public function build() {
+    public function build() 
+    {
         
-        $this->receiver = "contact@aprilvines.com";
-        $this->receiver_name = "April Vines";
-        $this->send();
+    }
 
+    public function config()
+    {
+        
     }
 
 

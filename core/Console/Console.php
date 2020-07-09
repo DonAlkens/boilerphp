@@ -3,21 +3,37 @@
 
 namespace Console;
 
-include "Command.php";
+require "Command.php";
 use CLI\CLI_Helper;
 
 class Console extends Command {
 
-    public $command;
-
     public function __construct($argv = null)
     {
-        $this->command = $argv;
+        $this->arguments = $argv;
     }
 
     public function run()
     {   
-        array_splice($this->command, 0, 1);
+        array_splice($this->arguments, 0, 1);
+        if($this->length($this->arguments) > 0) {
+            $this->parse($this->arguments);
+        } 
+
     }
 
+    public function parse($arguments) {
+
+        $command = $arguments[0];
+
+        if(in_array($command, $this->commands)) {
+            // Remove command from arguments 
+            array_splice($arguments, 0, 1);
+            
+            // Use function to execute commands
+            $this->$command($arguments);
+        }
+
+
+    }
 }

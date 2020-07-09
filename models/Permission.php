@@ -2,15 +2,11 @@
 
 /** 
  * creating a model class
- * it must extends the schema class
+ * it must extends the model class
  * in order to use the dboperation methods in 
  * the model class
  * @example creating a model
- * class User extends Schema{
- *  #state the table name in the public $table variable
- *  #the model structure should be design 
- *  #and assign to the public $model variable
- * }
+ * class User extends Model {}
  * */
 
 use App\Core\Database\Model;

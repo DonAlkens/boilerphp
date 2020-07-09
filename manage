@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__.'/Core/Console/Console.php';
+
+use Console\Console;
+
+$console = new Console($argv);
+
+/*
+|----------------------------------------------
+| Run the Console Application
+|----------------------------------------------
+|
+| ALl command run on the cli will be handle and 
+| response will be sent back to the terminal
+|
+*/
+
+$console->run();

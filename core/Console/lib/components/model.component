@@ -2,13 +2,15 @@
 
 namespace App;
 
+use App\Core\Database\Model;
+
+
 /*
  * ------------------------------------------------------
  * creating a model class it must extends the Model class
  * ------------------------------------------------------
  */
 
-use App\Core\Database\Model;
 
 class [Model] extends Model {
 

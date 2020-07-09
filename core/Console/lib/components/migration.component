@@ -1,21 +1,21 @@
-<?php
+<?php 
 
 use App\Core\Database\Migration;
-use App\Core\Database\Diagram;
 
-class [Migration] extends Migration {
+class [MigrationName] extends Migration {
 
     public function create() {
 
-        $this->table("[Table]", new Diagram (
+        $this->table("[TableName]", array (
             "id" => $this->bigIncrements(),
             "created_date" => $this->timestamp()
         ));
     }
 
     public function drop() {
+
+        $this->dropIfExists("[TableName]");
         
-        $this->dropIfExists("[Table]");
     }
 
 }
