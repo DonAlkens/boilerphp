@@ -29,7 +29,6 @@ class Console extends Command {
         if(in_array($command, $this->commands)) {
             // Remove command from arguments 
             array_splice($arguments, 0, 1);
-            
             // Use function to execute commands
             $this->$command($arguments);
         }

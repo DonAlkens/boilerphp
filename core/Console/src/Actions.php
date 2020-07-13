@@ -11,7 +11,7 @@ class Actions extends Helpers {
      * @param $name, $type
      * Boolean response if controller is created
     * */
-    public function controller($name)
+    public function controller($name, $flag = null)
     {
         $this->path = "./Controllers/".$name.".php";
 
@@ -27,8 +27,14 @@ class Actions extends Helpers {
     }
 
 
-    public function model($name)
+    public function model($name, $flag = null)
     {
+        if($this->flag_checker("model", $flag)) {
+            // $this->flag_manager($name);
+        } else {
+            return false;
+        }
+
         $this->path = "./Models/".$name.".php";
 
         if($this->check_existent($this->path)) {
@@ -42,7 +48,7 @@ class Actions extends Helpers {
         echo "Model $name successfully created!";
     }
 
-    public function migration($name)
+    public function migration($name, $flag = null)
     {
         $this->path = "./Migrations/".$name."Migration.php";
 

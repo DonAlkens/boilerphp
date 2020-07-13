@@ -25,9 +25,16 @@ class Command extends Actions {
     {
         $action = isset($parameters[0][0]) ? $parameters[0][0] : null;
         $name = isset($parameters[0][1]) ? $parameters[0][1] : null; 
+        $flag = isset($parameters[0][2]) ? $parameters[0][2] : null;
 
         if($action != null) {
-            $this->$action($name);
+            if($flag != null) {
+                if(array_key_exists($flag, $this->flags)) {
+                    $this->$action($name, $flag);
+                }
+            } else {
+                $this->$action($name);
+            }
         }
     }
     

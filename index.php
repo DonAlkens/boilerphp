@@ -1,19 +1,17 @@
 <?php
 session_start();
 
-require __DIR__."/Core/autoload_modules.php";
-require __DIR__."/Core/server.php";
+require __DIR__."/Core/app_loader.php";
 
+use App\Core\Server;
 
 /*
 * -----------------------------------------------------
-* Server Class for App Server
+* Initialize App Server
 * -----------------------------------------------------
 */ 
 
-use App\Core\Server;
 $server = new Server($debug = true);
-
 
 /*
 * -----------------------------------------------------
@@ -23,7 +21,6 @@ $server = new Server($debug = true);
 */ 
 
 $server->load_modules($modules);
-
 
 /*
 * --------------------------------------------------------

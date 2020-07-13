@@ -8,6 +8,26 @@ class Helpers {
         "create", "start"
     );
 
+    public $flags = array(
+        "--m" => "model",
+        "--a" => "all",
+        "--c" => "controller",
+        "--d" => "migration"
+    );
+
+    public function flag_checker($action, $flag) {
+        if($flag != null) {
+            if($this->flags[$flag] == $action) {
+                echo "mis-usage of flag on create ". $action;
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     public function check_existent($path) {
         if(file_exists($path)){
             return true;

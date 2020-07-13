@@ -1,8 +1,5 @@
 {
-    "name": "",
-    "version": "0.0.1",
-
-    "keywords" : [
-        
-    ]
+    "name": "BoilerPHP",
+    "description": "A php web application framework",
+    "version": "0.0.1"
 }
