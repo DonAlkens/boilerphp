@@ -1,9 +1,17 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__.'/Core/Console/Console.php';
+require __DIR__.'/Core/autoload_console.php';
 
 use Console\Console;
+
+/*
+|----------------------------------------------
+| Initializing the console app
+|----------------------------------------------
+| @param $argv - the command line arguments
+|
+*/
 
 $console = new Console($argv);
 

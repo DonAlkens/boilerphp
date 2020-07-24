@@ -3,13 +3,11 @@
 
 function get_view_path($filename) {
     
-    include "./config.php";
-    
-    $path = "./".$viewPath."/";
+    $path = "./Views/";
     $ext = "fish.html";
     $fullpath = $path.$filename.".".$ext;
 
-    return [ "fullpath" => $fullpath, "viewpath" => $viewPath, "extension" => $ext];
+    return [ "fullpath" => $fullpath, "viewpath" => "Views", "extension" => $ext];
 }
 
 function view($filename, $content=null) {

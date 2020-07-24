@@ -1,5 +1,9 @@
 <?php
 
+namespace App;
+
+use App\Core\Database\Model;
+
 /** 
  * creating a model class
  * it must extends the schema class
@@ -13,27 +17,11 @@
  * }
  * */
 
-use App\Core\Database\Model;
 
 class User extends Model {
-
-    public $table = 'users';
-
-    public $model = array(
-        'sn' => 'increments',
-        'user_id' => 'uniqueInteger',
-        'fullname' => 'string',
-        "username" => "string",
-        'email' => 'uniqueString',
-        'phone' => 'string',
-        'password' => 'string',
-        'is_admin' => 'bool',
-        'blocked' => 'bool'
-    );
-
     
     public function admin(){
-        return $this->hasOne(Admin::class, "user_id");
+        return $this->hasOne(Admin::class, ["admin_id" => "user_id"]);
     }
 
     public function address(){

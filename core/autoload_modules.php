@@ -16,10 +16,12 @@ $modules =  array(
     "database" => [
         "Database::DataTypes",
         "Database::QueryBuilder",
+        "Database::Connection",
+        "Database::Diagram",
         "Database::Schema",
         "Database::Relations",
         "Database::Model", 
-        "Database::Migrations",
+        "Database::Migration",
         "Database::Config",
     ],
 

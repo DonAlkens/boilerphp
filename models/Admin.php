@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Core\Database\Model;
+
 /** 
  * creating a model class
  * it must extends the schema class
@@ -15,15 +17,11 @@ namespace App;
  * }
  * */
 
-use App\Core\Database\Model;
 
 class Admin extends Model {
-
-    public $table = 'admins';
-    
     
     public function user(){
-        return $this->hasOne(User::class, "user_id");
+        return $this->hasOne(User::class, ["user_id" => "admin_id"]);
     }
 
     public function role(){

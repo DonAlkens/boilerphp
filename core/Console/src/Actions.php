@@ -2,9 +2,9 @@
 
 namespace Console\Support;
 
-require_once __DIR__."/Helpers.php";
 
-class Actions extends Helpers {
+
+class Actions extends ActionHelpers {
 
     /**
      * Create Controllers using command line manager
@@ -15,52 +15,74 @@ class Actions extends Helpers {
     {
         $this->path = "./Controllers/".$name.".php";
 
-        if($this->check_existent($this->path)) {
-            echo "$name already exists"; exit;
+        if($this->checkExistent($this->path)) {
+            echo "$name already exists"; 
+            return false;
         }
 
-        $this->read_controller_component();
-        $this->configure_controller($name);
-        $this->write_module($this->path);
-        
-        echo "$name successfully created!";
+        if($this->configureController($name, $this->path)) {
+
+            if(isset($this->run_flag) && $this->run_flag) {
+                $this->flagHandler($name, $flag, "controller", $this->path);
+            }
+
+            return true;
+        }
+
+        print("Unable to create model ".$name);
+        return false;
     }
 
 
     public function model($name, $flag = null)
     {
-        if($this->flag_checker("model", $flag)) {
-            // $this->flag_manager($name);
-        } else {
-            return false;
+        if(!is_null($flag)) {
+            if($this->flagChecker("model", $flag)) { $this->run_flag = true;} 
+            else { return $this->run_flag = false; }
         }
 
-        $this->path = "./Models/".$name.".php";
+        $path = "./Models/".$name.".php";
 
-        if($this->check_existent($this->path)) {
+        if($this->checkExistent($path)) {
             echo "Model $name already exists"; exit;
         }
 
-        $this->read_model_component();
-        $this->configure_model($name);
-        $this->write_module($this->path);
+        if($this->configureModel($name, $path)) {
+
+            if(isset($this->run_flag) && $this->run_flag) {
+                $this->flagHandler($name, $flag, "model", $path);
+            }
+
+            return true;
+        }
         
-        echo "Model $name successfully created!";
+        print("Unable to create model ".$name);
+        return false;
     }
 
     public function migration($name, $flag = null)
     {
         $this->path = "./Migrations/".$name."Migration.php";
 
-        if($this->check_existent($this->path)) {
-            echo "Migrations $name already exists"; exit;
+        if($this->checkExistent($this->path)) {
+            echo "Migration $name already exists"; exit;
         }
 
-        $this->read_migration_component();
-        $this->configure_migration($name);
-        $this->write_module($this->path);
-        
-        echo "Migrations $name successfully created!";
+        if($this->configureMigration($name, $this->path)) {
+
+            if(isset($this->run_flag) && $this->run_flag) {
+                $this->flagHandler($name, $flag, "migration", $this->path);
+            }
+
+            return true;
+        }
+
+        print("Unable to create model ".$name);
+        return false;
     }
 
+    public function db_migrate($flag)
+    {
+        
+    }
 }

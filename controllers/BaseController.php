@@ -3,6 +3,7 @@
 use App\Admin\Auth;
 use App\Helpers\Fs;
 use App\Action\Urls\Controller;
+use App\User;
 
 # use App\Core\Engine\Router\Request;
 

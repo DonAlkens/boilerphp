@@ -3,9 +3,6 @@
 
 namespace Console;
 
-require "Command.php";
-use CLI\CLI_Helper;
-
 class Console extends Command {
 
     public function __construct($argv = null)
@@ -16,7 +13,7 @@ class Console extends Command {
     public function run()
     {   
         array_splice($this->arguments, 0, 1);
-        if($this->length($this->arguments) > 0) {
+        if($this->getCommandLength($this->arguments) > 0) {
             $this->parse($this->arguments);
         } 
 

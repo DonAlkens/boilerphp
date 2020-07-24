@@ -3,6 +3,11 @@ session_start();
 
 require __DIR__."/Core/app_loader.php";
 
+/*
+* -----------------------------------------------------
+* Include server class namespace
+* -----------------------------------------------------
+*/ 
 use App\Core\Server;
 
 /*
@@ -25,9 +30,13 @@ $server->load_modules($modules);
 /*
 * --------------------------------------------------------
 * Routing will be handled by route class using the listen
-* funtion from the Route Class
+* function from the Route Class
 * -------------------------------------------------------
 */ 
 
-$server->start();
+// $server->start();
 
+require __DIR__."/Migrations/UserMigration.php";
+
+$userMigration = new UserMigration;
+$userMigration->create();

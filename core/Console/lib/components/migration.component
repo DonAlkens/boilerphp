@@ -4,18 +4,24 @@ use App\Core\Database\Migration;
 
 class [MigrationName] extends Migration {
 
+    /**
+     * create table with included field
+     */
     public function create() {
 
-        $this->table("[TableName]", array (
-            "id" => $this->bigIncrements(),
-            "created_date" => $this->timestamp()
-        ));
+        $this->field("id")->bigIncrements()->null();
+        $this->field("created_date")->timestamp();
+
+        $this->table("[TableName]");
     }
 
+    /**
+     * drop table if table exists
+     */
     public function drop() {
 
         $this->dropIfExists("[TableName]");
-        
     }
 
 }
+

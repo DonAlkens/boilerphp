@@ -6,8 +6,10 @@ class TemplateEngine {
 
     public static $content = [];
 
+    public static $ext;
+
     public function __construct($ext = null){
-        $this->ext = $ext;
+        self::$ext = $ext;
     }
 
     public function render($fileContent, $content=null) {
@@ -57,7 +59,7 @@ class TemplateEngine {
     static public function editFile($fileContent, $content=null){
         
         $fcontent = $fileContent;
-        $fcontent = preg_replace("/@\{\{(.*)load (.*)\}\}/",'<?php echo TemplateEngine::loadFile("views/".($2).".".$this->ext, $content); ?>',$fcontent);
+        $fcontent = preg_replace("/@\{\{(.*)load (.*)\}\}/",'<?php echo TemplateEngine::loadFile("views/".($2).".".self::$ext, $content); ?>',$fcontent);
         
         $fcontent = TemplateEngine::auth($fcontent);
         $fcontent = TemplateEngine::sessions($fcontent);

@@ -25,91 +25,53 @@ class Relations extends Schema {
     }
 
     public function hasOne($model, $key) {
+        
+        if($this->setModelProperties($model)) {
+            
+            $class = new $model;
+            $name = $this->getRelationsName();
+    
+            $this->setKeys($key);
 
-        $this->class = new $model;
-        $this->class->relating = $model;
-        $this->class->props = $this;
+            $value_key = $this->value_key; 
+            return $this->$name = $class->select($this->foreign_key, $this->$value_key);
+        }
+        
+    }
 
+    public function getRelationsName() {
+        return $this->name;
+    }
 
-        $value_key = $key;
-        $foreign_key = $key;
+    public function setModelProperties($model) 
+    {
+        if($model) {
+
+            $split_ = explode("\\", strtolower($model));
+
+            $this->namespace = $split_[0];
+            $this->class = $split_[1];
+
+            return true;
+        }
+        return false;
+    }
+
+    public function setKeys($key)
+    {
+        $this->value_key = $key;
+        $this->foreign_key = $key;
 
         if (is_array($key)) {
             foreach ($key as $_key => $_value) {
-                # code...
-                $foreign_key = $_key;
-                $value_key = $_value;
+                $this->foreign_key = $_key;
+                $this->value_key = $_value;
             }
         }
-        
-        if($this->class->props->$value_key) {
-            $this->value = $this->extractValue($this->class->props, $value_key);
-            $this->class->useKey = $foreign_key;
-            $this->class->select()->where([$this->class->useKey => $this->value]);
-            return $this->class;
-        }
-
-        
-
     }
 
     public function hasMultiple($model, $key){
-
-        $this->class = new $model;
-        $this->class->relating = $model;
-        $this->class->props = $this;
-        
-        $value_key = $key;
-        $foreign_key = $key;
-
-        if (is_array($key)) {
-            foreach ($key as $_key => $_value) {
-                # code...
-                $foreign_key = $_key;
-                $value_key = $_value;
-            }
-        }
-        
-        if($this->class->props->$value_key) {
-            $this->value = $this->extractValue($this->class->props, $value_key);
-            $this->class->useKey = $foreign_key;
-            $objects = $this->class->selectAll()->where([$this->class->useKey => $this->value]);
-            return $objects;
-        }
-    }
-
-
-    public function merge($model, $table_name = null, $other_fields = null) {
-        
-        $class_name = get_class($this);
-        $this->class_id_field = strtolower($class_name)."_"."id";
-        $table = $this->table;
-
-        
-        $this->class = new $model;
-        $this->model_name = get_class($this->class);
-        $this->lower_case_class_name = strtolower($this->model_name);
-        $this->model_id_field = strtolower($this->model_name)."_"."id";
-        $this->model_table = $this->class->table;
-
-        $this->_table = ($table_name != null) ? $table_name : $table."_".$this->model_table;
-
-        $_structure = [
-            "id" => "bigIncrements",
-            $this->class_id_field => "integer",
-            $this->model_id_field => "integer",
-        ];
-
-        if(!is_null($other_fields)) {
-            $_structure = array_merge($_structure, $other_fields);
-        }
-
-
-        $this->table($this->_table, $_structure);
-        $this->save();
-
-        return $this;
-
+        return $this->hasOne($model, $key);
     }
 
     public function attach($data) {
@@ -130,7 +92,7 @@ class Relations extends Schema {
     public function pickAll() {
         $this->table = $this->_table;
         $key = $this->useKey;
-        $result = $this->selectAll()->where([$this->class_id_field => $this->$key]);
+        $result = $this->select($this->class_id_field, $this->$key);
 
         $lower_case_class_name = $this->lower_case_class_name;
 

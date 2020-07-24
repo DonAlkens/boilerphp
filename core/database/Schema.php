@@ -2,114 +2,147 @@
 
 namespace App\Core\Database;
 
-use mysqli;
-
-class Schema extends QueryBuilder
+class Schema extends Connection
 {
-    private $db;
-    private $host;
-    private $port;
-    private $user;
-    private $pass;
-    private $dbname;
-    
+
+
     public function __construct()
     {
-        
-        include "./config.php";
-        
-        $this->host = $dbConnection["HOST"];
-        $this->port = $dbConnection["PORT"];
-        $this->user = $dbConnection["USER"];
-        $this->pass = $dbConnection["PASSWORD"];
-        $this->dbname = $dbConnection["DBNAME"];
-
-        $this->connect();
+        parent::__construct();
     }
 
-    public function connect()
+    public function all()
     {
-        $this->db = new mysqli($this->host, $this->user, $this->pass, $this->dbname);
-    }
-
-    public function table($name, $structure=null)
-    {
-        if ($structure) {
-            $this->table_map($name, $structure);
-        }
-        
-        $this->table = $name;
-        return $this;
-    }
-
-    public function insert($data)
-    {
-        if ($data) {
-
-            foreach ($data as $key => $value) {
-                # code...
-                $this->$key = $value;
+        $this->queryString = "SELECT * FROM $this->table";
+        $statement = $this->connection->prepare($this->queryString);
+        if($statement->execute()) {
+            if($statement->rowCount() > 0) {
+                return $this->resultFormatter($statement->fetchAll(), $multiple = true);
             }
+        }
+        return null;
+    }
 
-            $this->insert_map($data);
-            if ($this->db != null) {
-                if($this->db->query($this->query)) {
+    public function first($key, $value) 
+    {
+        $this->result = $this->select($key, $value);
+        if($this->resultTypeChecker($this->result) == "object") {
+            return $this->result;
+        }
 
-                    $this->new_obj_item_g = $this->select()->where($data);
-                    foreach ($this->new_obj_item_g as $key => $value) {
-                        # code...
-                        $this->$key = $value;
-                    }
-        
-                    return true;
+        return array_shift($this->result);
+    }
+
+    public function insert(array $data)
+    {
+        if($data) {
+            if($this->insertQuery($data)) {
+                $statement = $this->connection->prepare($this->queryString);
+                if($statement->execute($data)){
+                    return $this->select($data);
                 }
             }
-
         }
         return false;
     }
 
-    public function select($params=null)
+    public function last($key, $value) 
     {
-        $this->queryMode = "fetch";
-        $this->select_map($params);
+        $this->result = $this->select($key, $value);
+        return array_pop($result);
+    }
+
+    public function orderBy($key, $order) {
+        $this->queryString .= $this->orderQuery($key, $order);
         return $this;
     }
 
-    public function selectAll($params=null)
+    public function select($data, $value = null)
     {
-        $this->resultType = "multiple";
-        return $this->select($params);
-    }
-    
-    public function update($data)
-    {
-        if (is_array($data)) {
-            $this->queryMode = "run";
-            $this->update_map($data);
+        $this->value = $value;
+        if($this->dataFormatChecker($data, $value)) {
+            if($this->selectQuery($this->data)){
+                $statement = $this->connection->prepare($this->queryString);
+                if($statement->execute($this->data)){
+                    if($statement->rowCount() > 0) {
+                        return ($statement->rowCount() > 1)  
+                        ? $this->resultFormatter($statement->fetchAll(), $multiple = true) 
+                        : $this->resultFormatter($statement->fetch());
+                    }
+                }
+            }
         }
-        return $this;
+        return null;
     }
+
+    public function where($data, $value = null) {
+        $this->value = $value;
+        if($this->dataFormatChecker($data, $value)) {
+            if($this->selectQuery($this->data)){
+                return $this;
+            }
+        }
+        return null;
+    }
+
+    public function get() {
+        $statement = $this->connection->prepare($this->queryString);
+        if($statement->execute($this->data)){
+            if($statement->rowCount() > 0) {
+                return ($statement->rowCount() > 1)  
+                ? $this->resultFormatter($statement->fetchAll(), $multiple = true) 
+                : $this->resultFormatter($statement->fetch());
+            }
+        }
+    }
+
     
-    public function delete()
+    // public function update($data)
+    // {
+    //     if (is_array($data)) {
+    //         $this->queryMode = "run";
+    //         $this->update_map($data);
+    //     }
+    //     return $this;
+    // }
+    
+    // public function delete()
+    // {
+    //     $this->queryMode = "run";
+    //     $this->delete_map();
+    //     return $this;
+    // }
+
+    public function resultFormatter($result, $multiple = false) 
     {
-        $this->queryMode = "run";
-        $this->delete_map();
-        return $this;
+        $data = [];
+        $class = get_class($this);
+
+        if($multiple == true) {
+            foreach ($result as $instance) {
+                $class = $this->newObject($class, $instance);
+                array_push($data, $class);
+            }
+
+            return $data;
+        }
+
+        return $this->newObject($class, $result);
     }
 
-    public function order()
-    {
+    public function newObject($name, $instance) {
+        $class = new $name;
+        foreach ($instance as $key => $value) {
+            $class->$key = $value;
+        }
+        return $class;
     }
 
-    public function limit()
-    {
-    }
 
     public function run()
     {
         if (!empty($this->query)) {
-            if ($this->db->query($this->query)) {
+            if ($this->connection->query($this->query)) {
                 return true;
             }
             return false;
@@ -118,89 +151,28 @@ class Schema extends QueryBuilder
 
     public function save()
     {
-        if ($this->db != null) {
-            if ($this->db->query($this->query)) {
+        if ($this->connection != null) {
+            if ($this->connection->query($this->query)) {
                 return true;
             }
             return false;
         }
     }
-
-    public function fetch()
-    {
-        $data = $this->db->query($this->query);
-        if ($this->resultType == "multiple") {
-            if ($data->num_rows > 0) {
-                $result = [];
-                while ($row = $data->fetch_assoc()) {
-
-                    $Class = get_class($this);
-                    $object = new $Class;
-
-                    foreach ($row as $key => $value) {
-                        # code...
-                        $object->$key = $value;
-                    }
-
-                    array_push($result, $object);
-                }
-                
-                return $result;
-            }
-        } else if($this->resultType != "multiple") {
-            if ($data->num_rows > 0) {
-                $row = $data->fetch_assoc();
-                
-                // $Class = get_class($this);
-                // $object = new $Class;
-
-                foreach ($row as $key => $value) {
-                    # code...
-                    $this->$key = $value;
-                }
-
-                return $this;
-            }
-        }
-        return null;
-    }
     
     public function query($querystring)
     {
         if ($querystring !== "") {
-            $data = $this->db->query($querystring);
-            return $data->fetch_assoc();
+            $statement = $this->connection->prepare($querystring);
+            if($statement->execute()){
+                return $statement;
+            }
         }
         return null;
     }
 
-    private $int = "int(10) default null,";
-    private $integer = "int(10) default null,";
-    private $uniqueInteger = "int(9) not null unique,";
-    private $bigUniqueInteger = "int(16) not null unique,";
-    private $increments = "int(9) auto_increment not null,";
-    private $bigIncrements = "int(16) auto_increment not null,";
-    private $text = "text default null,";
-    private $longText = "longtext default null,";
-    private $uniqueText = "text not null unique,";
-    private $string = "varchar(255) default null,";
-    private $uniqueString = "varchar(255) not null unique,";
-    private $float = "float(10,7) default null,";
-    private $floatL1 = "float(10,1) default null,";
-    private $floatL2 = "float(10,2) default null,";
-    private $floatL3 = "float(10,3) default null,";
-    private $floatL4 = "float(10,4) default null,";
-    private $floatL5 = "float(10,5) default null,";
-    private $floatL6 = "float(10,6) default null,";
-    private $floatL7 = "float(10,7) default null,";
-    private $bool = "tinyint(1) default 0,";
-    private $boolean = "tinyint(1) default 0,";
-    private $datetime = "datetime default current_timestamp";
 }
 
-// fetchAll();
 // first([$key], [$value])
 // last([$key], [$value])
 // where([$key], [$value])
 // orderBy([$key], [$value])
-// get()
