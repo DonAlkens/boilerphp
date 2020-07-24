@@ -34,9 +34,4 @@ $server->load_modules($modules);
 * -------------------------------------------------------
 */ 
 
-// $server->start();
-
-require __DIR__."/Migrations/UserMigration.php";
-
-$userMigration = new UserMigration;
-$userMigration->create();
+$server->start();
