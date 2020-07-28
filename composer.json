@@ -1,0 +1,14 @@
+{
+    "name": "core/boiler",
+    "description": "A PHP Framework for web base applications",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Don Alkens",
+            "email": "akinniyiakinpelumi@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+    }
+}

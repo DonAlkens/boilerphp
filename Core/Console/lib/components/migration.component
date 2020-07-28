@@ -1,0 +1,31 @@
+<?php 
+
+use App\Core\Database\Migration;
+
+class [ClassName] extends Migration {
+
+    /**
+     * creates database table
+     * 
+     * @return void
+     */
+    public function create() {
+
+        $this->field("id")->bigIncrements()->null();
+        $this->field("created_date")->timestamp();
+
+        $this->table("[TableName]");
+    }
+
+    /**
+     * drop database table
+     * 
+     * @return void
+     */
+    public function drop() {
+
+        $this->dropIfExists("[TableName]");
+    }
+
+}
+
