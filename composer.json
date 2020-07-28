@@ -4,12 +4,11 @@
     "type": "project",
     "authors": [
         {
-            "name": "DonAlkens",
+            "name": "Don Alkens",
             "email": "akinniyiakinpelumi@gmail.com"
         }
     ],
     "minimum-stability": "dev",
     "require": {
-        "paypal/rest-api-sdk-php": "*"
     }
 }

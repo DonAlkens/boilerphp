@@ -27,8 +27,3 @@ use App\Core\Engine\Route;
 
 
 Route::get("/","BaseController::home");
-Route::HttpAction("/contact","BaseController::contact");
-
-
-Route::get("/testing", "TestController::testing");
-Route::get("/ipaddress","UserController::getUserIp");

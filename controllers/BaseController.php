@@ -1,11 +1,7 @@
 <?php
 
-use App\Admin\Auth;
-use App\Helpers\Fs;
 use App\Action\Urls\Controller;
-use App\User;
-
-# use App\Core\Engine\Router\Request;
+use App\Core\Engine\Request;
 
 # Create all action method in the Controller class
 # all method from the must must return
@@ -22,18 +18,8 @@ use App\User;
 
 class BaseController extends Controller {
 
-    public function __construct()
-    {
-        
-    }
-
-    public function home() {
-        
+    public function home(Request $request) {
         return view("base/welcome");
-    }
-
-    public function contact() {
-        echo $_ENV["FB_APP_SECRET_KEY"];
     }
 
 }
