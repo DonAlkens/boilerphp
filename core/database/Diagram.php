@@ -9,7 +9,7 @@ class Diagram {
 
     public function __construct($table_name, $query, $primary_keys)
     {
-        $this->createTableQuery($table_name, $query, $primary_keys);
+        return $this->createTableQuery($table_name, $query, $primary_keys);
     }
     
     public function createTableQuery($table_name, $query, $primary_keys) {

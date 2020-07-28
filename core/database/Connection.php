@@ -64,4 +64,9 @@ class Connection extends QueryBuilder {
         $this->driver = $driver;
     }
 
+    public function getDbName()
+    {
+        return $this->dbname;
+    }
+
 }

@@ -2,10 +2,12 @@
 
 use App\Core\Database\Migration;
 
-class [MigrationName] extends Migration {
+class [ClassName] extends Migration {
 
     /**
-     * create table with included field
+     * creates database table
+     * 
+     * @return void
      */
     public function create() {
 
@@ -16,7 +18,9 @@ class [MigrationName] extends Migration {
     }
 
     /**
-     * drop table if table exists
+     * drop database table
+     * 
+     * @return void
      */
     public function drop() {
 

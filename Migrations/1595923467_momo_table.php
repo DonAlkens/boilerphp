@@ -2,25 +2,30 @@
 
 use App\Core\Database\Migration;
 
-class UserMigration extends Migration {
+class MomoTable extends Migration {
 
     /**
-     * create table with included field
+     * creates database table
+     * 
+     * @return void
      */
     public function create() {
 
         $this->field("id")->bigIncrements()->null();
         $this->field("created_date")->timestamp();
 
-        $this->table("users");
+        $this->table("momos");
     }
 
     /**
-     * drop table if table exists
+     * drop database table
+     * 
+     * @return void
      */
     public function drop() {
 
-        $this->dropIfExists("users");
+        $this->dropIfExists("momos");
     }
 
 }
+

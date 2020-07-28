@@ -38,7 +38,7 @@ class Transaction extends Model {
         parent::__construct();
         if($transaction_id != null) {
             $this->transaction = $transaction_id;
-            return $this->select()->where(["transaction_id" => $this->transaction]);
+            return $this->select(["transaction_id" => $this->transaction]);
         } else {
             $this->transaction = "CRT-". rand(1234567890,9986756757) . date("ymd");
         }

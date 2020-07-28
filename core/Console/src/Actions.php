@@ -62,9 +62,10 @@ class Actions extends ActionHelpers {
 
     public function migration($name, $flag = null)
     {
-        $this->path = "./Migrations/".$name."Migration.php";
+        $file_name = strtolower($name)."_table.php";
+        $this->path = "./Migrations/".time()."_".$file_name;
 
-        if($this->checkExistent($this->path)) {
+        if($this->checkMigrationExistent($file_name)) {
             echo "Migration $name already exists"; exit;
         }
 
@@ -81,8 +82,18 @@ class Actions extends ActionHelpers {
         return false;
     }
 
-    public function db_migrate($flag)
+    public function migrate($flag = null)
     {
-        
+        if($this->newMigrationsChecker()) {
+            if(!$this->checkTableExists("migrations")){
+                $this->createMigrationsTable();
+            }
+
+            $this->runMigrations();
+
+            return true;
+        }
+
+       echo "No new migrations";
     }
 }

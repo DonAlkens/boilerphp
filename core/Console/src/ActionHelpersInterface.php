@@ -51,4 +51,20 @@ interface ActionHelpersInterface {
      */
 
      public function flagHandler($flag, $name, $action);
+
+
+     /**
+     * check available all migrations
+     * @return bool
+     */
+
+    public function newMigrationsChecker();
+
+     /**
+     * require/include file 
+     * @param string filepath
+     * @return void
+     */
+
+    public function requireOnce($filepath);    
 }

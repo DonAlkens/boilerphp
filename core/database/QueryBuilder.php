@@ -20,8 +20,8 @@ class QueryBuilder extends DataTypes {
     {
 
         foreach ($data as $column => $value) {
-            $this->columns .= "$column, ";
-            $this->params .= ":$column, ";
+            $this->columns .= " $column, ";
+            $this->params .= " :$column, ";
         }
 
         $this->cleanQueryStrings();

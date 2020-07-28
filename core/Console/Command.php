@@ -48,20 +48,18 @@ class Command extends Actions {
     * using command line manager.
     * -------------------------------------------------------------
     */
-    public function db(...$parameters) {
-
+    public function db(...$parameters) 
+    {
         $action = isset($parameters[0][0]) ? $parameters[0][0] : null;
-        $name = isset($parameters[0][1]) ? $parameters[0][1] : null; 
-        $flag = isset($parameters[0][2]) ? $parameters[0][2] : null;
+        $flag = isset($parameters[0][1]) ? $parameters[0][1] : null; 
 
         if($action != null) {
             if($flag != null) {
                 if(array_key_exists($flag, $this->flags)) {
-                    $action = "db_".$action;
-                    $this->$action($name, $flag);
+                    $this->$action($flag);
                 }
             } else {
-                $this->$action($name);
+                $this->$action();
             }
         }
 

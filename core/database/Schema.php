@@ -2,6 +2,8 @@
 
 namespace App\Core\Database;
 
+use Exception;
+
 class Schema extends Connection
 {
 
@@ -139,13 +141,19 @@ class Schema extends Connection
     }
 
 
-    public function run()
+    public function run($query)
     {
-        if (!empty($this->query)) {
-            if ($this->connection->query($this->query)) {
-                return true;
+        if (!empty($query)) {
+
+            try {
+                $statement = $this->connection->prepare($query);
+                if ($statement->execute()) {
+                    return true;
+                }
+            } catch (Exception $e) {
+                echo "Unable to run query: $query ; $e";
+                return false;
             }
-            return false;
         }
     }
 
@@ -159,12 +167,19 @@ class Schema extends Connection
         }
     }
     
-    public function query($querystring)
+    public function query($querystring, $data = null)
     {
         if ($querystring !== "") {
             $statement = $this->connection->prepare($querystring);
-            if($statement->execute()){
-                return $statement;
+            
+            if($data != null) {
+                if($statement->execute($data)){
+                    return $statement;
+                }
+            } else {
+                if($statement->execute()){
+                    return $statement;
+                }
             }
         }
         return null;
