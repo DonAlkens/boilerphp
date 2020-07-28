@@ -5,8 +5,8 @@ use App\Action\Urls\Controller;
 
 /** 
  * @param 'optional' [Request $request]
- * # used when an action is used on a post request
- * */ 
+ * used to get action's request data get/post
+ */ 
 
 class BaseController extends Controller {
 
