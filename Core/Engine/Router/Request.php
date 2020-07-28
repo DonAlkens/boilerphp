@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Engine;
+namespace App\Core\Urls;
 
 class Request {
 

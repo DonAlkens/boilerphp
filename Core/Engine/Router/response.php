@@ -1,7 +1,8 @@
 <?php 
 
 
-function get_view_path($filename) {
+function get_view_path($filename) 
+{
     
     $path = "./Views/";
     $ext = "fish.html";
@@ -10,7 +11,8 @@ function get_view_path($filename) {
     return [ "fullpath" => $fullpath, "viewpath" => "Views", "extension" => $ext];
 }
 
-function view($filename, $content=null) {
+function view($filename, $content=null) 
+{
 
     $path = get_view_path($filename);
     $fullpath = $path["fullpath"]; 
@@ -32,7 +34,8 @@ function view($filename, $content=null) {
 
 }
 
-function mail_view($filename, $data) {
+function mail_view($filename, $data) 
+{
 
     if(file_exists($filename)) {
         $fcontent = file_get_contents($filename);
@@ -46,28 +49,39 @@ function mail_view($filename, $data) {
     }
 }
 
-function content($text){
+function content($text)
+{
     return $text;
 }
 
-function json($content){
+function json($content)
+{
     return json_encode($content);
 }
 
-function redirect($location) {
+function redirect($location) 
+{
     $location = trim($location,"/");
     $location = "/".$location;
     return header("location:".$location);
 }
 
-function redirectToHost($location) {
+function redirectToHost($location) 
+{
     return header("location:".$location);
 }
 
-function unhandledPost() {
+function unhandledPost() 
+{
     return file_get_contents("core/errors/unhadledPost.fish.php");
 }
 
-function Error404(){
+function Error404()
+{
     return file_get_contents("views/errors/404.fish.html");
+}
+
+function env($key)
+{
+    return $_ENV[$key];
 }

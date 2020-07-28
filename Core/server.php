@@ -2,7 +2,7 @@
 
 namespace App\Core;
 
-use App\Core\Engine\Route;
+use App\Core\Urls\Route;
 
 class Server  {
 
@@ -60,6 +60,8 @@ class Server  {
 
     public function start() {
 
+        session_start();
+        
         /*
         * Load all app models
         */ 

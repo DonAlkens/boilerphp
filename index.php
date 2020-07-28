@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 require __DIR__."/Core/app_loader.php";
 
