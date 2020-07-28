@@ -11,10 +11,10 @@ function get_view_path($filename)
     return [ "fullpath" => $fullpath, "viewpath" => "Views", "extension" => $ext];
 }
 
-function view($filename, $content=null) 
+function view($viewfile, $content=null) 
 {
 
-    $path = get_view_path($filename);
+    $path = get_view_path($viewfile);
     $fullpath = $path["fullpath"]; 
     $viewPath = $path["viewpath"];
     $ext = $path["extension"];
@@ -29,7 +29,7 @@ function view($filename, $content=null)
         return $fcontent;
     } 
     else {
-        throw new Error($filename." does not exists");
+        throw new Error($viewfile." does not exists");
     }
 
 }

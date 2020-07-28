@@ -46,7 +46,6 @@ class Server  {
     }
 
     public function load_app_models() {
-
         foreach(glob("Models/*.php") as $model) {
             require __DIR__."/../".$model;
         }
