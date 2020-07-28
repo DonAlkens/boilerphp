@@ -75,6 +75,18 @@ class ActionHelpers implements ActionHelpersInterface {
         if($task == "controller") { $name .= "Controller"; }
 
         $path = $this->paths[$task].$name.".php";
+
+        if($task == "migration") {
+            $file_name = strtolower($name)."_table.php";
+
+            if($this->checkMigrationExistent($file_name)) {
+                echo "Migration $name already exists";
+                return;
+            }
+
+            $path = $this->paths[$task].time()."_".$file_name;
+        }
+
         $configuration = $this->configurations[$task];
         $this->$configuration($name, $path);
 
