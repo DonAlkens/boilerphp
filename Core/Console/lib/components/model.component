@@ -5,19 +5,12 @@ namespace App;
 use App\Core\Database\Model;
 
 
-/*
- * ------------------------------------------------------
- * creating a model class it must extends the Model class
- * ------------------------------------------------------
- */
-
-
 class [Model] extends Model {
 
     /**
     * defining all required fields 
     **/
-    public $required = [];
+    protected $required = [];
 
 
 
