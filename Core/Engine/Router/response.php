@@ -85,3 +85,10 @@ function env($key)
 {
     return $_ENV[$key];
 }
+
+function loadStatic($filesource) {
+    $fullpath = "/public/".$filesource;
+    if(file_exists($fullpath)) {
+        return $fullpath;
+    }
+}
