@@ -7,32 +7,65 @@ use Exception;
 class Schema extends Connection
 {
 
+    public $queryString = "";
 
     public function __construct()
     {
         parent::__construct();
     }
 
-    public function all()
-    {
-        $this->queryString = "SELECT * FROM $this->table";
-        $statement = $this->connection->prepare($this->queryString);
-        if($statement->execute()) {
-            if($statement->rowCount() > 0) {
-                return $this->resultFormatter($statement->fetchAll(), $multiple = true);
-            }
+    public function positionCollection($key, $value) {
+        if(!is_null($key) && !is_null($value)){ 
+            $result =  $this->where($key, $value)->select();
+        } else {
+            $result = $this->select();
         }
-        return null;
+
+        return $result;
     }
 
-    public function first($key, $value) 
+    public function all()
+    {
+        $this->allQuery();
+        return $this->fetch();
+    }
+
+    public function first($key = null, $value = null) 
+    {
+        $result = $this->positionCollection($key, $value);
+        if($this->resultTypeChecker($result) == "object") {
+            return $result;
+        }
+        return array_shift($this->result);
+    }
+
+    public function last($key = null, $value = null) 
+    {
+        $result = $this->positionCollection($key, $value);
+        if($this->resultTypeChecker($result) == "object") {
+            return $result;
+        }
+        return array_pop($result);
+    }
+
+    public function find($key, $value) 
     {
         $this->result = $this->select($key, $value);
-        if($this->resultTypeChecker($this->result) == "object") {
+        if($this->result !== null) {
             return $this->result;
         }
 
-        return array_shift($this->result);
+        return null;
+    }
+
+    public function groupBy($column) {
+        $this->groupQuery($column);
+        return $this;
+    }
+
+    public function orderBy($key, $order = "ASC") {
+        $this->orderQuery($key, $order);
+        return $this;
     }
 
     public function insert(array $data)
@@ -41,79 +74,60 @@ class Schema extends Connection
             if($this->insertQuery($data)) {
                 $statement = $this->connection->prepare($this->queryString);
                 if($statement->execute($data)){
-                    return $this->select($data);
+                    return $this->where($data)->get();
                 }
             }
         }
         return false;
     }
 
-    public function last($key, $value) 
+    public function select($fields = null)
     {
-        $this->result = $this->select($key, $value);
-        return array_pop($result);
+        if($this->fieldFormatChecker($fields)) {
+            if($this->selectQuery($this->fields)){
+                $this->queryString .= $this->whereQuery;
+                return $this->fetch();
+            }
+        }
+        return null;
     }
-
-    public function orderBy($key, $order) {
-        $this->queryString .= $this->orderQuery($key, $order);
-        return $this;
-    }
-
-    public function select($data, $value = null)
+    
+    public function update($data, $value = null)
     {
-        $this->value = $value;
         if($this->dataFormatChecker($data, $value)) {
-            if($this->selectQuery($this->data)){
-                $statement = $this->connection->prepare($this->queryString);
-                if($statement->execute($this->data)){
-                    if($statement->rowCount() > 0) {
-                        return ($statement->rowCount() > 1)  
-                        ? $this->resultFormatter($statement->fetchAll(), $multiple = true) 
-                        : $this->resultFormatter($statement->fetch());
-                    }
+            if($this->updateQuery($this->data)) {
+                $this->queryString .= $this->whereQuery;
+                if($this->save()){
+                    return $this->where($this->data)->get();
                 }
             }
         }
-        return null;
+        return false;
     }
-
-    public function where($data, $value = null) {
-        $this->value = $value;
-        if($this->dataFormatChecker($data, $value)) {
-            if($this->selectQuery($this->data)){
-                return $this;
+    
+    public function delete($key, $value = null)
+    {
+        if($this->dataFormatChecker($key, $value)) {
+            if($this->deleteQuery($this->data)){
+                $statement = $this->connection->prepare($this->queryString);
+                if($statement->execute($this->whereData)){
+                    return true;
+                }
             }
         }
-        return null;
+
+        return false;
+    }
+
+    public function where($keys, $value = null) 
+    {
+        $this->whereQuery($keys, $value);
+        return $this;
     }
 
     public function get() {
-        $statement = $this->connection->prepare($this->queryString);
-        if($statement->execute($this->data)){
-            if($statement->rowCount() > 0) {
-                return ($statement->rowCount() > 1)  
-                ? $this->resultFormatter($statement->fetchAll(), $multiple = true) 
-                : $this->resultFormatter($statement->fetch());
-            }
-        }
+        return $this->select();
     }
-
-    
-    // public function update($data)
-    // {
-    //     if (is_array($data)) {
-    //         $this->queryMode = "run";
-    //         $this->update_map($data);
-    //     }
-    //     return $this;
-    // }
-    
-    // public function delete()
-    // {
-    //     $this->queryMode = "run";
-    //     $this->delete_map();
-    //     return $this;
-    // }
 
     public function resultFormatter($result, $multiple = false) 
     {
@@ -141,26 +155,37 @@ class Schema extends Connection
     }
 
 
-    public function run($query)
+    public function fetch()
     {
-        if (!empty($query)) {
+        if($this->queryString()) {
+            $statement = $this->connection->prepare($this->queryString());
+            
+            (isset($this->whereData))
+            ? $exec = $statement->execute($this->whereData)
+            : $exec = $statement->execute();
 
-            try {
-                $statement = $this->connection->prepare($query);
-                if ($statement->execute()) {
-                    return true;
+            if($exec){
+                if($statement->rowCount() > 0) {
+                    return ($statement->rowCount() > 1)  
+                    ? $this->resultFormatter($statement->fetchAll(), $multiple = true) 
+                    : $this->resultFormatter($statement->fetch());
                 }
-            } catch (Exception $e) {
-                echo "Unable to run query: $query ; $e";
-                return false;
-            }
+
+                return null;
+            } 
         }
     }
 
     public function save()
     {
-        if ($this->connection != null) {
-            if ($this->connection->query($this->query)) {
+        if ($this->connection != null && $this->queryString()) {
+            $statement = $this->connection->prepare($this->queryString());
+
+            (isset($this->whereData))
+            ? $exec = $statement->execute($this->whereData)
+            : $exec = $statement->execute();
+
+            if($exec){
                 return true;
             }
             return false;
@@ -186,8 +211,3 @@ class Schema extends Connection
     }
 
 }
-
-// first([$key], [$value])
-// last([$key], [$value])
-// where([$key], [$value])
-// orderBy([$key], [$value])

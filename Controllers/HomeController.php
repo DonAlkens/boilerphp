@@ -8,16 +8,16 @@ use App\Action\Urls\Controller;
  * used to get action's request data get/post
  */ 
 
-class BaseController extends Controller {
+class HomeController extends Controller {
 
     public function __construct()
     {
         //$this->hasAuthAccess("user", "login");
     }
 
-    public function home() 
+    public function index()
     {
-        return view("base/home");
+        return view("home");
     }
 
 }

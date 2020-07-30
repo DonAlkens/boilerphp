@@ -9,4 +9,4 @@ use App\Core\Urls\Route;
  * */
 
 
-Route::get("/","BaseController::home");
+Route::get("/","HomeController::index");

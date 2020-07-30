@@ -6,22 +6,25 @@ namespace App\Core\Database;
 
 class QueryBuilder extends DataTypes {
 
-    public $columns;
-    public $params;
 
     public function cleanQueryStrings() 
     {
-        $this->columns = trim($this->columns, ", ");
-        $this->params = trim($this->params, ", ");
+        isset($this->columns) ? $this->columns = trim($this->columns, ", ") : null;
+        isset($this->params) ? $this->params = trim($this->params, ", ") : null;
 
+    }
+
+    public function allQuery()
+    {
+        $this->queryString = "SELECT * FROM $this->table";
     }
 
     public function insertQuery($data)
     {
 
         foreach ($data as $column => $value) {
-            $this->columns .= " $column, ";
-            $this->params .= " :$column, ";
+            $this->columns .= "$column, ";
+            $this->params .= ":$column, ";
         }
 
         $this->cleanQueryStrings();
@@ -30,36 +33,83 @@ class QueryBuilder extends DataTypes {
         return $this->queryString;
     }
 
-    public function selectQuery($columns)
+    public function selectQuery($fields)
     {
-
-        foreach ($columns as $column => $value) {
-            $this->columns .= "$column = :$column, ";
-        }
-
-        $this->cleanQueryStrings();
-
-        $this->queryString = "SELECT * FROM $this->table WHERE $this->columns";
+        $this->queryString = "SELECT $fields FROM $this->table ";
         return $this->queryString;
     }
 
     public function updateQuery($data)
     {
+        $this->columns = "";
         foreach ($data as $column => $value) {
             $this->columns .= "$column = :$column, ";
         }
 
         $this->cleanQueryStrings();
 
-        $this->queryString = "UPDATE $this->table SET $this->columns WHERE ";
+        $this->queryString = "UPDATE $this->table SET $this->columns ";
+        $this->whereData = array_merge($data, $this->whereData);
         return $this->queryString;
     }
 
 
-    public function deleteQuery()
+    public function deleteQuery($data)
     {
-        $this->queryString = "DELETE FROM $this->table WHERE ";
+        $this->columns = "";
+        foreach ($data as $column => $value) {
+            $this->columns .= "$column = :$column, ";
+        }
+
+        $this->cleanQueryStrings();
+
+        $this->queryString = "DELETE FROM $this->table WHERE $this->columns";
+        $this->whereData = $data;
         return $this->queryString;
+    }
+
+    public function whereQuery($key, $value) {
+
+        if(is_array($key)) {
+            $this->whereQuery = " WHERE ";
+            foreach($key as $column => $val) {
+                $this->whereQuery .= "$column = :$column AND ";
+            }
+
+            $this->whereQuery = trim($this->whereQuery, "AND ");
+            $this->whereData = $key;
+        } 
+        else if(!is_array($key) && $value != null) {
+            $this->whereQuery = " WHERE $key = :$key";
+            $this->whereData = array($key => $value);
+        }
+
+    }
+
+    public function groupQuery($column) 
+    {
+        $this->$this->groupQuery = " GROUP BY $column";
+    }
+    
+    public function orderQuery($key, $order) 
+    {
+        $this->orderQuery = " ORDER BY $key $order";
+    }
+
+    public function queryString()
+    {
+        if(!empty($this->queryString)) {
+            if(isset($this->orderQuery)){ 
+                $this->queryString .= $this->orderQuery;
+            } 
+            if(isset($this->groupQuery)) {
+                $this->queryString .= $this->groupQuery;
+            }
+
+            return $this->queryString;
+        }
+
+        return null;
     }
 
     public function dataFormatChecker($data, $value) {
@@ -74,11 +124,14 @@ class QueryBuilder extends DataTypes {
         return $this->data = $data;
     }
 
-    public function orderQuery($key, $order) 
-    {
-        return " ORDER BY $key $order";
-    }
+    public function fieldFormatChecker($fields) {
+        if(is_null($fields)) {
+            $fields = "*";
+        } 
 
+        return $this->fields = $fields;
+    }
+    
     public function resultTypeChecker($result) {
         return gettype($result);
     }
