@@ -111,7 +111,7 @@ class Route {
             //Call Coutroller to Load All MiddleWare and Auth
             new $controller();
 
-            echo call_user_func($path["action"], new Request($method) );
+            call_user_func($path["action"], new Request($method) );
 
             self::$lastUrl = $path;
             
@@ -147,15 +147,15 @@ class Route {
                     $i++;
                 }
 
-                $req = new Request($method);
-                $req->param = self::$routes[$method][$pattern]["param"];
-                $req->map($req->result);
+                $request = new Request($method);
+                $request->param = self::$routes[$method][$pattern]["param"];
+                $request->map($request->result);
 
                 $controller = explode("::", $path["action"])[0];
                 //Call Coutroller to Load All MiddleWare and Auth
                 new $controller();
                 
-                echo call_user_func($path["action"], $req);
+                call_user_func($path["action"], $request);
 
                 self::$lastUrl = $path;
                 return;
