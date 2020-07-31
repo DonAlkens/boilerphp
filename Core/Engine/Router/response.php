@@ -91,4 +91,6 @@ function loadStatic($filesource) {
     if(file_exists($fullpath)) {
         return "/public/".$fullpath;
     }
+
+    return "yes";
 }
