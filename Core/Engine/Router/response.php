@@ -87,8 +87,8 @@ function env($key)
 }
 
 function loadStatic($filesource) {
-    $fullpath = "/public/".$filesource;
+    $fullpath = "./public/".$filesource;
     if(file_exists($fullpath)) {
-        return $fullpath;
+        return "/public/".$fullpath;
     }
 }
