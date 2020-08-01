@@ -85,7 +85,7 @@ class Schema extends Connection
     {
         if($this->fieldFormatChecker($fields)) {
             if($this->selectQuery($this->fields)){
-                $this->queryString .= $this->whereQuery;
+                $this->queryString .= isset($this->whereQuery) ? $this->whereQuery : "";
                 return $this->fetch();
             }
         }
@@ -96,7 +96,7 @@ class Schema extends Connection
     {
         if($this->dataFormatChecker($data, $value)) {
             if($this->updateQuery($this->data)) {
-                $this->queryString .= $this->whereQuery;
+                $this->queryString .= isset($this->whereQuery) ? $this->whereQuery : "";
                 if($this->save()){
                     return $this->where($this->data)->get();
                 }
