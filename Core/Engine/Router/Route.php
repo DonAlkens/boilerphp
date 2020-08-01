@@ -166,7 +166,7 @@ class Route {
                 return;
             }
 
-            echo view("errors/404");
+            return error404();
         }
 
     }

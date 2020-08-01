@@ -9,7 +9,7 @@ require __DIR__."/../../../Config/errors.php";
 
 function get_view_path($filename) 
 {
-    $view_path = "views";
+    $view_path = "Views";
 
     $extension = "fish.html";
     $full_path = $view_path."/".$filename.".".$extension;
