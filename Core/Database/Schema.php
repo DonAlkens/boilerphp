@@ -176,6 +176,17 @@ class Schema extends Connection
         }
     }
 
+    public function run($queryString)
+    {
+        $statement = $this->connection->prepare($queryString);
+        if($statement->execute())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public function save()
     {
         if ($this->connection != null && $this->queryString()) {
