@@ -21,7 +21,8 @@ class QueryBuilder extends DataTypes {
 
     public function insertQuery($data)
     {
-
+        $this->columns = "";
+        $this->params = "";
         foreach ($data as $column => $value) {
             $this->columns .= "$column, ";
             $this->params .= ":$column, ";
