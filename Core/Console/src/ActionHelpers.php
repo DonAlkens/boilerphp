@@ -174,9 +174,9 @@ class ActionHelpers implements ActionHelpersInterface {
 
             $this->module = preg_replace("/\[ClassName\]/",$class_name."Table", $this->component);
             
-            $lastChar = substr($migration_name, -1);
             $table_name = $migration_name;
-            if($lastChar != "s" || $lastChar != "S") 
+            $lastChar = substr($migration_name, -1);
+            if(strtolower($lastChar) != "s") 
             {
                 $table_name .= "s";
             }
