@@ -10,7 +10,9 @@ class Migration extends Schema {
     {
         $diagram = new Diagram($name, 
                     $this->trimmer($this->query), 
-                    $this->trimmer($this->primary_keys)); 
+                    $this->trimmer($this->primary_keys), 
+                    $this->foreignKey
+                ); 
 
         return $this->run($diagram->TableQuery);
     }

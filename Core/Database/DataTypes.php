@@ -7,6 +7,8 @@ class DataTypes {
 
     public $query;
 
+    public $foreignKey = "";
+    
     public $primary_keys;
 
     public $nullable = "NOT NULL";
@@ -29,6 +31,12 @@ class DataTypes {
         return $this;
     }
 
+    public function cascade()
+    {
+        $this->foreignKey .= "ON DELETE CASCADE";
+        return $this;
+    }
+
     public function date() 
     {
         $this->query .= " `$this->column` DATE DEFAULT CURRENT_TIMESTAMP(),";
@@ -38,6 +46,27 @@ class DataTypes {
     {
         $this->query .= " `$this->column` FLOAT(". (string) $length.", ". (string) $decimal."),";
         return $this;
+    }
+
+    public function foreign($table, $tKey = null)
+    {
+        $this->foreignKeyValidator();
+
+        $this->primary_keys .= " `$this->column`,";
+        $tKey = is_null($tKey) ? $this->column : $tKey;
+
+        $const = $table."_".$this->column."_fk1";
+        $this->foreignKey = ", CONSTRAINT `$const` FOREIGN KEY (`$this->column`) REFERENCES `$table` (`$tKey`) ";
+        
+        return $this;
+    }
+
+    public function foreignKeyValidator()
+    {
+        if($this->foreignKey !== "")
+        {
+            // throw more that one foreign Key exceprions
+        }
     }
 
     public function increments() 
@@ -89,6 +118,12 @@ class DataTypes {
     public function longtext() 
     {
         $this->query .= " `$this->column` LONGTEXT,";
+        return $this;
+    }
+
+    public function primary()
+    {
+        $this->primary_keys .= " `$this->column`,";
         return $this;
     }
 

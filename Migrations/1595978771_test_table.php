@@ -11,7 +11,8 @@ class TestTable extends Migration {
      */
     public function create() {
 
-        $this->field("id")->bigIncrements()->null();
+        $this->field("id")->bigIncrements();
+        $this->field("name")->string();
         $this->field("created_date")->timestamp();
 
         $this->table("tests");
