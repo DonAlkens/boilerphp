@@ -341,8 +341,13 @@ class ActionHelpers implements ActionHelpersInterface {
         $ex = str_replace(".php", "", $split[2]);
 
         $exMfile = explode("_", $ex);
+        array_shift($exMfile);
 
-        $classname = ucfirst($exMfile[1]).ucfirst($exMfile[2]);
+        $classname = "";
+        foreach($exMfile as $piece) {
+            $classname .= ucfirst($piece);
+        }
+
         $filename = $ex;
 
         $tablename = ucfirst($exMfile[1]."s");
