@@ -157,11 +157,34 @@ class ActionHelpers implements ActionHelpersInterface {
     public function configureMigration($migration_name, $migration_path) 
     {
         $component_path = "./Core/Console/lib/components/migration.component";
-        if($this->readComponent($component_path)) {
-            $this->module = preg_replace("/\[ClassName\]/",$migration_name."Table", $this->component);
-            $this->module = preg_replace("/\[TableName\]/", strtolower($migration_name."s"), $this->module);
+        if($this->readComponent($component_path)) 
+        {
+            $class_name = ucfirst($migration_name);
+            if(strpos($migration_name, "_"))
+            {
+                $e = explode("_", $migration_name);
+                $new_cl_name = "";
+                foreach($e as $piece) 
+                {
+                    $new_cl_name .= ucfirst($piece);
+                }
 
-            if($this->writeModule($migration_path)) {
+                $class_name = $new_cl_name;
+            }
+
+            $this->module = preg_replace("/\[ClassName\]/",$class_name."Table", $this->component);
+            
+            $lastChar = substr($migration_name, -1);
+            $table_name = $migration_name;
+            if($lastChar != "s" || $lastChar != "S") 
+            {
+                $table_name .= "s";
+            }
+
+            $this->module = preg_replace("/\[TableName\]/", strtolower($table_name), $this->module);
+
+            if($this->writeModule($migration_path)) 
+            {
                 echo "Migration $migration_name successfully created!\n";
                 return true;
             }
