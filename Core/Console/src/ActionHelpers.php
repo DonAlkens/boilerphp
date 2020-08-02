@@ -310,10 +310,10 @@ class ActionHelpers implements ActionHelpersInterface {
     {
         foreach($this->new_migrations as $migration) {
             $this->requireOnce($migration);
-            echo "Creating ".$this->mFileFormater($migration)["table"]." table: ".$this->mFileFormater($migration)["file"]."\n";
+            echo "Creating ".$this->mFileFormater($migration)["table"].": ".$this->mFileFormater($migration)["file"]."\n";
             $this->migrationClass($migration)->create();
             $this->registerMigration($this->mFileFormater($migration)["file"], 1);
-            echo "Created ".$this->mFileFormater($migration)["table"]." table: ".$this->mFileFormater($migration)["file"]."\n";
+            echo "Created ".$this->mFileFormater($migration)["table"].": ".$this->mFileFormater($migration)["file"]."\n";
         }
     }
 
@@ -344,13 +344,13 @@ class ActionHelpers implements ActionHelpersInterface {
         array_shift($exMfile);
 
         $classname = "";
+        $tablename = "";
         foreach($exMfile as $piece) {
             $classname .= ucfirst($piece);
+            $tablename .= ucfirst($piece)." "; 
         }
 
         $filename = $ex;
-
-        $tablename = ucfirst($exMfile[1]."s");
 
         return array("class" => $classname, "file" => $filename, "table" => $tablename);
     }
