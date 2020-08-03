@@ -307,7 +307,7 @@ class ActionHelpers implements ActionHelpersInterface {
     {
         $schema = new Schema;
         $schema->table = "migrations";
-        $checking = $schema->select("migration", $migration);
+        $checking = $schema->where("migration", $migration)->get();
 
         if($checking) {
             return false;

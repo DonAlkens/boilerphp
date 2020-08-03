@@ -127,11 +127,11 @@ class DataTypes {
         return $this;
     }
 
-    public function null() 
+    public function null($bool = true) 
     {
 
         $this->query = $this->trimmer($this->query);
-        $this->query .= " DEFAULT NULL,";
+        $this->query .= ($bool) ? " DEFAULT NULL," : "NOT NULL";
         return $this;
     }
 
