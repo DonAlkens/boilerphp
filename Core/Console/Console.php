@@ -5,13 +5,16 @@ namespace Console;
 
 class Console extends Command {
 
-    public function __construct($argv = null)
+    public function __construct($server, $argv = null)
     {
+        $server->load_app_modules();
         $this->arguments = $argv;
     }
 
     public function run()
     {   
+
+
         array_splice($this->arguments, 0, 1);
         if($this->getCommandLength($this->arguments) > 0) {
             $this->parse($this->arguments);

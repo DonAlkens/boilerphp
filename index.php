@@ -15,7 +15,7 @@ use App\Core\Server;
 * -----------------------------------------------------
 */ 
 
-$server = new Server($debug = true);
+$server = new Server(new App\Core\Modules\AppModules, $debug = true);
 
 /*
 * -----------------------------------------------------
@@ -24,7 +24,7 @@ $server = new Server($debug = true);
 * -----------------------------------------------------
 */ 
 
-$server->load_modules($modules);
+$server->load_app_modules();
 
 /*
 * --------------------------------------------------------

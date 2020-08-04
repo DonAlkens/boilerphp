@@ -6,13 +6,16 @@ use App\Core\Urls\Route;
 
 class Server  {
 
-    public function __construct($debug=true){
+    public function __construct($app_modules, $debug=true){
+        
         $this->setEnv();
+        
+        $this->app_modules = $app_modules->modules;
     }
 
-    public function load_modules($modules){
+    public function load_app_modules(){
 
-        foreach($modules as $module) {
+        foreach($this->app_modules as $module) {
 
             foreach($module as $class) {
                 $path_array = explode("::", $class);
