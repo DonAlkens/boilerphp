@@ -155,11 +155,7 @@ class Route {
                 //Call Coutroller to Load All MiddleWare and Auth
                 new $controller();
                 
-                $response = call_user_func($path["action"], $request);
-                if(gettype($response) !== "object")
-                {
-                    echo $response;
-                }
+                echo call_user_func($path["action"], $request);
 
                 self::$lastUrl = $path;
                 return;
