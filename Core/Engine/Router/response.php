@@ -48,12 +48,12 @@ function view($view_file, $content=null)
 
 function content($text)
 {
-    return $text;
+    echo $text;
 }
 
 function json($content)
 {
-    return json_encode($content);
+    echo json_encode($content);
 }
 
 function redirect($location) 
