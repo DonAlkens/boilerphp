@@ -21,7 +21,7 @@ class ActionHelpers implements ActionHelpersInterface {
     );
 
     public $db_flags = array(
-        "--fresh" => "refresh",
+        "--new" => "refresh",
     );
 
     public $configurations = array(
