@@ -84,6 +84,7 @@ class Actions extends ActionHelpers {
 
     public function migrate($flag = null)
     {
+        $this->migrationFlagHandler($flag);
         if($this->newMigrationsChecker()) {
             if(!$this->checkTableExists("migrations")){
                 $this->createMigrationsTable();

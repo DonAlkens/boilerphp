@@ -55,7 +55,7 @@ class Command extends Actions {
 
         if($action != null) {
             if($flag != null) {
-                if(array_key_exists($flag, $this->flags)) {
+                if(array_key_exists($flag, $this->db_flags)) {
                     $this->$action($flag);
                 }
             } else {

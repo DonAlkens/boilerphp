@@ -20,11 +20,19 @@ class ActionHelpers implements ActionHelpersInterface {
         "--d" => "migration"
     );
 
+    public $db_flags = array(
+        "--fresh" => "refresh",
+    );
+
     public $configurations = array(
         "model" => "configiureModel",
         "controller" => "configureController",
         "migration" => "configureMigration",
         "notification" => "configureNotification"
+    );
+
+    public $db_configurations = array(
+        "refresh" => "dropAllExistingTable",
     );
 
     public $paths = array(
@@ -265,6 +273,23 @@ class ActionHelpers implements ActionHelpersInterface {
         return false;
     }
 
+    public function dropAllExistingTable()
+    {
+        $schema = new Schema;
+        $checking = $schema->query("SHOW TABLES");
+        $tables = $checking->fetchAll();
+        if($tables) {
+            foreach($tables as $key => $value) {
+                foreach($value as $defination => $name) {
+                    // Drop
+                    echo "Dropping Table $name \n";
+                    $schema->query("SET FOREIGN_KEY_CHECKS = 1; DROP TABLE IF EXISTS $name;");
+                    echo "Dropped Table $name \n";
+                }
+            }
+        }
+    }
+
     public function newMigrationsChecker()
     {
         $this->new_migrations = array();
@@ -376,5 +401,14 @@ class ActionHelpers implements ActionHelpersInterface {
         $filename = $ex;
 
         return array("class" => $classname, "file" => $filename, "table" => $tablename);
+    }
+
+    public function migrationFlagHandler($flag)
+    {
+        if($flag != null) {
+            $flag_action = $this->db_flags[$flag];
+            $configuration = $this->db_configurations[$flag_action];
+            $this->$configuration();
+        }
     }
 }

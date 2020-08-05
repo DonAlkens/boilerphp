@@ -60,6 +60,14 @@ interface ActionHelpersInterface {
 
     public function newMigrationsChecker();
 
+
+    /**
+     * drops all the existing tables in the database
+     * @return void
+     */
+    public function dropAllExistingTable();
+
+
      /**
      * require/include file 
      * @param string filepath
