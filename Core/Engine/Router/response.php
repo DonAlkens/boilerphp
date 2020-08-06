@@ -1,15 +1,12 @@
 <?php 
 
-require __DIR__."/../../../Config/views.php";
-
-
-require __DIR__."/../../../Config/errors.php";
-
+use App\Config\ViewsConfig;
 
 
 function get_view_path($filename) 
 {
-    $view_path = "Views";
+
+    $view_path = ViewsConfig::$views_path;
 
     $extension = "fish.html";
     $full_path = $view_path."/".$filename.".".$extension;

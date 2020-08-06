@@ -9,4 +9,12 @@ use App\Core\Urls\Route;
  * */
 
 
-Route::get("/","HomeController::index");
+Route::httpAction("/","HomeController::index");
+
+
+Route::subdomain("admin", function() {
+
+    Route::get("/", "HomeController::yeah");
+    Route::get("/yet", "AdminController::index");
+
+});

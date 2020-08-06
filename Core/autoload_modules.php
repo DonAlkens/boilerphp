@@ -3,8 +3,14 @@ namespace App\Core\Modules;
 
 class AppModules {
 
+    public $configurations = array(
+        "Config::ErrorsConfig",
+        "Config::RoutesConfig",
+        "Config::ViewsConfig",
+    );
+
     public $modules =  array(
-    
+
         "Admin" => [
             "Admin::Auth"
         ],

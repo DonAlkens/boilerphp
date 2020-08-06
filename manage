@@ -3,6 +3,14 @@
 
 require __DIR__.'/Core/autoload_console.php';
 
+
+/*
+|----------------------------------------------
+| Importing Console class namespace for usage
+| Contains all modules and classes for cli usages
+|----------------------------------------------
+|
+*/
 use Console\Console;
 
 
