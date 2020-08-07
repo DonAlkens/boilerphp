@@ -7,6 +7,7 @@ class Console extends Command {
 
     public function __construct($server, $argv = null)
     {
+        $server->load_configurations();
         $server->load_app_modules();
         $this->arguments = $argv;
     }
