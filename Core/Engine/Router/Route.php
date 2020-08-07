@@ -17,6 +17,9 @@ class Route extends RoutesConfig {
     static private $domains = array();
 
 
+    static private $route_lookup_list;
+
+
     public function __construct()
     {
 
@@ -82,7 +85,6 @@ class Route extends RoutesConfig {
         }
 
         # checking if url has already been registered
-        $registerer = static::$routes[$method];
         if(static::$enable_subdomains) 
         {
             if(!array_key_exists($key, static::$domains[static::$domain][$method])) 
@@ -114,7 +116,7 @@ class Route extends RoutesConfig {
         $uri = trim($_SERVER["REQUEST_URI"],"/");
         $method = strtolower($_SERVER["REQUEST_METHOD"]);
 
-        $route_lookup_list = static::$routes[$method];
+        static::$route_lookup_list = static::$routes[$method];
 
         if(static::$enable_subdomains) 
         {
@@ -122,7 +124,7 @@ class Route extends RoutesConfig {
 
             // Do some domain name checks here
 
-            $route_lookup_list = static::$domains[$domain][$method];
+            static::$route_lookup_list = static::$domains[$domain][$method];
         }
 
         if(strpos($uri,"?"))
@@ -142,10 +144,10 @@ class Route extends RoutesConfig {
 
 
         # if uri is registered in method class
-        if(array_key_exists($uri, $route_lookup_list))
+        if(array_key_exists($uri, static::$route_lookup_list))
         {
 
-            $path = $route_lookup_list[$uri];
+            $path = static::$route_lookup_list[$uri];
 
             $controller = explode("::", $path["action"])[0];
             //Call Coutroller to Load All MiddleWare and Auth
@@ -161,9 +163,9 @@ class Route extends RoutesConfig {
             $pattern = Route::verifyPattern($uri, $method);
             
             # checking it pattern exists
-            if(array_key_exists($pattern, $route_lookup_list))
+            if(array_key_exists($pattern, static::$route_lookup_list))
             {
-                $path = $route_lookup_list[$pattern];
+                $path = static::$route_lookup_list[$pattern];
 
                 # attaching the parameter values
 
@@ -182,14 +184,14 @@ class Route extends RoutesConfig {
 
                 #setting the parameter value
                 $i = 0;
-                foreach (static::$routes[$method][$pattern]["param"] as $key => $value) 
+                foreach (static::$route_lookup_list[$pattern]["param"] as $key => $value) 
                 {
-                    static::$routes[$method][$pattern]["param"][$key] = $p[$i];
+                    static::$route_lookup_list[$pattern]["param"][$key] = $p[$i];
                     $i++;
                 }
 
                 $request = new Request($method);
-                $request->param = static::$routes[$method][$pattern]["param"];
+                $request->param = static::$route_lookup_list[$pattern]["param"];
                 $request->map($request->result);
 
                 $controller = explode("::", $path["action"])[0];
@@ -295,7 +297,7 @@ class Route extends RoutesConfig {
         $params = [];
 
         $j = 1;
-        $numberRegisterUrl = count(static::$routes[$method]);
+        $numberRegisterUrl = count(static::$route_lookup_list[$method]);
         $pattern = '';
 
         while(true) 
@@ -323,7 +325,7 @@ class Route extends RoutesConfig {
             $pattern = trim($base,"/").$sub;
 
             # check if pattern exists
-            if(array_key_exists($pattern, static::$routes[$method])) 
+            if(array_key_exists($pattern, static::$route_lookup_list[$method])) 
             {
                 break;
             }

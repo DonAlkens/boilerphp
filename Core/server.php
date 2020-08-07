@@ -65,8 +65,8 @@ class Server  {
     public function init_route_handler() 
     {
         require __DIR__."/../route.php";
-        // Route::pattern();
-        Route::listen();
+        Route::pattern();
+        // Route::listen();
     }
 
     public function load_app_models() 
