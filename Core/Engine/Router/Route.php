@@ -127,11 +127,11 @@ class Route extends RoutesConfig {
             static::$route_lookup_list = static::$domains[$domain][$method];
         }
 
-        if(strpos($uri,"?"))
+        if(preg_match('/\?/i', $uri))
         {
-            $uri = preg_replace("/\?(.*)/","",$uri);
+            $uri = preg_replace("/\?(.*)/", "", $uri);
         }
-
+        
         # if uri is empty after trim
         if(empty($uri)) 
         {
@@ -297,7 +297,7 @@ class Route extends RoutesConfig {
         $params = [];
 
         $j = 1;
-        $numberRegisterUrl = count(static::$route_lookup_list[$method]);
+        $numberRegisterUrl = count(static::$route_lookup_list);
         $pattern = '';
 
         while(true) 
@@ -325,7 +325,7 @@ class Route extends RoutesConfig {
             $pattern = trim($base,"/").$sub;
 
             # check if pattern exists
-            if(array_key_exists($pattern, static::$route_lookup_list[$method])) 
+            if(array_key_exists($pattern, static::$route_lookup_list)) 
             {
                 break;
             }
