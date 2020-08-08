@@ -59,8 +59,8 @@ class TemplateEngine {
     static public function editFile($fileContent, $content=null){
         
         $fcontent = $fileContent;
+        $fcontent = TemplateEngine::htmlSymbolicCharacters($fcontent);
         $fcontent = preg_replace("/@\{\{(.*)load (.*)\}\}/",'<?php echo TemplateEngine::loadFile("views/".($2).".".self::$ext, $content); ?>',$fcontent);
-        
         $fcontent = TemplateEngine::auth($fcontent);
         $fcontent = TemplateEngine::sessions($fcontent);
         $fcontent = TemplateEngine::keys($fcontent, $content);
@@ -70,6 +70,12 @@ class TemplateEngine {
         $fcontent = TemplateEngine::basic($fcontent);
         $fcontent = TemplateEngine::emptyParameter($fcontent);  
 
+        return $fcontent;
+    }
+
+    static function htmlSymbolicCharacters($fcontent)
+    {
+        $fcontent = str_replace("$", "&dollar;", $fcontent);
         return $fcontent;
     }
 
