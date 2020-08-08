@@ -8,7 +8,3 @@ use App\Core\Urls\Route;
  * */
 
 Route::httpAction("/","HomeController::index");
-
-Route::subdomain("admins", function(){
-    Route::httpAction("/","HomeController::index");
-}); 
