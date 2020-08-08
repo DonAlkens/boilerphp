@@ -4,8 +4,8 @@ namespace App\Config;
 
 class RoutesConfig {
 
-    static public $domain = "boilerphp.com";
+    static public $domain = "";
 
-    static public $enable_subdomains = true;
+    static public $enable_subdomains = false;
 
 }
