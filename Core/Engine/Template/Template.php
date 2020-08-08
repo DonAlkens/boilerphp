@@ -85,6 +85,7 @@ class TemplateEngine {
         $fcontent = preg_replace("/(.*)foreach\((.*)\~(.*)\~(.*)\)/", '$1 function() ' ,$fcontent);
         $fcontent = preg_replace("/(.*)\~(.*)\~(.*)/", "$1"."false"."$3",$fcontent);
         $fcontent = preg_replace("/(.*)break(.*)/", "$1"."null"."$2", $fcontent);
+        $fcontent = preg_replace("/(.*)continue(.*)/", "$1"."null"."$2", $fcontent);
         return $fcontent;
     }
 
