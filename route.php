@@ -8,3 +8,8 @@ use App\Core\Urls\Route;
  * */
 
 Route::httpAction("/","HomeController::index");
+Route::httpAction("/category", "HomeController::category");
+Route::httpAction("/product", "HomeController::details");
+Route::httpAction("/cart", "HomeController::cart");
+Route::httpAction("/checkout", "HomeController::checkout");
+Route::httpAction("/contact", "HomeController::contact");

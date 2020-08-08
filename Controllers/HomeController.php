@@ -17,7 +17,32 @@ class HomeController extends Controller {
 
     public function index()
     {
-        return view("home");
+        return view("index");
+    }
+
+    public function category()
+    {
+        return view("category");
+    }
+
+    public function cart()
+    {
+        return view("cart");
+    }
+
+    public function checkout()
+    {
+        return view("checkout");
+    }
+
+    public function contact()
+    {
+        return view("contact");
+    }
+
+    public function details()
+    {
+        return view("details");
     }
 
 }
