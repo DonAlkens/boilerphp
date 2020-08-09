@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Alkens</title>
+    <link rel="stylesheet" href="public/assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="public/assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="public/assets/css/style.css">
+    <link rel="shortcut icon" href="public/assets/images/favicon.png" />
+</head>
+
+<body>
+    <div class="container-scroller">
+
+        @{{load "admin/shared/_navbar"}}
+
+        <div class="container-fluid page-body-wrapper">
+            
+            @{{load "admin/shared/_sidebar"}}
+            
+            <div class="main-panel">
+
+
+                @{{content}}
+
+
+                <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2017 <a
+                                href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights
+                            reserved.</span>
+                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made
+                            with <i class="mdi mdi-heart text-danger"></i></span>
+                    </div>
+                </footer>
+                
+            </div>
+            
+        </div>
+
+    </div>
+
+    <script src="public/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="public/assets/vendors/chart.js/Chart.min.js"></script>
+
+    <script src="public/assets/js/off-canvas.js"></script>
+    <script src="public/assets/js/hoverable-collapse.js"></script>
+    <script src="public/assets/js/misc.js"></script>
+
+    <script src="public/assets/js/dashboard.js"></script>
+    <script src="public/assets/js/todolist.js"></script>
+
+</body>
+
+</html>

@@ -13,3 +13,6 @@ Route::httpAction("/product", "HomeController::details");
 Route::httpAction("/cart", "HomeController::cart");
 Route::httpAction("/checkout", "HomeController::checkout");
 Route::httpAction("/contact", "HomeController::contact");
+
+
+Route::get("/dashboard", "Admin_DashboardController::index");
