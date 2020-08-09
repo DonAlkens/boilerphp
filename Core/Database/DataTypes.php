@@ -5,13 +5,46 @@ namespace App\Core\Database;
 
 class DataTypes {
 
+    /*
+    * ALl command run on the cli will be handle and 
+    * response will be sent back to the terminal
+    *
+    */
+
     public $query;
+
+    /*
+    * ALl command run on the cli will be handle and 
+    * response will be sent back to the terminal
+    *
+    */
+
+    public $alters = array();
+
+    /*
+    * ALl command run on the cli will be handle and 
+    * response will be sent back to the terminal
+    *
+    */
 
     public $foreignKey = "";
     
+    /*
+    * ALl command run on the cli will be handle and 
+    * response will be sent back to the terminal
+    *
+    */
     public $primary_keys;
 
+    /*
+    * ALl command run on the cli will be handle and 
+    * response will be sent back to the terminal
+    *
+    */
     public $nullable = "NOT NULL";
+
+
+
 
     public function trimmer($str) 
     {
@@ -33,7 +66,8 @@ class DataTypes {
 
     public function cascade()
     {
-        $this->foreignKey .= "ON DELETE CASCADE";
+        $this->foreignKey = $this->trimmer($this->foreignKey);
+        $this->foreignKey .= "ON DELETE CASCADE ,";
         return $this;
     }
 
@@ -53,10 +87,20 @@ class DataTypes {
         $this->primary_keys .= " `$this->column`,";
         $tKey = is_null($tKey) ? $this->column : $tKey;
 
-        $const = $table."_".$this->column."_fk1";
-        $this->foreignKey .= ", CONSTRAINT `$const` FOREIGN KEY (`$this->column`) REFERENCES `$table` (`$tKey`) ";
+        $const = $table."_".$this->column."_fk";
+        $this->foreignKey .= " ADD CONSTRAINT `$const` FOREIGN KEY (`$this->column`) REFERENCES `$table` (`$tKey`) ,";
         
         return $this;
+    }
+
+    public function foreignKeyProccessor($table)
+    {
+        if($this->foreignKey != "")
+        {
+            $query = $this->trimmer($this->foreignKey);
+            $alter_query = "ALTER TABLE $table ".$query;
+            array_push($this->alters, $alter_query);
+        }
     }
 
     public function increments() 

@@ -2,7 +2,6 @@
 
 namespace App\Core\Database;
 
-use App\Core\Database\Diagram;
 
 class Migration extends Schema {
 
@@ -11,8 +10,9 @@ class Migration extends Schema {
         $diagram = new Diagram($name, 
                     $this->trimmer($this->query), 
                     $this->trimmer($this->primary_keys), 
-                    $this->foreignKey
                 ); 
+
+        $this->foreignKeyProccessor($name);
 
         return $this->run($diagram->TableQuery);
     }
