@@ -311,11 +311,13 @@ class ActionHelpers implements ActionHelpersInterface {
                 foreach($value as $defination => $name) 
                 {
                     // Drop
-                    echo "Dropping Table $name \n";
                     $schema->query("SET FOREIGN_KEY_CHECKS = 1; DROP TABLE IF EXISTS $name;");
-                    echo "Dropped Table $name \n";
+                    $schema->query("SET FOREIGN_KEY_CHECKS = 0; DROP TABLE IF EXISTS $name;");
+
                 }
             }
+
+            echo "Dropped ".(count($tables) - 1)." table(s)\n";
         }
     }
 
@@ -381,7 +383,7 @@ class ActionHelpers implements ActionHelpersInterface {
     {
         
         $schema = new Schema;
-        return $create_table = $schema->query("CREATE TABLE IF NOT EXISTS migrations(
+        return $schema->run("CREATE TABLE IF NOT EXISTS migrations(
             `id` INT(9) NOT NULL AUTO_INCREMENT,
             `migration` VARCHAR(255) DEFAULT NULL,
             `version` INT(9) DEFAULT NULL,
@@ -394,13 +396,38 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function runMigrations()
     {
+        $alters = array();
+
         foreach($this->new_migrations as $migration) 
         {
             $this->requireOnce($migration);
+
             echo "Creating ".$this->mFileFormater($migration)["table"].": ".$this->mFileFormater($migration)["file"]."\n";
-            $this->migrationClass($migration)->create();
+            
+            $class = $this->migrationClass($migration);
+            $class->create();
+            array_push($alters, $class->alters);
+
             $this->registerMigration($this->mFileFormater($migration)["file"], 1);
+
             echo "Created ".$this->mFileFormater($migration)["table"].": ".$this->mFileFormater($migration)["file"]."\n";
+        }
+
+        $this->runMigrationAlters($alters);
+    }
+
+    public function runMigrationAlters($alters)
+    {
+        foreach($alters as $alter)
+        {
+            if(count($alter) > 0)
+            {
+                foreach($alter as $query)
+                {
+                    $schema = new Schema;
+                    $schema->run($query);
+                }
+            }
         }
     }
 

@@ -7,7 +7,14 @@ use Exception;
 class Schema extends Connection
 {
 
+    /*
+    * ALl command run on the cli will be handle and 
+    * response will be sent back to the terminal
+    *
+    */
     public $queryString = "";
+
+    
 
     public function __construct()
     {
