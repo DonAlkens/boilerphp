@@ -55,8 +55,8 @@ class DataTypes {
         $this->primary_keys .= " `$this->column`,";
         $tKey = is_null($tKey) ? $this->column : $tKey;
 
-        $const = $table."_".$this->column."_fk1";
-        $this->foreignKey = ", CONSTRAINT `$const` FOREIGN KEY (`$this->column`) REFERENCES `$table` (`$tKey`) ";
+        $const = $table."_".$this->column."_fk1_";
+        $this->foreignKey .= ", CONSTRAINT `$const` FOREIGN KEY (`$this->column`) REFERENCES `$table` (`$tKey`) ";
         
         return $this;
     }
