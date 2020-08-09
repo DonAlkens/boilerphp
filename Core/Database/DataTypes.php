@@ -50,28 +50,13 @@ class DataTypes {
 
     public function foreign($table, $tKey = null)
     {
-        $this->foreignKeyValidator();
-
         $this->primary_keys .= " `$this->column`,";
         $tKey = is_null($tKey) ? $this->column : $tKey;
-
 
         $const = $table."_".$this->column."_fk1";
         $this->foreignKey .= ", CONSTRAINT `$const` FOREIGN KEY (`$this->column`) REFERENCES `$table` (`$tKey`) ";
         
-
-        $this->last_table_ref = $table;
-        // $this->setLastTableRef($table);
-
         return $this;
-    }
-
-    public function foreignKeyValidator()
-    {
-        if($this->foreignKey !== "")
-        {
-            // throw more that one foreign Key exceprions
-        }
     }
 
     public function increments() 
