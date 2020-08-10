@@ -50,15 +50,6 @@ class Connection extends QueryBuilder
     *
     */
     private $dbname;
-
-
-    /**
-    * database connection object
-    *
-    * @var PDO
-    *
-    */
-    private $connection;
     
     
     public function __construct()
