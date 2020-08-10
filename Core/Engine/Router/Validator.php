@@ -93,7 +93,6 @@ class Validator
      * */
     public function validatePropType($prop, $field) 
     {
-        echo $this->$field."\n";
 
         if($this->$field == null || empty($this->$field))
         {
