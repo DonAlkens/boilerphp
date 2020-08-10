@@ -109,4 +109,13 @@ class Connection extends QueryBuilder
         return $this->dbname;
     }
 
+    public function __sleep() {
+        return ["connection"]; //Pass the names of the variables that should be serialised here
+   }
+   
+   public function __wakeup() {
+        //Since we can't serialize the connection we need to re-open it when we unserialise
+        $this->getConnectionVariable();
+        $this->connect();
+   }
 }
