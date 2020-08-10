@@ -22,7 +22,7 @@ class Schema extends QueryBuilder
     * @var App\Core\Database\Connenction;
     *
     */
-    protected $connection;
+    static protected $connection;
 
 
     public function __construct()
