@@ -144,8 +144,12 @@ class Validator
         $length = $e[1];
 
         $operation = strlen( (string) $this->$field)." $operator ". $length;
+
+        $result = true;
+
+        eval("?>".'<?php $result = '.$operation."; ?>");
         
-        if(!(int)($operation))
+        if(!$result)
         {
             $this->validationMessage($field, "$field must be up to $length characters.");
         }
