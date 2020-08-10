@@ -12,7 +12,9 @@ class Auth
         if(isset($_SESSION["auth"])) 
         {
             $id = $_SESSION["auth"];
-            return (new Schema)->where("id", $id)->get();
+            $schema = (new Schema);
+            $schema->table = "users";
+            return $schema->where("id", $id)->get();
         }
 
         return false;
