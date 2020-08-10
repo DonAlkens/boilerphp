@@ -16,3 +16,9 @@ Route::httpAction("/contact", "HomeController::contact");
 
 
 Route::get("/dashboard", "Admin_DashboardController::index");
+Route::httpAction("/signin", "Admin_LoginController::index");
+
+
+Route::get("/seed-admin", "TestController::index");
+Route::get("/seed-roles", "TestController::roles");
+Route::get("/seed-permissions", "TestController::permissions");

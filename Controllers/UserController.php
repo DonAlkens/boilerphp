@@ -8,16 +8,16 @@ use App\Action\Urls\Controller;
  * used to get action's request data get/post
  */ 
 
-class Admin_DashboardController extends Controller {
+class UserController extends Controller {
 
     public function __construct()
     {
-        $this->hasAuthAccess("auth", "signin");
+        //$this->hasAuthAccess("user", "login");
     }
 
     public function index()
     {
-        return view("admin/index");
+        return view("user/index");
     }
 
 }
