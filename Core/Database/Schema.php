@@ -2,10 +2,9 @@
 
 namespace App\Core\Database;
 
-use App\Core\Database\Connection;
 use Exception;
 
-class Schema extends QueryBuilder
+class Schema extends Connection
 {
 
     /**
@@ -16,19 +15,12 @@ class Schema extends QueryBuilder
     */
     public $queryString = "";
 
-    /**
-    * Query formated by query builder
-    *
-    * @var App\Core\Database\Connenction;
-    *
-    */
-    static protected $connection;
-
+    
 
     public function __construct()
     {
 
-        // self::$connection = new Connection();
+        parent::__construct();
 
     }
 
@@ -132,7 +124,7 @@ class Schema extends QueryBuilder
             if($this->insertQuery($data)) 
             {
 
-                $statement = self::$connection->prepare($this->queryString);
+                $statement = $this->connection->prepare($this->queryString);
 
                 if($statement->execute($data))
                 {
@@ -199,7 +191,7 @@ class Schema extends QueryBuilder
             if($this->deleteQuery($this->data))
             {
 
-                $statement = self::$connection->prepare($this->queryString);
+                $statement = $this->connection->prepare($this->queryString);
 
                 if($statement->execute($this->whereData))
                 {
@@ -275,7 +267,7 @@ class Schema extends QueryBuilder
         if($this->queryString()) 
         {
 
-            $statement = self::$connection->prepare($this->queryString());
+            $statement = $this->connection->prepare($this->queryString());
             
             (isset($this->whereData))
             ? $exec = $statement->execute($this->whereData)
@@ -290,7 +282,7 @@ class Schema extends QueryBuilder
                     return ($statement->rowCount() > 1)  
                     ? $this->resultFormatter($statement->fetchAll(), $multiple = true) 
                     : $this->resultFormatter($statement->fetch());
-
+                    
                 }
 
                 return null;
@@ -304,7 +296,7 @@ class Schema extends QueryBuilder
     public function run($queryString)
     {
 
-        $statement = self::$connection->prepare($queryString);
+        $statement = $this->connection->prepare($queryString);
 
         if($statement->execute())
         {
@@ -318,10 +310,10 @@ class Schema extends QueryBuilder
     public function save()
     {
 
-        if (self::$connection != null && $this->queryString()) 
+        if ($this->connection != null && $this->queryString()) 
         {
 
-            $statement = self::$connection->prepare($this->queryString());
+            $statement = $this->connection->prepare($this->queryString());
 
             (isset($this->whereData))
             ? $exec = $statement->execute($this->whereData)
@@ -344,7 +336,7 @@ class Schema extends QueryBuilder
         if ($querystring !== "") 
         {
 
-            $statement = self::$connection->prepare($querystring);
+            $statement = $this->connection->prepare($querystring);
             
             if($data != null) 
             {

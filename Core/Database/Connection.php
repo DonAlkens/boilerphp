@@ -4,7 +4,7 @@ namespace App\Core\Database;
 
 use ErrorException, PDO;
 
-class Connection
+class Connection extends QueryBuilder 
 {
 
     /**
@@ -50,12 +50,21 @@ class Connection
     *
     */
     private $dbname;
+
+
+    /**
+    * database connection object
+    *
+    * @var PDO
+    *
+    */
+    private $connection;
     
     
     public function __construct()
     {
         $this->getConnectionVariable();
-        return $this->connect();
+        $this->connect();
     }
 
     public function connect()
@@ -66,8 +75,6 @@ class Connection
         // Set all attributes
         $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-
-        return $this->connection;
     }
 
     public function buildConnectionString() 
