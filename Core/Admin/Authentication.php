@@ -9,15 +9,14 @@ class Auth
     
     static public function user()
     {
+
         if(isset($_SESSION["auth"])) 
         {
             $id = $_SESSION["auth"];
-            $schema = (new Schema);
-            $schema->table = "users";
-            return $schema->where("id", $id)->get();
+            return (new Schema)->setTable("users")->where("id", $id)->get();
         }
 
-        return false;
+        return null;
     }
 
     static public function logout()

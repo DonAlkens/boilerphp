@@ -329,6 +329,12 @@ class Schema extends Connection
         }
 
     }
+
+    public function setTable($name)
+    {
+        $this->table = $name;
+        return $this;
+    }
     
     public function query($querystring, $data = null)
     {
