@@ -11,8 +11,9 @@ class AppModules {
 
     public $modules =  array(
 
-        "Admin" => [
-            "Admin::Auth"
+        "admin" => [
+            "Admin::Auth::Auth",
+            "Admin::Auth::AuthProvider",
         ],
     
         "router" => [
@@ -43,13 +44,22 @@ class AppModules {
             "Engine::Template::Template",
         ],
     
+        "filesystem" => [
+            "FileSystem::Fs",
+        ],
+
+        "hash" => [
+            "Hash::Hash",
+        ],
+
         "helpers" => [
-            "Helper::Fs",
-            "Helper::Hash",
+            "Helpers::forms",
+            "Helpers::routes"
         ]
     );
 
-    public function addModule(array $module) {
+    public function addModule(array $module) 
+    {
         array_push($this->modules, $module);
     }
 }

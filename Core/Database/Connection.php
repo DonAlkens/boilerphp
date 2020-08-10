@@ -6,11 +6,50 @@ use ErrorException, PDO;
 
 class Connection extends QueryBuilder {
 
+    /**
+    * database driver
+    *
+    * @var string
+    *
+    */
     private $driver = "mysql";
+
+
+    /**
+    * database hostname
+    *
+    * @var string
+    *
+    */
     private $host;
+
+
+    /**
+    * database username
+    *
+    * @var string
+    *
+    */
     private $username;
+
+
+    /**
+    * database password
+    *
+    * @var string
+    *
+    */
     private $password;
+
+
+    /**
+    * database name
+    *
+    * @var string
+    *
+    */
     private $dbname;
+    
     
     public function __construct()
     {

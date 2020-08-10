@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Hashing;
 
 class Hash {
 
-    static public function create($string) {
+    static public function create($string) 
+    {
         return password_hash($string, PASSWORD_BCRYPT);
     }
 
-    static public function verify($string, $hash) {
+    static public function verify($string, $hash) 
+    {
         return password_verify($string, $hash);
     }
 }

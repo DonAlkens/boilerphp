@@ -5,40 +5,51 @@ namespace App\Core\Database;
 
 class DataTypes {
 
-    /*
-    * ALl command run on the cli will be handle and 
-    * response will be sent back to the terminal
+
+    /**
+    * App formatted query
+    *
+    * @var string
     *
     */
 
     public $query;
 
-    /*
-    * ALl command run on the cli will be handle and 
-    * response will be sent back to the terminal
+
+    /**
+    * All alter querys from table contructions
+    *
+    * @var array
     *
     */
 
     public $alters = array();
 
-    /*
-    * ALl command run on the cli will be handle and 
-    * response will be sent back to the terminal
+
+    /**
+    * foreign key query
+    *
+    * @var string
     *
     */
 
     public $foreignKey = "";
     
-    /*
-    * ALl command run on the cli will be handle and 
-    * response will be sent back to the terminal
+
+    /**
+    * primary key query
+    *
+    * @var string
     *
     */
     public $primary_keys;
 
-    /*
-    * ALl command run on the cli will be handle and 
-    * response will be sent back to the terminal
+
+
+    /**
+    * default nullable contraint on datatypes
+    *
+    * @var string
     *
     */
     public $nullable = "NOT NULL";

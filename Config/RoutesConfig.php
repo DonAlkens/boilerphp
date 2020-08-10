@@ -5,15 +5,18 @@ namespace App\Config;
 class RoutesConfig {
 
     /**
-    * ALl command run on the cli will be handle and 
-    * @value string
+    * App domain name example.com 
+    *
+    * @var string
     *
     */
     static public $domain = "";
 
+
     /**
-    * ALl command run on the cli will be handle and 
-    * @value bool
+    * Allows multiple domains manager
+    *
+    * @var bool
     *
     */
     static public $enable_subdomains = false;
