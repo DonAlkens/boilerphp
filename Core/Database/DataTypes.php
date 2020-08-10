@@ -78,7 +78,7 @@ class DataTypes {
     public function cascade()
     {
         $this->foreignKey = $this->trimmer($this->foreignKey);
-        $this->foreignKey .= "ON DELETE CASCADE ,";
+        $this->foreignKey .= "ON DELETE CASCADE ON UPDATE SET NULL ,";
         return $this;
     }
 
