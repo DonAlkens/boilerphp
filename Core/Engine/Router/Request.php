@@ -2,14 +2,30 @@
 
 namespace App\Core\Urls;
 
-class Request {
+class Request extends Validator 
+{
 
+    /**
+    * url parameters 
+    *
+    * @var string
+    */
     public $param;
 
+    /**
+    * request method
+    *
+    * @var string
+    */
     public $method;
 
-    public $validationMessages = array();
 
+    /**
+    * set the method use in http request
+    *
+    * @param string method of http request action
+    * @return void
+    */
     public function __construct($method) 
     {
         $this->method = strtoupper($method);
@@ -71,91 +87,4 @@ class Request {
         }
     }
 
-    public function fieldValidator($fields) 
-    {
-
-        foreach($fields as $key => $validation) 
-        {
-            if(isset($this->$key)) 
-            {
-                $props = $this->validationProperties($validation);
-                foreach($props as $prop) 
-                {
-                    $this->validatePropType($prop, $key);
-                }
-            }
-        }
-
-        if(count($this->validationMessages)) {
-            $this->validation = false;
-            return false;
-        }
-
-        $this->validation = true;
-        return true;
-    }
-
-
-    public function validatePropType($prop, $field) 
-    {
-
-        if($prop == "string" || $prop == "integer") 
-        {
-            if(gettype($this->$field) != $prop) 
-            {
-                $this->validationMessage($field, "Invalid characters for field ".$field);
-            }
-        }
-
-        else if(strpos($prop, ":"))
-        {
-            $this->lengthValidation($prop,  $field);
-        }
-    }
-
-
-    public function lengthValidation($prop, $field)
-    {
-        $e = explode(":", $prop);
-        $operator = $e[0];
-        $length = $e[1];
-
-        $operation = strlen( (string) $this->$field)." $operator ". $length;
-        
-        if(!(int)($operation))
-        {
-            $this->validationMessage($field, "$field must be up to $length characters.");
-        }
-    }
-
-
-    public function validationMessage($field, $message)
-    {
-        $this->validationMessages[$field] = $message; 
-    }
-
-
-    public function validationProperties($validation) 
-    {
-
-        $properties = $validation;
-        if(strpos($validation, "|")) 
-        {
-            $properties = explode("|", $validation);
-        }
-
-        return $this->formatValidationProperties($properties);
-    }
-
-
-    public function formatValidationProperties($properties) 
-    {
-
-        if(is_string($properties)) 
-        {
-            return array($properties);
-        }
-
-        return $properties;
-    }
 }
