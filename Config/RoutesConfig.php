@@ -8,7 +8,7 @@ class RoutesConfig {
     * App domain name example.com 
     *
     * @var string
-
+    *
     */
     static public $domain = "";
 

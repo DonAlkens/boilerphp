@@ -6,6 +6,12 @@ namespace App\Core\Database;
 
 class Model extends Relations {
 
+    /**
+    * Database Schema table name
+    *
+    * @var string
+    *
+    */
     public $table;
 
     public function __construct()
