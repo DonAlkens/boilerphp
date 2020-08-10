@@ -94,16 +94,32 @@ class Validator
     public function validatePropType($prop, $field) 
     {
 
-        if($this->$field == null || empty($this->field))
+        if($this->$field == null || empty($this->$field))
         {
             $this->validationMessage($field, $field." is required!");
         }
 
-        else if($prop == "string" || $prop == "integer") 
+        else if($prop == "integer")
+        {
+            if(!filter_var($this->$field, FILTER_VALIDATE_INT))
+            {
+                $this->validationMessage($field, "Only numbers are allowed in ".$field." field");
+            }
+        }
+
+        else if($prop == "string") 
         {
             if(gettype($this->$field) != $prop) 
             {
                 $this->validationMessage($field, "Invalid characters for field ".$field);
+            }
+        }
+
+        else if($prop == "email")
+        {
+            if(!filter_var($this->$field, FILTER_VALIDATE_EMAIL))
+            {
+                $this->validationMessage($field, "Invalid email address");
             }
         }
 
