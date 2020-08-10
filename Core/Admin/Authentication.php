@@ -2,6 +2,8 @@
 
 namespace App\Admin;
 
+use App\Core\Database\Schema;
+
 class Auth
 {
     
@@ -9,7 +11,8 @@ class Auth
     {
         if(isset($_SESSION["auth"])) 
         {
-            return unserialize($_SESSION["auth"]);
+            $id = $_SESSION["auth"];
+            return (new Schema)->where("id", $id)->get();
         }
 
         return false;
@@ -22,7 +25,7 @@ class Auth
 
     static public function login($user) 
     {
-        $_SESSION["auth"] = serialize($user);
+        $_SESSION["auth"] = $user->id;
     }
 
 }
