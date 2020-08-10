@@ -12,8 +12,14 @@ class AppModules {
     public $modules =  array(
 
         "admin" => [
-            "Admin::Auth::Auth",
-            "Admin::Auth::AuthProvider",
+            "Admin::Authentication",
+            "Admin::AuthProvider",
+        ],
+
+        "helpers" => [
+            "Helpers::forms",
+            "Helpers::routes",
+            "Helpers::views"
         ],
     
         "router" => [
@@ -50,11 +56,6 @@ class AppModules {
 
         "hash" => [
             "Hash::Hash",
-        ],
-
-        "helpers" => [
-            "Helpers::forms",
-            "Helpers::routes"
         ]
     );
 

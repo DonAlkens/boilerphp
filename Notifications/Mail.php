@@ -115,8 +115,8 @@ class Mail {
 
     public function template($template, $data = null)
     {
-        $message = mail_view($template, $data);
-        return $message;
+        // $message = mail_view($template, $data);
+        // return $message;
     }
 
 
