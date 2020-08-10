@@ -23,6 +23,7 @@ class AppModules {
         ],
     
         "router" => [
+            "Engine::Router::Validator",
             "Engine::Router::Route",
             "Engine::Router::Request",
             "Engine::Router::Response",
