@@ -9,7 +9,7 @@ class Auth
     {
         if(isset($_SESSION["auth"])) 
         {
-            return $_SESSION["auth"];
+            return unserialize($_SESSION["auth"]);
         }
 
         return false;
@@ -22,7 +22,7 @@ class Auth
 
     static public function login($user) 
     {
-        $_SESSION["auth"] = $user;
+        $_SESSION["auth"] = serialize($user);
     }
 
 }
