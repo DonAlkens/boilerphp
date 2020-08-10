@@ -15,6 +15,12 @@ class AppModules {
             "Admin::Authentication",
             "Admin::AuthProvider",
         ],
+
+        "helpers" => [
+            "Helpers::forms",
+            "Helpers::routes",
+            "Helpers::views"
+        ],
     
         "router" => [
             "Engine::Router::Route",
@@ -50,12 +56,6 @@ class AppModules {
 
         "hash" => [
             "Hash::Hash",
-        ],
-
-        "helpers" => [
-            "Helpers::forms",
-            "Helpers::routes",
-            "Helpers::views"
         ]
     );
 
