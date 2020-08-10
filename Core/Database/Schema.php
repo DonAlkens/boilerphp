@@ -28,7 +28,7 @@ class Schema extends QueryBuilder
     public function __construct()
     {
 
-        self::$connection = new Connection();
+        // self::$connection = new Connection();
 
     }
 
