@@ -1,0 +1,178 @@
+@{{extends "admin/shared/layout"}}
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mt-3 mb-4">Add Products</h2>
+
+                    <div class="add-product-form">
+
+                        <ul class="nav nav-pills mb-2 d-flex justify-content-between" id="pills-tab" role="tablist" style="border-bottom: 1px solid #F3F6F9;">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#product-information"
+                                    role="tab" aria-controls="pills-home" aria-selected="true">
+                                    <i class="mdi mdi-tshirt-crew"></i> <b>Product Informations</b>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#product-images"
+                                    role="tab" aria-controls="pills-profile" aria-selected="false"> 
+                                    <i class="mdi mdi-image-multiple"></i> <b>Images</b>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#product-variations"
+                                    role="tab" aria-controls="pills-contact" aria-selected="false">
+                                    <i class="mdi mdi-package-variant"></i> <b>Variation</b>
+                                </a>
+                            </li>
+                            <!-- <li class="nav-item">
+                                <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#product-shipping"
+                                    role="tab" aria-controls="pills-contact" aria-selected="false">
+                                    <i class="mdi mdi-truck"></i> <b>Shipping</b>
+                                </a>
+                            </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#product-settings"
+                                    role="tab" aria-controls="pills-profile" aria-selected="false">
+                                    <i class="mdi mdi-settings"></i> <b>Settings</b>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="product-information" role="tabpanel"
+                                aria-labelledby="pills-home-tab">
+                                
+                                <div class="form-light-box mb-3">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Category"><b>Category</b></label>
+                                                <select class="form-control" name="category" id="Category">
+                                                    <option value="">**select product category**</option>
+                                                </select>
+                                                <span class="text-danger">{{validation("category")}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Category"><b>Sub Category</b></label>
+                                                <select class="form-control" name="sub_category" id="Sub_Category" disabled>
+                                                    <option value="">**select product sub-category**</option>
+                                                </select>
+                                                <span class="text-danger">{{validation("sub_category")}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-light-box mb-3">
+                                    <div class="form-group">
+                                        <label for="Name"><b>Product Name <span>*</span></b></label>
+                                        <input type="text" class="form-control" name="name" id="Name" placeholder="Enter Product Name">
+                                        <span class="text-danger">{{validation("name")}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-light-box mb-3">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="price"><b>Price <span>*</span></b></label>
+                                                <input type="text" class="form-control" name="price" id="Price" placeholder="0.00">
+                                                <span class="text-danger">{{validation("price")}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Discount"><b>Sales Discount (%) </b></label>
+                                                <input type="number" max="100" min="0" class="form-control" name="discount" id="Discount" value="0">
+                                                <span class="text-danger">{{validation("discount")}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Condition"><b>Condition <span>*</span></b></label>
+                                                <select class="form-control" name="condition" id="Condition">
+                                                    <option value="">**select product condition**</option>
+                                                </select>
+                                                <span class="text-danger">{{validation("condition")}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Brand"><b>Brand <span>*</span></b></label>
+                                                <input type="text" class="form-control" name="brand" id="Brand">
+                                                <span class="text-danger">{{validation("brand")}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane fade" id="product-images" role="tabpanel"
+                                aria-labelledby="pills-profile-tab">
+                                <div class="form-light-box mb-3">
+                                    <div class="form-group">
+                                        <label for="Brand"><b>Product Image <span>*</span></b></label>
+                                        <div class="text-center">
+                                            <div class="image-box">
+                                                
+                                                <div class="thumbnail" id="mainImage">
+                                                    <img src="/public/img/product/1.jpg" alt="" width="250px">
+                                                    <div class="change-action">
+                                                        <label for="Image" class="btn btn-sm btn-inverse-success">
+                                                            <i class="mdi mdi-image"></i> Select image
+                                                            <input type="file" class="hide" name="image" id="Image">
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-light-box mb-3">
+                                    <div class="form-group">
+                                        <label for=""><b>Gallery</b> <small>(you can add other samples images for product here)</small></label>
+                                        <div class="image-box hide" id="GalleryBox">
+                                            <!-- <div class="thumbnail small">
+                                                <img src="/public/img/product/1.jpg" alt="" width="140px">
+                                                <div class="remove-action">
+                                                    <button type="button" class="btn btn-icon btn-inverse-danger btn-rounded">
+                                                        <i class="mdi mdi-close"></i>
+                                                    </button>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="form-group text-right">
+                                        <label for="Gallery" class="btn btn-inverse-success btn-sm">
+                                            <i class="mdi mdi-plus-circle-outline"></i> Add images
+                                            <input type="file" class="" name="gallery" id="Gallery" multiple>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="product-settings" role="tabpanel"
+                                aria-labelledby="pills-profile-tab">
+                            
+                            </div>
+                            <div class="tab-pane fade" id="product-variations" role="tabpanel"
+                                aria-labelledby="pills-contact-tab">
+                            
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

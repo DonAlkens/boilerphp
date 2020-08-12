@@ -1,0 +1,199 @@
+@{{extends "admin/shared/layout"}}
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mt-3 mb-4">Add Products</h2>
+
+                    <div class="add-product-form">
+
+                        <ul class="step-list step-list-horizontal mb-3">
+                            <li class="step-badge active" step-validate="1" step-badge="1">
+                                <div class="d-flex">
+                                    <div class="mt-3 step-count">
+                                        <a class="step-counter">1</a>
+                                    </div>
+                                    <div class="mt-1 ml-2 step-title">
+                                        <b>Product Information</b>
+                                        <span>Basic details</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="step-badge" step-validate="2" step-badge="2">
+                                <div class="d-flex">
+                                    <div class="mt-3 step-count">
+                                        <a class="step-counter">2</a>
+                                    </div>
+                                    <div class="mt-1 ml-2 step-title">
+                                        <b>Images</b>
+                                        <span>Add images</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="step-badge" step-validate="3" step-badge="3">
+                                <div class="d-flex">
+                                    <div class="mt-3 step-count">
+                                        <a class="step-counter">3</a>
+                                    </div>
+                                    <div class="mt-1 ml-2 step-title">
+                                        <b>Variations</b>
+                                        <span>Items variations</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="step-badge" step-validate="4" step-badge="4">
+                                <div class="d-flex">
+                                    <div class="mt-3 step-count">
+                                        <a class="step-counter">4</a>
+                                    </div>
+                                    <div class="mt-1 ml-2 step-title">
+                                        <b>Setting</b>
+                                        <span>Configurations</span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div class="step-box" id="step-box">
+
+                            <div class="step-content show active" step-id="1">
+                                <div class="form-light-box mb-3">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Category"><b>Category</b></label>
+                                                <select class="form-control" step-field-required="false" name="category" id="Category">
+                                                    <option value="">**select product category**</option>
+                                                </select>
+                                                <span class="text-danger">{{validation("category")}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Category"><b>Sub Category</b></label>
+                                                <select class="form-control" step-field-required="false" name="sub_category" id="Sub_Category" disabled>
+                                                    <option value="">**select product sub-category**</option>
+                                                </select>
+                                                <span class="text-danger">{{validation("sub_category")}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-light-box mb-3">
+                                    <div class="form-group">
+                                        <label for="Name"><b>Product Name <span>*</span></b></label>
+                                        <input type="text" class="form-control" step-field-required="false" name="name" id="Name" placeholder="Enter Product Name">
+                                        <span class="text-danger">{{validation("name")}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-light-box mb-3">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="price"><b>Price <span>*</span></b></label>
+                                                <input type="text" class="form-control" step-field-required="false" name="price" id="Price" placeholder="0.00">
+                                                <span class="text-danger">{{validation("price")}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Discount"><b>Sales Discount (%) </b></label>
+                                                <input type="number" max="100" min="0" class="form-control" name="discount" id="Discount" value="0">
+                                                <span class="text-danger">{{validation("discount")}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Condition"><b>Condition <span>*</span></b></label>
+                                                <select class="form-control" step-field-required="false" name="condition" id="Condition">
+                                                    <option value="">**select product condition**</option>
+                                                </select>
+                                                <span class="text-danger">{{validation("condition")}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Brand"><b>Brand <span>*</span></b></label>
+                                                <input type="text" class="form-control" step-field-required="true" name="brand" id="Brand">
+                                                <span class="text-danger">{{validation("brand")}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-content hide" step-id="2">
+                                <div class="form-light-box mb-3">
+                                    <div class="form-group">
+                                        <label for="Brand"><b>Product Image <span>*</span></b></label>
+                                        <div class="text-center">
+                                            <div class="image-box">
+                                                
+                                                <div class="thumbnail" id="mainImage">
+                                                    <img src="/public/img/product/1.jpg" alt="" width="250px">
+                                                    <div class="change-action">
+                                                        <label for="Image" class="btn btn-sm btn-inverse-success">
+                                                            <i class="mdi mdi-image"></i> Select image
+                                                            <input type="file" step-field-required="true" class="hide" name="image" id="Image">
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-light-box mb-3">
+                                    <div class="form-group">
+                                        <label for=""><b>Gallery</b> <small>(you can add other samples images for product here)</small></label>
+                                        <div class="image-box hide" id="GalleryBox">
+                                            <!-- <div class="thumbnail small">
+                                                <img src="/public/img/product/1.jpg" alt="" width="140px">
+                                                <div class="remove-action">
+                                                    <button type="button" class="btn btn-icon btn-inverse-danger btn-rounded">
+                                                        <i class="mdi mdi-close"></i>
+                                                    </button>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="form-group text-right">
+                                        <label for="Gallery" class="btn btn-inverse-success btn-sm">
+                                            <i class="mdi mdi-plus-circle-outline"></i> Add images
+                                            <input type="file" class="hide" name="gallery" id="Gallery" multiple>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="step-content hide" step-id="3">
+                            
+                            </div>
+
+                            <div class="step-content hide" step-id="4">
+                            
+                            </div>
+
+                            <div class="step-actions mt-3">
+                                <div class="d-flex justify-content-between flex-row-reverse">
+                                    <button type="submit" class="step-submit btn btn-primary btn-fw">Submit</button>
+                                    <button type="button" class="step-next btn btn-primary btn-fw">Next</button>
+                                    <button type="button"  class="step-previous btn btn-light btn-fw">Previous</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

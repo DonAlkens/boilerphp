@@ -15,8 +15,10 @@ Route::httpAction("/checkout", "HomeController::checkout");
 Route::httpAction("/contact", "HomeController::contact");
 
 
-Route::get("/dashboard", "Admin_DashboardController::index");
 Route::httpAction("/signin", "Admin_LoginController::index");
+Route::get("/dashboard", "Admin_DashboardController::index");
+Route::get("/a/products", "Admin_ProductController::index");
+Route::get("/a/products/add", "Admin_ProductController::add_form");
 
 
 Route::get("/seed-admin", "TestController::index");

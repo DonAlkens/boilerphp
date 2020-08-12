@@ -5,7 +5,7 @@ namespace App;
 use App\Core\Database\Model;
 
 
-class User extends Model {
+class ProductSettings extends Model {
 
     /**
     * defining all required fields 
@@ -13,10 +13,6 @@ class User extends Model {
     protected $required = [];
 
 
-    public function role()
-    {
-        return $this->hasOne(Role::class, ["id" => "role"]);
-    }
 
 }
 

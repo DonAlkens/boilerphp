@@ -1,80 +1,27 @@
 (function(){
 
+    var options = {
+        display: "#GalleryBox",
+        thumbnail: {
+            node: "div", 
+            style:"thumbnail small"
+        },
+        removeBtn: {
+            node: "button", 
+            style: "btn btn-icon btn-inverse-danger btn-rounded",
+            text: "x"
+        }
+    }
+
     var imageArr = [];
 
-    $("#adVImages").change(function(e){
-        var file = document.querySelector("#adVImages");
-        var length = file.files.length;
+    $("#Gallery").change(function(){
 
-        // if(imageArr.length > 5){
-        //     alert("Maximum picture at a time is 5");
-        //     return;
-        // }
-
-        // else if(length > 5) {
-        //     alert("Maximum picture at a time is 5");
-        //     return;
-        // }
-        var j = 0;
-        for(var i = 0; i < length; i++) {
-            var filename = file.files[i].name;
-            var ext = filename.split(".").pop().toLowerCase();
-            if(jQuery.inArray(ext,["gif","png","jpeg","jpg"]) == -1)
-            {
-                file.value = "";
-                alert("Invalid file selected!");
-            } else {
-                imageArr.push(file.files[i]);
-
-                const reader = new FileReader(); // The file reader object
-                reader.onload = function(){
-                    //When files have been read by the file reader
-                    //the onload method will be executed - async
-                
-                    //For an image reading and previewing
-                    //Create a new image object
-                    const image = new Image();
-                    image.src = reader.result;
-                    //Render image to browser
-                    var imgbox = document.createElement("div");
-                    imgbox.setAttribute("class","col-md-2");
-                    imgbox.setAttribute("id", (j))
-
-                    var inner = document.createElement("div");
-                    inner.setAttribute("class", "img-card");
-
-                    var overlay = document.createElement("div");
-                    overlay.setAttribute("class", "img-overlay");
-
-                    var remove = document.createElement("a");
-                    remove.setAttribute("file-id", (j));
-                    remove.setAttribute("class", "remove");
-                    remove.setAttribute("href", "#remove");
-                    remove.innerHTML = "Remove";
-
-                    remove.onclick = function(event) {
-                        var index = event.target.attributes["file-id"].nodeValue;
-                        imageArr.splice(Number(index), 1);
-                        $("#"+index).remove();
-                    }
-
-                    overlay.appendChild(remove);
-                    inner.appendChild(overlay);
-                    inner.appendChild(image);
-                    imgbox.appendChild(inner);
-                
-                    document.getElementById("img-preview").appendChild(imgbox);
-                    j++;
-                }
-                //Browser file reader object
-                // It can read files as text using the the readAsText method from the FileReader object.
-                //It can read files as URL link using the readAsDataURL method
-                reader.readAsDataURL(file.files[i]);
-            }
+        imageArr = ImageViewer("#Gallery", options).images;
+        if(imageArr.length != 0){
+            $("#GalleryBox").removeClass("hide");
         }
-        
     });
-
 
     // if($("#ajaxForm")){ 
 
