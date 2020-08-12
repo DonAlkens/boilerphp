@@ -1,5 +1,5 @@
-# BoilerPHP
-Php Framework For Creating Web Application
+# Mendiza
+Ecommerce store for fashion accessories
 
 
 
