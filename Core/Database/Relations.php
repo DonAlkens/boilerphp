@@ -24,24 +24,24 @@ class Relations extends Schema {
         return $object->$foreign_key;
     }
 
-    public function hasOne($model, $key) {
+    public function hasOne($model, $key) 
+    {
         
-        // if($this->setModelProperties($model)) {
-            
-        //     $class = new $model;
-        //     $name = $this->getRelationsName();
+        if($this->setModelProperties($model)) 
+        {
+            $name = $this->getRelationsName();
     
             if($this->setKeys($key)) 
             {
                 $class = new $model;
                 $value_key = $this->value_key;
                 
-                $class->where($this->foreign_key, $this->$value_key)->get();
+                $this->result = $class->where($this->foreign_key, $this->$value_key)->select();
 
-                return $class;
+                return $this->result;
             }
 
-        // }
+        }
 
         // return OCI_RETURN_NULLS;
         
