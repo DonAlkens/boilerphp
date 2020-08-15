@@ -31,11 +31,18 @@ class Relations extends Schema {
             $class = new $model;
             $name = $this->getRelationsName();
     
-            $this->setKeys($key);
+            if($this->setKeys($key)) 
+            {
+                $value_key = $this->value_key;
+                
+                $this->$name = $class->where($this->foreign_key, $this->$value_key)->get();
 
-            $value_key = $this->value_key; 
-            return $this->$name = $class->select($this->foreign_key, $this->$value_key);
+                return $this->$name;
+            }
+
         }
+
+        return OCI_RETURN_NULLS;
         
     }
 
@@ -68,6 +75,8 @@ class Relations extends Schema {
                 $this->value_key = $_value;
             }
         }
+
+        return true;
     }
 
     public function hasMultiple($model, $key){

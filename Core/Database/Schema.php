@@ -267,7 +267,7 @@ class Schema extends Connection
         if($this->queryString()) 
         {
 
-            $statement = $this->connection->prepare($this->queryString());
+            $statement = $this->connection->prepare($this->queryString);
             
             (isset($this->whereData))
             ? $exec = $statement->execute($this->whereData)
@@ -313,7 +313,7 @@ class Schema extends Connection
         if ($this->connection != null && $this->queryString()) 
         {
 
-            $statement = $this->connection->prepare($this->queryString());
+            $statement = $this->connection->prepare($this->queryString);
 
             (isset($this->whereData))
             ? $exec = $statement->execute($this->whereData)
