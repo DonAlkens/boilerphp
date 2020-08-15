@@ -12,7 +12,7 @@ class ProductSettingsTable extends Migration {
     public function create() {
 
         $this->field("id")->bigIncrements();
-        $this->field("product")->integer();
+        $this->field("product")->integer()->foreign("products", "id")->cascade();
         $this->field("out_of_stock")->boolean();
         $this->field("created_date")->timestamp();
         $this->field("created_by")->integer();

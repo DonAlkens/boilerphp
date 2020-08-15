@@ -1,0 +1,48 @@
+@{{extends "admin/shared/layout"}}
+
+<div class="content-wrapper">
+    
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex mb-5 justify-content-between">
+                        <h4 class="card-title">Collections</h4>
+                        <div class="actions">
+                            <a href="/a/collections/add" class="btn btn-sm btn-inverse-info"><i class="mdi mdi-plus"></i> Add</a>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th> #Id </th>
+                                    <th> Name </th>
+                                    <th> Created by </th>
+                                    <th> Created date </th>
+                                    <th> Last update by </th>
+                                    <th> Last updated date </th>
+                                    <th> Actions </th>
+                                </tr>
+                            </thead>
+                            <tbody api-table="/api/a/get-collections-table">
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<!-- content-wrapper ends -->

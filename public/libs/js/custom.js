@@ -1,10 +1,12 @@
 (function(){
     
-    if($("#addVarientBtn"))
+    if($("#addSkeletonBtn"))
     {
-        $("#addVarientBtn").click(function(){
-            let skeleton = $("#variationSkeleton").html();
-            $("#variationForm").append('<div class="row">'+skeleton+"</div>");
+        let skeleton = $("#skeleton").html();
+        
+        $("#addSkeletonBtn").click(function(){
+            $("#skeletonForm").append('<div class="col-md-6">'+skeleton+"</div>");
+            rni++;
         });
     }
 

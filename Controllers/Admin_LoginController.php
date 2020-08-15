@@ -65,4 +65,9 @@ class Admin_LoginController extends Controller {
         return view("admin/login/index", $response);
     }
 
+    public function logout() {
+        Auth::logout();
+        return redirect("signin");
+    }
+
 }

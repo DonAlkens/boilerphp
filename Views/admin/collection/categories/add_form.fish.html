@@ -1,0 +1,69 @@
+@{{extends "admin/shared/layout"}}
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mt-3 mb-4">Add Categories</h2>
+
+                    <div class="add-form">
+                        <form action="/api/a/add-categories" method="post" id="ajaxForm">
+                            <div class="form-light-box mb-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="Name"><b>Collection <span>*</span></b></label>
+                                            <select class="form-control" validate-field="true" validation-message="Select a collection*"
+                                            api-options="/api/a/get-collections" name="collection">
+                                                <option value="">**select collection**</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="Name"><b>Category Name <span>*</span></b></label>
+                                            <input type="text" class="form-control" validate-field="true" validation-message="Category is required*" name="name" placeholder="Enter Product Name">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-light-box mb-3">
+                                <label><b>Subcategories</b></label>
+                                <div class="row" id="skeletonForm">
+                                    <div class="col-md-6" id="skeleton">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <input name="subCategories[]" class="form-control var_name" placeholder="Enter name" onblur="handleblur(this);">
+                                            </div>
+                                            <div class="col-md-2 rmVar hide" onclick="remover(this);">
+                                                <button type="button" class="btn btn-danger btn-sm st-btn"> <i class="mdi mdi-close"></i> </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-12 mt-2">
+                                    <div class="row">
+                                        <div class="text-left">
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-sm btn-inverse-info" id="addSkeletonBtn">
+                                                    + add more
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <a href="/a/categories" class="btn btn-light">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,7 +2,7 @@
 
 use App\Core\Database\Migration;
 
-class ProductTable extends Migration {
+class CollectionTable extends Migration {
 
     /**
      * creates database table
@@ -12,19 +12,14 @@ class ProductTable extends Migration {
     public function create() {
 
         $this->field("id")->bigIncrements();
-        $this->field("name")->string();
+        $this->field("name")->string()->unique();
         $this->field("slug")->string();
-        $this->field("description")->longtext();
-        $this->field("price")->string();
-        $this->field("collection")->integer();
-        $this->field("category")->integer();
-        $this->field("sub_category")->integer();
         $this->field("created_date")->timestamp();
         $this->field("created_by")->integer();
         $this->field("last_updated_date")->timestamp();
         $this->field("last_updated_by")->integer();
 
-        $this->table("products");
+        $this->table("collections");
     }
 
     /**
@@ -34,7 +29,7 @@ class ProductTable extends Migration {
      */
     public function drop() {
 
-        $this->dropIfExists("products");
+        $this->dropIfExists("collections");
     }
 
 }

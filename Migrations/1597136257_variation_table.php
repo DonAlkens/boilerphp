@@ -12,7 +12,7 @@ class VariationTable extends Migration {
     public function create() {
 
         $this->field("id")->bigIncrements();
-        $this->field("name")->string();
+        $this->field("name")->string()->unique();
         $this->field("created_date")->timestamp();
         $this->field("created_by")->integer();
         $this->field("last_updated_date")->timestamp();

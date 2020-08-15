@@ -1,0 +1,50 @@
+@{{extends "admin/shared/layout"}}
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mt-3 mb-4">Add Collections</h2>
+
+                    <div class="add-form">
+                        <form action="/api/a/add-collections" method="post" id="ajaxForm">
+                            <div class="form-light-box mb-3">
+                                <label><b>Collections</b></label>
+                                <div class="row" id="skeletonForm">
+                                    <div class="col-md-6" id="skeleton">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <input name="collections[]" class="form-control var_name" placeholder="Enter collection name" onblur="handleblur(this);">
+                                            </div>
+                                            <div class="col-md-2 rmVar hide" onclick="remover(this);">
+                                                <button type="button" class="btn btn-danger btn-sm"> <i class="mdi mdi-delete-forever"></i> </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-12 mt-2">
+                                    <div class="row">
+                                        <div class="text-left">
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-sm btn-inverse-info" id="addSkeletonBtn">
+                                                    + add more
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <a href="/a/collections" class="btn btn-light">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
