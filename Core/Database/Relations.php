@@ -26,23 +26,24 @@ class Relations extends Schema {
 
     public function hasOne($model, $key) {
         
-        if($this->setModelProperties($model)) {
+        // if($this->setModelProperties($model)) {
             
-            $class = new $model;
-            $name = $this->getRelationsName();
+        //     $class = new $model;
+        //     $name = $this->getRelationsName();
     
             if($this->setKeys($key)) 
             {
+                $class = new $model;
                 $value_key = $this->value_key;
                 
-                $this->$name = $class->where($this->foreign_key, $this->$value_key)->get();
+                $class->where($this->foreign_key, $this->$value_key)->get();
 
-                return $this->$name;
+                return $class;
             }
 
-        }
+        // }
 
-        return OCI_RETURN_NULLS;
+        // return OCI_RETURN_NULLS;
         
     }
 
