@@ -98,7 +98,7 @@ class DataTypes {
         $this->primary_keys .= " `$this->column`,";
         $tKey = is_null($tKey) ? $this->column : $tKey;
 
-        $const = strtolower(get_class())."_".$table."_".$this->column."_fk";
+        $const = time()."_".$table."_".$this->column."_fk";
         $this->foreignKey .= " ADD CONSTRAINT `$const` FOREIGN KEY (`$this->column`) REFERENCES `$table` (`$tKey`) ,";
         
         return $this;
