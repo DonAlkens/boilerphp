@@ -9,6 +9,8 @@ class Fs
 
 	static public $filename = "";
 
+	static public $filelist = array();
+
 	static public function copy($source, $destination)
 	{
 
@@ -184,6 +186,76 @@ class Fs
 		{
 			throw new Error("This file type is not supported");
 		}
+	}
+
+	static public function uploadMultipleImage($properties, $extensions = null)
+	{
+
+		if (is_null($extensions)) 
+		{
+			$extensions = ["jpg", "png", "gif", "bmp", "jpeg", "JPG", "PNG", "BMP", "GIF", "JPEG"];
+		}
+
+
+		$filefield = $properties["filename"];
+		$path = $properties["path"];
+
+		if (!file_exists($path)) 
+		{
+			Fs::mkdir($path);
+		}
+
+		$prefix_name = null;
+		if (array_key_exists("prefix", $properties)) 
+		{
+			if (!is_null($properties["prefix"])) 
+			{
+				$prefix_name = $properties["prefix"];
+			}
+		}
+
+
+		for($i = 0; $i < count($_FILES["$filefield"]["tmp_name"]); $i++) 
+		{
+
+			$file_name = $_FILES[$filefield]["name"][$i];
+			$file_tmp = $_FILES[$filefield]["tmp_name"][$i];
+	
+
+			$file_array = explode('.', $file_name);
+			$file_extension = end($file_array);
+
+	
+			if (in_array($file_extension, $extensions)) 
+			{
+
+				if (!is_null($prefix_name)) 
+				{
+					# rename file 
+					# check if user add extension
+					$uploadFile = $path . $prefix_name . "-" . $file_name;
+				} 
+				
+				else 
+				
+				{
+					$uploadFile = $path . $file_name;
+				}
+				
+
+				if (move_uploaded_file($file_tmp, $uploadFile)) 
+				{
+					array_push(static::$filelist, $prefix_name);
+				}
+			} 
+		}
+
+		if(count(static::$filelist)) {
+			return true;
+		} 
+
+		return false;
+
 	}
 
 	static public function uploadFile($properties, $extensions = null)

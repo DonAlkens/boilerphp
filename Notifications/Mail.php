@@ -1,34 +1,48 @@
 <?php 
 
-namespace App\Messages;
+namespace App\Notification;
+
 // Import PHPMailer classes into the global namespace
 // These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-use TemplateEngine;
 
 include_once("PHPMailer/src/PHPMailer.php");
 include_once("PHPMailer/src/SMTP.php");
 include_once("PHPMailer/src/Exception.php");
 
-class Mail {
+// Mail Configurations
+use App\Config\MailConfig;
+
+class Mail extends MailConfig
+{
 
     public $sender;
-    public $sender_name = "April Vines";
+
+
+    public $sender_name;
+
 
     public $receiver;
+
+
     public $receiver_name;
 
+
     public $subject;
+
+
     public $message;
 
-    public $reply_mail = "no-reply@aprilvines.com";    
+
+    public $reply_to;  
+    
+    
     public $header;
 
-    public $is_smtp = true;
-    public $port  = 587;
+
     public $smtp_host = "mail.aprilvines.com";
     public $smtp_user = "info@aprilvines.com";
     public $smtp_pass = "Aprilvines2020!";
@@ -36,13 +50,8 @@ class Mail {
     public function __construct($sender = null, $receiver = null, $subject = null,$message = null, $header = null)
     {
         $this->sender = $sender; $this->receiver = $receiver; $this->subject = $subject; $this->message = $message; $this->header = $header;
-        $this->build();
-        $this->config();
+
     }
-
-    public function build(){/******/}
-
-    public function config(){/******/}
 
     public function send($smtp = false)
     {
@@ -88,14 +97,15 @@ class Mail {
             $mail->Body    = $this->message;
             // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-            $mail->send();
-            $this->response = 'sent';
-            // echo $this->response;
-            return true;
-        } catch (Exception $e) {
+            $mail->send(); $this->response = 'sent'; return true;
+
+        } 
+        catch (Exception $e) {
+
             $this->response = "Failed: {$mail->ErrorInfo}";
-            // echo $this->response;
+            
             return false;
+
         }
     }
     
@@ -103,7 +113,7 @@ class Mail {
     {
         $headers = "MIME-VERSION: 1.0" . " \r\n";
         $headers .= "Content-type: text/html; charset=UTF-8 "."\r\n";
-        $headers .= "From: April Vines <$this->smtp_user> \r\n";
+        $headers .= "From: $this->sender <$this->smtp_user> \r\n";
         $headers .= 'Reply-To: ' .$this->reply_mail . "\r\n";
         
         if(mail($this->receiver, $this->subject, $this->message, $headers)){
@@ -111,12 +121,6 @@ class Mail {
         } else {
             return false;
         }
-    }
-
-    public function template($template, $data = null)
-    {
-        // $message = mail_view($template, $data);
-        // return $message;
     }
 
 

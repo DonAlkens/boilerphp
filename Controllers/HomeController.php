@@ -2,6 +2,7 @@
 
 use App\Core\Urls\Request;
 use App\Action\Urls\Controller;
+use App\FileSystem\Fs;
 
 /** 
  * @param 'optional' [Request $request]
@@ -15,7 +16,7 @@ class HomeController extends Controller {
         //$this->hasAuthAccess("user", "login");
     }
 
-    public function index()
+    public function index(Request $request)
     {
         return view("index");
     }

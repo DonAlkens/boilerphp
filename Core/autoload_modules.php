@@ -7,6 +7,7 @@ class AppModules {
         "Config::ErrorsConfig",
         "Config::RoutesConfig",
         "Config::ViewsConfig",
+        "Config::MailConfig",
     );
 
     public $modules =  array(
