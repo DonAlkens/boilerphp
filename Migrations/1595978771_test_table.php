@@ -11,11 +11,13 @@ class TestTable extends Migration {
      */
     public function create() {
 
+        $this->table("tests");
+
         $this->field("id")->bigIncrements();
         $this->field("name")->string();
         $this->field("created_date")->timestamp();
 
-        $this->table("tests");
+        $this->sign();
     }
 
     /**
