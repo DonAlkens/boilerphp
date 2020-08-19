@@ -17,7 +17,6 @@ class [ClassName] extends Migration {
         $this->field("created_date")->timestamp();
 
         $this->sign();
-
     }
 
     /**
