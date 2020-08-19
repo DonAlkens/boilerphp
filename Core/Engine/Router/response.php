@@ -48,7 +48,7 @@ function content($text)
     echo $text;
 }
 
-function json($content)
+function Json($content)
 {
     echo json_encode($content);
 }
