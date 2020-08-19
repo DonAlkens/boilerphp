@@ -47,7 +47,8 @@ class Schema extends Connection
     {
 
         $this->allQuery();
-        return $this->fetch();
+        return (gettype($this->fetch()) == "object") 
+        ? [$this->fetch()] : $this->fetch() ;
 
     }
 
