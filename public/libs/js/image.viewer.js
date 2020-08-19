@@ -4,7 +4,8 @@ function ImageViewer(element, options =
         thumbnail: { node: "div", style: "img-thumbnail rounded" },
         extensions: [],
         showRemoveBtn: true,
-        removeBtn: { node: "button", style: "btn btn-primary", text: "Remove" }
+        removeBtn: { node: "button", style: "btn btn-primary", text: "Remove" },
+        clearInitial: true,
     }) {
 
     var images = [];
@@ -23,6 +24,12 @@ function ImageViewer(element, options =
             alert("Invalid file(s) selected!");
         }
         else {
+            
+            if(options.clearInitial !== undefined && options.clearInitial == true) {
+                $(options.display).html("");
+                images = [];
+            }
+
             images.push(file.files[i]);
 
             const reader = new FileReader(); // The file reader object

@@ -11,10 +11,13 @@ class [ClassName] extends Migration {
      */
     public function create() {
 
+        $this->table("[TableName]");
+
         $this->field("id")->bigIncrements();
         $this->field("created_date")->timestamp();
 
-        $this->table("[TableName]");
+        $this->sign();
+
     }
 
     /**

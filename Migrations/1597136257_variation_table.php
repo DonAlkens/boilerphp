@@ -11,6 +11,7 @@ class VariationTable extends Migration {
      */
     public function create() {
 
+        $this->table("variations");
         $this->field("id")->bigIncrements();
         $this->field("name")->string()->unique();
         $this->field("created_date")->timestamp();
@@ -18,8 +19,8 @@ class VariationTable extends Migration {
         $this->field("last_updated_date")->timestamp();
         $this->field("last_updated_by")->integer();
 
+        $this->sign();
 
-        $this->table("variations");
     }
 
     /**

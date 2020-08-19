@@ -64,25 +64,22 @@ class Api_Collection extends Controller {
         }
 
         return Json($list);
-
     }
 
     public function get_collections_table() {
 
-        $collections = (new Collection)->orderBy("id", "DESC")->all();
+        $collections = (new Collection)->orderBy("id", "ASC")->all();
         $list = array();
 
         foreach($collections as $collection) {
-
-            $updator = isset($collection->updator()->email) ? $collection->updator()->email : "";
 
             $data = array(
                 $collection->id, 
                 $collection->name, 
                 $collection->creator()->email, 
                 $collection->created_date, 
-                $updator, 
-                $collection->last_updated_date
+                // $collection->updator()->email, 
+                // $collection->last_updated_date
             );
 
             array_push($list, $data);
@@ -102,7 +99,7 @@ class Api_Collection extends Controller {
 
         if($request->validation == true) {
 
-            $check = (new Category)->where("name", $request->name)->get();
+            $check = (new Category)->where(["name" => $request->name, "collection" => $request->collection])->get();
             if($check) {
 
                 return Json(["status" => 200, "success" => false, "error"=>["message" => "Category name already exists."]]);
@@ -150,6 +147,69 @@ class Api_Collection extends Controller {
 
         }
 
+    }
+
+    public function get_categories() {
+
+        $categories = (new Category)->orderBy("name", "ASC")->all();
+        $list = array();
+
+        foreach($categories as $category) {
+            $category->name = $category->collection()->name." ". $category->name;
+            $data = array("name" => $category->name, "value" => $category->id);
+            array_push($list, $data);
+        }
+
+        return Json($list);
+    }
+
+    public function get_categories_table() {
+
+        $categories = (new Category)->orderBy("id", "ASC")->all();
+        $list = array();
+
+        foreach($categories as $category) {
+
+            $data = array(
+                $category->id, 
+                $category->name, 
+                $category->collection()->name,
+                $category->creator()->email, 
+                $category->created_date, 
+                // $category->updator()->email, 
+                // $category->last_updated_date
+            );
+
+            array_push($list, $data);
+
+        }
+
+        return Json($list);
+    }    
+
+
+    public function get_subcategories($request) {
+
+        $subcategories = (new SubCategory)->where("category", $request->param["category"])->orderBy("name", "ASC")->get();
+        $list = array();
+
+
+        if(gettype($subcategories) == "array") {
+
+            foreach($subcategories as $subcategory) {
+
+                $data = array(
+                    "name" => $subcategory->name, 
+                    "value" => $subcategory->id
+                );
+                
+                array_push($list, $data);
+            }
+    
+            return Json($list);
+        }
+
+        return Json([]);
     }
 
 }

@@ -43,4 +43,40 @@ class Api_Variation extends Controller {
         
     }
 
+    public function get_variations() {
+
+        $variations = (new Variation)->orderBy("name", "ASC")->all();
+        $list = array();
+
+        foreach($variations as $variation) {
+            $data = array("name" => $variation->name, "value" => $variation->id);
+            array_push($list, $data);
+        }
+
+        return Json($list);
+    }
+
+    public function get_variations_table() {
+
+        $variations = (new Variation)->orderBy("id", "ASC")->all();
+        $list = array();
+
+        foreach($variations as $variation) {
+
+            $data = array(
+                $variation->id, 
+                $variation->name, 
+                $variation->creator()->email, 
+                $variation->created_date, 
+                // $variation->updator()->email, 
+                // $variation->last_updated_date
+            );
+
+            array_push($list, $data);
+
+        }
+
+        return Json($list);
+    }    
+
 }

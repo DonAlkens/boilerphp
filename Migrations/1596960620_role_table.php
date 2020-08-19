@@ -11,6 +11,7 @@ class RoleTable extends Migration {
      */
     public function create() {
 
+        $this->table("roles");
         $this->field("id")->bigIncrements()->null();
         $this->field("name")->string()->unique();
         $this->field("created_date")->timestamp();
@@ -18,7 +19,7 @@ class RoleTable extends Migration {
         $this->field("created_by")->integer();
         $this->field("updated_by")->integer();
 
-        $this->table("roles");
+        $this->sign();
     }
 
     /**

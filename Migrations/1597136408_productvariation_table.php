@@ -11,6 +11,7 @@ class ProductVariationTable extends Migration {
      */
     public function create() {
 
+        $this->table("product_variations");
         $this->field("id")->bigIncrements();
         $this->field("product")->integer();
         $this->field("variation")->integer();
@@ -22,8 +23,8 @@ class ProductVariationTable extends Migration {
         $this->field("last_updated_date")->timestamp();
         $this->field("last_updated_by")->integer();
 
+        $this->sign();
 
-        $this->table("productvariations");
     }
 
     /**

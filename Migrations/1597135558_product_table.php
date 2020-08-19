@@ -11,9 +11,11 @@ class ProductTable extends Migration {
      */
     public function create() {
 
+        $this->table("products");
         $this->field("id")->bigIncrements();
         $this->field("name")->string();
         $this->field("slug")->string();
+        $this->field("brand")->string();
         $this->field("description")->longtext();
         $this->field("price")->string();
         $this->field("collection")->integer();
@@ -24,7 +26,7 @@ class ProductTable extends Migration {
         $this->field("last_updated_date")->timestamp();
         $this->field("last_updated_by")->integer();
 
-        $this->table("products");
+        $this->sign();
     }
 
     /**

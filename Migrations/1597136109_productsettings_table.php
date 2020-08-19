@@ -11,6 +11,7 @@ class ProductSettingsTable extends Migration {
      */
     public function create() {
 
+        $this->table("product_settings");
         $this->field("id")->bigIncrements();
         $this->field("product")->integer()->foreign("products", "id")->cascade();
         $this->field("out_of_stock")->boolean();
@@ -19,8 +20,7 @@ class ProductSettingsTable extends Migration {
         $this->field("last_updated_date")->timestamp();
         $this->field("last_updated_by")->integer();
 
-
-        $this->table("productsettings");
+        $this->sign();
     }
 
     /**

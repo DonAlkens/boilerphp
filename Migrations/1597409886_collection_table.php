@@ -10,7 +10,8 @@ class CollectionTable extends Migration {
      * @return void
      */
     public function create() {
-
+        
+        $this->table("collections");
         $this->field("id")->bigIncrements();
         $this->field("name")->string()->unique();
         $this->field("slug")->string();
@@ -19,7 +20,7 @@ class CollectionTable extends Migration {
         $this->field("last_updated_date")->timestamp();
         $this->field("last_updated_by")->integer();
 
-        $this->table("collections");
+        $this->sign();
     }
 
     /**

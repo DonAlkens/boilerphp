@@ -9,7 +9,12 @@ function validateCurrentStep(current) {
     var valid = true,
         fields = $('[step-id="' + current + '"]').children().find('[step-field-required="true"]');
     fields.each(function () {
-        if ($(this).val() === "") { valid = false; }
+        $(this).css("border-color","#dcdcdc").siblings('[step-validation-result="true"]').remove();
+        if ($(this).val() === "") { 
+            var message = $(this).attr("step-validation-message");
+            $(this).css("border-color","red").after('<span class="text-danger" step-validation-result="true">'+ message +'</span>');
+            valid = false; 
+        }
     });
 
     return valid;
@@ -114,6 +119,15 @@ function stepModal(mode, message, iconClass = null) {
     closePopUpAction();
 }
 
+function stepLoading(state, message = null){
+    if(state) {
+        $("body").append('<div class="step-overlay text-center" step-loading="true"><div class="step-loading"><div class="d-flex justify-content-center"><div class="spinner-grow text-primary" role="status"><span class="sr-only text-white"></span></div></div><p class="text-center text-white">'+message+'</p></div></div>');
+    } 
+    else {
+        $('[step-loading="true"]').remove();
+    }
+}
+
 function closePopUpAction() {
     $(".step-close").click(function () {
         $(".step-overlay").fadeOut().remove();
@@ -162,4 +176,8 @@ Step.prototype.init = function () {
 
 Step.prototype.modal = function (mode, message) {
     return stepModal(mode, message);
+}
+
+Step.prototype.loader = function(state, message = null) {
+    return stepLoading(state, message);
 }

@@ -11,6 +11,7 @@ class SubCategoriesTable extends Migration {
      */
     public function create() {
 
+        $this->table("sub_categories");
         $this->field("id")->bigIncrements();
         $this->field("name")->string()->unique();
         $this->field("slug")->string();
@@ -20,7 +21,7 @@ class SubCategoriesTable extends Migration {
         $this->field("last_updated_date")->timestamp();
         $this->field("last_updated_by")->integer();
 
-        $this->table("sub_categories");
+        $this->sign();
     }
 
     /**

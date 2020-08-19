@@ -11,6 +11,7 @@ class UserTable extends Migration {
      */
     public function create() {
 
+        $this->table("users");
         $this->field("id")->bigIncrements()->null();
         $this->field("firstname")->string()->null();
         $this->field("lastname")->string()->null();
@@ -22,7 +23,7 @@ class UserTable extends Migration {
         $this->field("updated_date")->timestamp();
         $this->field("updated_by")->integer();
 
-        $this->table("users");
+        $this->sign();
     }
 
     /**

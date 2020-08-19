@@ -2,7 +2,7 @@
 
 use App\Core\Database\Migration;
 
-class CategoriesTable extends Migration {
+class ProductImagesTable extends Migration {
 
     /**
      * creates database table
@@ -11,18 +11,17 @@ class CategoriesTable extends Migration {
      */
     public function create() {
 
-        $this->table("categories");
+        $this->table("product_images");
         $this->field("id")->bigIncrements();
-        $this->field("name")->string()->unique();
-        $this->field("slug")->string();
-        $this->field("collection")->integer()->foreign("collections", "id")->cascade();
+        $this->field("product")->integer()->foreign("products", "id")->cascade();
+        $this->field("main")->string();
+        $this->field("gallery")->longtext();
         $this->field("created_date")->timestamp();
         $this->field("created_by")->integer();
         $this->field("last_updated_date")->timestamp();
         $this->field("last_updated_by")->integer();
 
         $this->sign();
-
     }
 
     /**
@@ -32,7 +31,7 @@ class CategoriesTable extends Migration {
      */
     public function drop() {
 
-        $this->dropIfExists("categories");
+        $this->dropIfExists("product_images");
     }
 
 }

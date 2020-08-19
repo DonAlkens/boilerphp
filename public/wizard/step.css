@@ -169,3 +169,18 @@
   margin-top: 10px;
   font-family: "ubuntu-regular", sans-serif;
 }
+
+.divider {
+  width: 100%;
+	border: none;
+  border-top: 1px solid #e7dee9;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.step-overlay .step-loading {
+    margin: 200px auto;
+    border-radius: 5px;
+    padding: 23px 30px;
+    display: inline-block;
+}
