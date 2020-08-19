@@ -9,7 +9,7 @@ class Migration extends Schema {
     {
         $diagram = new Diagram($name, 
                     $this->trimmer($this->query), 
-                    $this->trimmer($this->primary_keys), 
+                    $this->trimmer($this->primary_keys)
                 ); 
 
         $this->foreignKeyProccessor($name);

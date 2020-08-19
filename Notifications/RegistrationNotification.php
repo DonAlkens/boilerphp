@@ -2,7 +2,7 @@
 
 namespace App\Messages\Notification;
 
-use App\Messages\Mail;
+use App\Notification\Mail;
 
 
 class RegistrationNotfication extends Mail {
