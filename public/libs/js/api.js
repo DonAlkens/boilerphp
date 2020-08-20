@@ -47,7 +47,7 @@
 
     $("#ajaxForm").submit(function(event){ 
         event.preventDefault();
-
+        var form = $(this);
         // Form data Validation
         var validation = true;
 
@@ -65,28 +65,24 @@
         if(validation){
 
             let edit = true;
-            if(!$(this).attr("edit")) {
+            if(!form.attr("edit") && form.attr("enctype") == "multipart/form-data") {
                 edit = false;
 
-                if($("#adVImages").length > 0) {
-
-                    if(imageArr.length == 0){
-                        step.modal("error", "Please add Product Images");
-                        return;
-                    }
+                if(imageArr.length == 0){
+                    step.modal("error", "Please add Product Images");
+                    return;
                 }
             }
 
             var data = new FormData(this), 
-                url = $(this).attr("action"), 
-                method = $(this).attr("method");
+                url = form.attr("action"), 
+                method = form.attr("method");
 
-            if($(this).attr("class") == "add-product") {
+            if(form.attr("class") == "add-product") {
                 step.loader(true, "Saving Products...");
             }
             
-            if(imageArr.length > 1){    imageArr.forEach(image => { data.append("file[]",image);}); } 
-            else if(imageArr.length == 1){  data.append("file",imageArr[0]);    }
+            if(imageArr.length > 0){    imageArr.forEach(image => { data.append("gallery[]",image);}); } 
             
             $.ajax({ url, method, data, cache: false, contentType: false, processData: false, 
                 beforeSend: function() {
@@ -96,15 +92,17 @@
                     console.log(res);
 
                     if(res !== null && JSON.parse(res)) {
-                        res = JSON.parse(res); imageArr = [];
+                        res = JSON.parse(res);
+                        step.loader(false);
 
                         if(res.success) {
-                            step.loader(false);
 
-                            if(!edit) {
+                            if(!edit && form.attr("class") != "add-product") {
+                                imageArr = [];
                                 $("input, textarea").val("");
                                 $("#img-preview").html("");
                             }
+
                             step.modal("success", res.message);
 
                         } 
@@ -126,6 +124,7 @@
     $('[api-options]').each(function(){
         let select = $(this); url = $(this).attr("api-options");
         $.ajax({url, method:"GET", data: {}, success: function(list){
+            console.log(list);
             if(list != null && JSON.parse(list)) {
                 list = JSON.parse(list);
                 list.forEach(option => {
@@ -142,6 +141,7 @@
     $('[api-table]').each(function(){
         let table = $(this); url = $(this).attr("api-table");
         $.ajax({url, method: "GET", data:{}, success:function(rows){ 
+            console.log(rows);
             if(rows != null && JSON.parse(rows)) {
                 rows = JSON.parse(rows);
                 rows.forEach(row => {

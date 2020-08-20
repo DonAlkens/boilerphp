@@ -47,10 +47,14 @@ class Api_Variation extends Controller {
 
         $variations = (new Variation)->orderBy("name", "ASC")->all();
         $list = array();
+        
+        if($variations != null){
 
-        foreach($variations as $variation) {
-            $data = array("name" => $variation->name, "value" => $variation->id);
-            array_push($list, $data);
+            foreach($variations as $variation) {
+                $data = array("name" => $variation->name, "value" => $variation->id);
+                array_push($list, $data);
+            }
+
         }
 
         return Json($list);
@@ -61,20 +65,23 @@ class Api_Variation extends Controller {
         $variations = (new Variation)->orderBy("id", "ASC")->all();
         $list = array();
 
-        foreach($variations as $variation) {
-
-            $data = array(
-                $variation->id, 
-                $variation->name, 
-                $variation->creator()->email, 
-                $variation->created_date, 
-                // $variation->updator()->email, 
-                // $variation->last_updated_date
-            );
-
-            array_push($list, $data);
-
+        if($variations != null){
+            foreach($variations as $variation) {
+    
+                $data = array(
+                    $variation->id, 
+                    $variation->name, 
+                    $variation->creator()->email, 
+                    $variation->created_date, 
+                    // $variation->updator()->email, 
+                    // $variation->last_updated_date
+                );
+    
+                array_push($list, $data);
+    
+            }
         }
+
 
         return Json($list);
     }    

@@ -12,7 +12,8 @@ class ProductSettings extends Model {
     **/
     protected $required = [];
 
-
+    
+    public $table = "product_settings";
 
 }
 

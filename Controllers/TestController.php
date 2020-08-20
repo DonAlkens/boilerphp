@@ -33,6 +33,15 @@ class TestController extends Controller
         //$this->hasAuthAccess("user", "login");
     }
 
+    public function test_form($request) {
+        
+        if($request->method == "POST") {
+            return content(count($request->field));
+        }
+
+        return view("test/index");
+    }
+
     public function index()
     {
 

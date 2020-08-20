@@ -13,6 +13,7 @@ class ProductVariation extends Model {
     protected $required = [];
 
 
+    public $table = "product_variations";
 
 }
 

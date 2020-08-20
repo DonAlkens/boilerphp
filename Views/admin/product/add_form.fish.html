@@ -8,7 +8,7 @@
                     <h2 class="card-title mt-3 mb-4">Add Products</h2>
 
                     <div class="add-form">
-                        <form action="/api/a/add-products" class="add-product" method="post" id="ajaxForm">
+                        <form action="/api/a/add-products" class="add-product" method="post" id="ajaxForm" enctype="multipart/form-data">
                             <div class="step-box">
                                 <ul class="step-list step-list-horizontal mb-3">
                                     <li class="step-badge active" step-validate="1" step-badge="1">
@@ -247,8 +247,8 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <div class="custom-control custom-switch">
-                                                        <input name="track_inventory" type="checkbox" class="custom-control-input" id="TrackInventory" checked>
-                                                        <label class="custom-control-label ln-16" for="TrackInventory">Track Product Inventory</label>
+                                                        <input name="featured" type="checkbox" class="custom-control-input" id="featured" checked>
+                                                        <label class="custom-control-label ln-16" for="featured">Set as featured product</label>
                                                     </div>
                                                 </div>
                                             </div>

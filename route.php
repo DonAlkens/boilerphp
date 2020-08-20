@@ -50,3 +50,7 @@ Route::get("/api/a/get-categories-table", "Api_Collection::get_categories_table"
 Route::get("/api/a/get-subcategories/{category:int}", "Api_Collection::get_subcategories");
 
 Route::post("/api/a/add-products", "Api_Product::add");
+Route::get("/api/a/get-products-table", "Api_Product::get_prouducts_table");
+
+
+Route::httpAction("/test_form", "TestController::test_form");

@@ -8,7 +8,10 @@
     
     if($("#addSkeletonBtn"))
     {
-        let skeleton = $("#skeleton").html();
+        let skeleton = "";
+        setTimeout(function(){
+            skeleton = $("#skeleton").html()
+        }, 2000);
         
         $("#addSkeletonBtn").click(function(){
             $("#skeletonForm").append('<div class="col-md-6">'+skeleton+"</div>");
@@ -18,7 +21,10 @@
 
     if($("#addSkeletonBtn2"))
     {
-        let skeleton = $("#skeleton").html();
+        let skeleton = "";
+        setTimeout(function(){
+            skeleton = $("#skeleton").html()
+        }, 2000);
         
         $("#addSkeletonBtn2").click(function(){
             $("#skeletonForm").append('<div class="divider"></div><div class="col-md-12">'+skeleton+"</div>");

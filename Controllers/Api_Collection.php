@@ -5,6 +5,7 @@ use App\Action\Urls\Controller;
 use App\Admin\Auth;
 use App\Category;
 use App\Collection;
+use App\Product;
 use App\SubCategory;
 
 /** 
@@ -29,8 +30,7 @@ class Api_Collection extends Controller {
                     array_push($existing, $collection);
                 } 
                 else {
-                    $slug = str_replace([" ", "'", ","], "-", $collection);
-                    $slug = strtolower($slug);
+                    $slug = (new Product)->create_slug(($collection));
                     $create = (new Collection)->insert(["name" => $collection, "slug" => $slug, "created_by" => Auth::user()->id]);
                 }
             }
@@ -105,8 +105,7 @@ class Api_Collection extends Controller {
                 return Json(["status" => 200, "success" => false, "error"=>["message" => "Category name already exists."]]);
             }
 
-            $slug = str_replace([" ", "'", ","], "-", $request->name);
-            $slug = strtolower($slug);
+            $slug = (new Product)->create_slug(($request->name));
 
             $category = (new Category)->insert([
                 "name" => $request->name, 
@@ -129,8 +128,7 @@ class Api_Collection extends Controller {
                             array_push($existing, $sub_cat);
                         } 
                         else {
-                            $slug = str_replace([" ", "'", ","], "-", $sub_cat);
-                            $slug = strtolower($slug);
+                            $slug = (new Product)->create_slug(($sub_cat));
                             $create = (new SubCategory)->insert(["name" => $sub_cat, "slug" => $slug, "category" => $category->id, "created_by" => Auth::user()->id]);
                         }
 
@@ -154,10 +152,12 @@ class Api_Collection extends Controller {
         $categories = (new Category)->orderBy("name", "ASC")->all();
         $list = array();
 
-        foreach($categories as $category) {
-            $category->name = $category->collection()->name." ". $category->name;
-            $data = array("name" => $category->name, "value" => $category->id);
-            array_push($list, $data);
+        if($categories != null){
+            foreach($categories as $category) {
+                $category->name = $category->collection()->name." ". $category->name;
+                $data = array("name" => $category->name, "value" => $category->id);
+                array_push($list, $data);
+            }
         }
 
         return Json($list);
@@ -168,21 +168,24 @@ class Api_Collection extends Controller {
         $categories = (new Category)->orderBy("id", "ASC")->all();
         $list = array();
 
-        foreach($categories as $category) {
-
-            $data = array(
-                $category->id, 
-                $category->name, 
-                $category->collection()->name,
-                $category->creator()->email, 
-                $category->created_date, 
-                // $category->updator()->email, 
-                // $category->last_updated_date
-            );
-
-            array_push($list, $data);
-
+        if($categories != null){
+            foreach($categories as $category) {
+    
+                $data = array(
+                    $category->id, 
+                    $category->name, 
+                    $category->collection()->name,
+                    $category->creator()->email, 
+                    $category->created_date, 
+                    // $category->updator()->email, 
+                    // $category->last_updated_date
+                );
+    
+                array_push($list, $data);
+    
+            }
         }
+
 
         return Json($list);
     }    
@@ -209,7 +212,7 @@ class Api_Collection extends Controller {
             return Json($list);
         }
 
-        return Json([]);
+        return Json($list);
     }
 
 }

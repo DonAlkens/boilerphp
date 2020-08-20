@@ -13,7 +13,7 @@ class CategoriesTable extends Migration {
 
         $this->table("categories");
         $this->field("id")->bigIncrements();
-        $this->field("name")->string()->unique();
+        $this->field("name")->string();
         $this->field("slug")->string();
         $this->field("collection")->integer()->foreign("collections", "id")->cascade();
         $this->field("created_date")->timestamp();

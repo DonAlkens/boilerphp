@@ -31,6 +31,12 @@ class Product extends Model {
 
     }
 
+    public function collection() {
+
+        return $this->hasOne(Collection::class, ["id" => "collection"]);
+
+    }
+
     public function category() {
 
         return $this->hasOne(Category::class, ["id" => "category"]);
@@ -43,10 +49,34 @@ class Product extends Model {
         
     }
 
+    // Utils functions
+
     public function create_slug($string) {
 
         $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
         return preg_replace('/[^A-Za-z0-9\-]/', '', strtolower($string)); // Removes special chars.
+    }
+
+
+    public function delete_images($id) {
+
+        $target = $this->where("id", $id)->get();
+
+        $main = "src/images/".$target->images()->main;
+        unlink($main);
+
+        $gallery = $target->images()->gallery;
+        if(!empty($gallery)) {
+
+            $gallery_list = explode(",", $gallery);
+            foreach($gallery_list as $image) {
+
+                $file = "src/images/".$image;
+                unlink($file);
+            }
+
+        }
+
     }
 
 }

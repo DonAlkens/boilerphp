@@ -18,6 +18,7 @@ class ProductTable extends Migration {
         $this->field("brand")->string();
         $this->field("description")->longtext();
         $this->field("price")->string();
+        $this->field("discount")->float();
         $this->field("collection")->integer();
         $this->field("category")->integer();
         $this->field("sub_category")->integer();
