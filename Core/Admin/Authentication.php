@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 use App\Core\Database\Schema;
+use App\User;
 
 class Auth
 {
@@ -13,7 +14,7 @@ class Auth
         if(isset($_SESSION["auth"])) 
         {
             $id = $_SESSION["auth"];
-            return (new Schema)->setTable("users")->where("id", $id)->get();
+            return (new User)->where("id", $id)->get();
         }
 
         return null;
