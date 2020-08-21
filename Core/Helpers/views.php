@@ -5,7 +5,7 @@ function env($key)
     return $_ENV[$key];
 }
 
-function loadStatic($filesource) 
+function load_static($filesource) 
 {
     if(file_exists("public/".$filesource)) 
     {

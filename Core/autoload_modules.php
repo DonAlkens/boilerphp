@@ -20,7 +20,8 @@ class AppModules {
         "helpers" => [
             "Helpers::forms",
             "Helpers::routes",
-            "Helpers::views"
+            "Helpers::views",
+            "Helpers::auth"
         ],
     
         "router" => [
