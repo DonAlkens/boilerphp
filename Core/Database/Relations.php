@@ -34,7 +34,6 @@ class Relations extends Schema {
         
         if($this->setModelProperties($model)) 
         {
-            $name = $this->getRelationsName();
     
             if($this->setKeys($key)) 
             {
@@ -115,14 +114,6 @@ class Relations extends Schema {
 
 
         return $this;
-    }
-
-    public function key($name) 
-    {
-
-        $this->useKey = $name;
-        return $this;
-
     }
 
     public function pickAll() {
