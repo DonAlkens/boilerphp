@@ -233,7 +233,8 @@ class Fs
 				{
 					# rename file 
 					# check if user add extension
-					$uploadFile = $path . $prefix_name . "-" . $file_name;
+					$file_name = $prefix_name . "-" . $file_name;
+					$uploadFile = $path . $file_name;
 				} 
 				
 				else 
@@ -245,7 +246,7 @@ class Fs
 
 				if (move_uploaded_file($file_tmp, $uploadFile)) 
 				{
-					array_push(static::$filelist, $prefix_name);
+					array_push(static::$filelist, $file_name);
 				}
 			} 
 		}
