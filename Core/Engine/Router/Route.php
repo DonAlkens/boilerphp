@@ -194,11 +194,15 @@ class Route extends RoutesConfig {
 
                 $request = new Request($method);
                 $request->param = static::$route_lookup_list[$pattern]["param"];
-                $request->map($request->result);
+
 
                 $controller = explode("::", $path["action"])[0];
+
+
+
                 //Call Coutroller to Load All MiddleWare and Auth
                 new $controller();
+
                 
                 call_user_func($path["action"], $request);
 

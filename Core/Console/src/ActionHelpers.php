@@ -163,7 +163,7 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function configureModel($model_name, $model_path) 
     {
-        $component_path = "./Core/Console/lib/components/model.component";
+        $component_path = "./Core/Console/components/model.component";
 
         if($this->readComponent($component_path)) 
         {
@@ -185,7 +185,7 @@ class ActionHelpers implements ActionHelpersInterface {
      */
     public function configureMigration($migration_name, $migration_path) 
     {
-        $component_path = "./Core/Console/lib/components/migration.component";
+        $component_path = "./Core/Console/components/migration.component";
         if($this->readComponent($component_path)) 
         {
             $class_name = ucfirst($migration_name);
@@ -228,7 +228,7 @@ class ActionHelpers implements ActionHelpersInterface {
      */
     public function configureController($controller_name, $controller_path) 
     {
-        $component_path = "./Core/Console/lib/components/controller.component";
+        $component_path = "./Core/Console/components/controller.component";
 
         if($this->readComponent($component_path) !== "") 
         {
