@@ -12,6 +12,10 @@ Workbench
 RouteServices
 
 
+By Folders::
+Migrations
+
+
 *Notes*: 
 Check if Where query is available on get all function.
 Add file function & timestamp function into Request class

@@ -194,7 +194,6 @@ class Route extends RoutesConfig {
 
                 $request = new Request($method);
                 $request->param = static::$route_lookup_list[$pattern]["param"];
-                // $request->$method($request->result);
 
 
                 $controller = explode("::", $path["action"])[0];
