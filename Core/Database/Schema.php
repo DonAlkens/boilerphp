@@ -48,7 +48,9 @@ class Schema extends Connection
 
         $this->allQuery();
         $data = $this->fetch();
-        if(gettype($data) == "object") {
+
+        if(gettype($data) == "object") 
+        {
             return array($data);
         } 
         else 
@@ -90,10 +92,17 @@ class Schema extends Connection
 
     }
 
-    public function find($key, $value) 
+    public function find($key, $value = null) 
     {
 
-        $this->result = $this->select($key, $value);
+        if($value == null) 
+        {
+            $this->result = $this->where("id", $key)->select();
+        }
+        else 
+        {
+            $this->result = $this->where($key, $value)->select();
+        }
 
         if($this->result !== null) 
         {
@@ -156,7 +165,6 @@ class Schema extends Connection
             if($this->selectQuery($this->fields))
             {
 
-                $this->queryString .= isset($this->whereQuery) ? $this->whereQuery : "";
                 return $this->fetch();
 
             }
@@ -174,8 +182,6 @@ class Schema extends Connection
 
             if($this->updateQuery($this->data)) 
             {
-
-                $this->queryString .= isset($this->whereQuery) ? $this->whereQuery : "";
 
                 if($this->save())
                 {

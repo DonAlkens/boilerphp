@@ -124,6 +124,11 @@ class QueryBuilder extends DataTypes
 				$this->queryString .= $this->groupQuery;
 			}
 
+			if(isset($this->whereQuery)) 
+			{
+				$this->queryString .= $this->whereQuery;
+			}
+
 			return $this->queryString;
 		}
 

@@ -174,9 +174,11 @@ class Route extends RoutesConfig {
 
                 # get the intersect 
                 $intersect = array_intersect($splitPattern,$splitUri);
+
                 # get the diff between intersect and uri
                 $params = array_diff($splitUri, $intersect);
                 $p = [];
+                
                 foreach ($params as $key => $value) 
                 {
                     array_push($p, $value);
