@@ -114,6 +114,11 @@ class QueryBuilder extends DataTypes
 		if (!empty($this->queryString)) 
 		{
 
+			if(isset($this->whereQuery)) 
+			{
+				$this->queryString .= $this->whereQuery;
+			}
+			
 			if (isset($this->orderQuery)) 
 			{
 				$this->queryString .= $this->orderQuery;
@@ -122,11 +127,6 @@ class QueryBuilder extends DataTypes
 			if (isset($this->groupQuery)) 
 			{
 				$this->queryString .= $this->groupQuery;
-			}
-
-			if(isset($this->whereQuery)) 
-			{
-				$this->queryString .= $this->whereQuery;
 			}
 
 			return $this->queryString;
