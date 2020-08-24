@@ -28,8 +28,11 @@ class Request extends Validator
     */
     public function __construct($method) 
     {
+
         $this->method = strtoupper($method);
+
         $this->init($method);
+        
     }
 
     public function init($method)
@@ -54,28 +57,44 @@ class Request extends Validator
 
     public function get() 
     {
-        $object = $_GET;
-        $this->result = $object;
-        $this->map($object);
+        $this->map($_GET);
     }
 
     public function post() 
     {
-        $object = $_POST;
-        $this->result = $object;
-        $this->map($object);
+        $this->map($_POST);
     }
 
     public function file($index)
     {
-        $file = $_FILES[$index];
+        if(isset($_FILES[$index]))
+        {
+
+            $file = $_FILES[$index];
+
+        }
+        else 
+        {
+
+            $file = null;
+
+        }
+
         return $file;
     }
 
     public function filename($index)
     {
-        $file_name = $_FILES[$index]["name"];
-        return $file_name;
+        if($this->file($index) != null) 
+        {
+
+            return $_FILES[$index]["name"];
+            
+        }
+        else 
+        {
+            return null;
+        }
     }
 
     public function map($data) 
