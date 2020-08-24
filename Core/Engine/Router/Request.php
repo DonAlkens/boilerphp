@@ -106,4 +106,10 @@ class Request extends Validator
         }
     }
 
+    public function timestamp() 
+    {
+        
+        return date("Y-m-d H:i:s");
+    }
+
 }
