@@ -49,7 +49,7 @@ class Schema extends Connection
         $this->allQuery();
         $data = $this->fetch();
 
-        if(gettype($data) == "object") 
+        if(!is_array($data)) 
         {
             return array($data);
         } 
