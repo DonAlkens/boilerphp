@@ -24,7 +24,8 @@
                                     <th> Action </th>
                                 </tr>
                             </thead>
-                            <tbody api-table="/api/a/get-variations-table"></tbody>
+                            <tbody api-table="/api/a/get-variations-table" api-modal="Variation" api-actions="edit, view, delete" 
+                            api-action-links="/api/a/variation/, /api/a/variation/, /api/a/variation/"></tbody>
                         </table>
                     </div>
                 </div>
@@ -32,5 +33,6 @@
         </div>
     </div>
     
+    @{{load "admin/modals/variations"}}
 </div>
 <!-- content-wrapper ends -->

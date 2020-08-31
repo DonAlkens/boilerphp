@@ -49,6 +49,17 @@ class Product extends Model {
         
     }
 
+    public function settings() {
+        
+        return $this->hasOne(ProductSettings::class, ["product" => "id"]);
+    }
+
+    public function variations() {
+
+        return $this->hasMultiple(ProductVariation::class, ["product" => "id"]);
+
+    }
+
     // Utils functions
 
     public function create_slug($string) {

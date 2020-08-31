@@ -18,7 +18,7 @@
                             <thead>
                                 <tr>
                                     <th> #Id </th>
-                                    <th> Image</th>
+                                    <!-- <th> Image</th> -->
                                     <th> Name </th>
                                     <th> Category </th>
                                     <th> Price </th>
@@ -27,7 +27,9 @@
                                     <th> Actions </th>
                                 </tr>
                             </thead>
-                            <tbody api-table="/api/a/get-products-table"></tbody>
+                            <tbody api-table="/api/a/get-products-table" api-actions="edit, view, delete" 
+                            api-action-links="/a/products/edit/, /a/products/view/, /a/products/delete/">
+                            </tbody>
                         </table>
                     </div>
                 </div>

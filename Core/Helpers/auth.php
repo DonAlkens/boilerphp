@@ -1,12 +1,13 @@
 <?php
 
 use App\Admin\Auth;	
+use App\Admin\Door;
 
 if(!function_exists("auth")) 
 {
     /** 
      * 
-     * @retutn App\Admin\Auth::user|null
+     * @return App\Admin\Auth::user|null
     */
     function auth() {
 
@@ -17,4 +18,20 @@ if(!function_exists("auth"))
 
         return null;
     }
+}
+
+if(!function_exists("access")) 
+{
+    /** 
+     * gives access with permission
+     * 
+     * @param string $lock
+     * @return App\Admin\Door::hasLock
+    */
+
+    function access($lock)
+    {
+        return Door::hasLock($lock);
+    }
+
 }

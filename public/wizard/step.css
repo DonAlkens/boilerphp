@@ -113,6 +113,7 @@
 
 .image-box .thumbnail img {
   padding: 4px;
+  max-width: 250px;
 }
 
 .image-box .thumbnail.small img {
@@ -176,6 +177,11 @@
   border-top: 1px solid #e7dee9;
   display: block;
   margin-bottom: 20px;
+}
+
+.bordered-top {
+  border: none;
+  border-top: 1px solid #e7dee9;
 }
 
 .step-overlay .step-loading {

@@ -59,7 +59,9 @@
     media="screen" />
   <link href="/public/catalog/view/javascript/jquery/swiper/css/opencart.css" type="text/css" rel="stylesheet" media="screen" />
   <link href="/public/catalog/view/javascript/jquery/magnific/magnific-popup.css" type="text/css" rel="stylesheet"
-    media="screen" />
+  	media="screen" />
+  <link href="/public/catalog/view/theme/storezo/stylesheet/webinewsletter.css" type="text/css" rel="stylesheet"
+	media="screen" />
   <script src="/public/catalog/view/javascript/jquery/swiper/js/slick.min.js" type="text/javascript"></script>
   <script src="/public/catalog/view/javascript/jquery/swiper/js/owl.carousel.min.js" type="text/javascript"></script>
   <script src="/public/catalog/view/javascript/jquery/swiper/js/swiper.jquery.js" type="text/javascript"></script>
@@ -71,7 +73,11 @@
 </head>
 
 <body>
+
+	@{{load "shared/_popup"}}
+
 	@{{load "shared/_svg"}}
+
 	@{{load "shared/_header"}}
 
 	@{{content}}

@@ -17086,3 +17086,42 @@ ul li, ol li, dl li {
 .ln-16 {
   line-height: 1.6 !important;
 }
+
+.table td.actions .btn {
+  margin-right: 10px !important;
+  padding: 7px 8px !important;
+}
+
+.product-img-outer img {
+  width: 100%;
+}
+
+.product-title {
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.edit-product-form .nav-link {
+  background: none !important;
+  color: #7E8299 !important;
+  border: none;
+  border-bottom: 3px solid transparent;
+  border-radius: 0 !important;
+  padding: 13px 0px;
+  margin-right: 40px !important;
+  transition: .3s;
+  -webkit-transition: .3s;
+}
+
+.edit-product-form .nav-link:hover {
+  color: #b66dff !important;
+  border-bottom-color: #b66dff;
+}
+
+.edit-product-form .nav-link.active {
+  color: #b66dff !important;
+  border-bottom-color: #b66dff;
+
+}

@@ -26,13 +26,16 @@
                                     <th> Actions </th>
                                 </tr>
                             </thead>
-                            <tbody api-table="/api/a/get-collections-table"></tbody>
+                            <tbody api-table="/api/a/get-collections-table" api-modal="Collection" api-actions="edit, view, delete" 
+                            api-action-links="/api/a/collection/, /api/a/collection/, /api/a/collection/"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    @{{load "admin/modals/collections"}}
     
 </div>
 <!-- content-wrapper ends -->

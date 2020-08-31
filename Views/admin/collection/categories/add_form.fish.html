@@ -8,7 +8,7 @@
                     <h2 class="card-title mt-3 mb-4">Add Categories</h2>
 
                     <div class="add-form">
-                        <form action="/api/a/add-categories" method="post" id="ajaxForm">
+                        <form action="/api/a/add-categories" form-reset="#skeletonForm" method="post" class="ajaxForm">
                             <div class="form-light-box mb-3">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -31,7 +31,7 @@
                             <div class="form-light-box mb-3">
                                 <label><b>Subcategories</b></label>
                                 <div class="row" id="skeletonForm">
-                                    <div class="col-md-6" id="skeleton">
+                                    <div class="col-md-6  mb-3" default="true" id="skeleton">
                                         <div class="row">
                                             <div class="col-md-10">
                                                 <input name="subCategories[]" class="form-control var_name" placeholder="Enter name" onblur="handleblur(this);">

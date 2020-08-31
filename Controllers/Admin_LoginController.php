@@ -17,7 +17,6 @@ class Admin_LoginController extends Controller {
 
     public function __construct()
     {
-        // $this->hasAuthAccess("user", "login");
         if(Auth::user()) {
             return redirect("/dashboard");
         }

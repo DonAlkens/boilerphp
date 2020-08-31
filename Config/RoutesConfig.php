@@ -10,7 +10,7 @@ class RoutesConfig {
     * @var string
     *
     */
-    static public $domain = "";
+    static public $domain = "mendiz.now";
 
 
     /**

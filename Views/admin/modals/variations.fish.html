@@ -1,0 +1,78 @@
+<!-- Modal -->
+<div class="modal fade" id="editVariation" tabindex="-1" role="dialog" aria-labelledby="editVariation"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/api/a/edit-variation" api-modal-form="edit" edit="true" method="post" class="ajaxForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editVariationLabel">Edit Variation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" api-edit-role="variation" api-field-key="id">
+                    <div class="form-group">
+                        <input type="text" name="variation" validate-field="true" validation-message="variation name cannot be empty *"
+                        api-edit-role="variation" api-field-key="name" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="viewVariation" tabindex="-1" role="dialog" aria-labelledby="editVariation"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editVariationLabel">View Variation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <p><b>ID: </b> <span api-view-role="variation" api-text-key="id"></span></p>
+                    <p><b>Name: </b> <span api-view-role="variation" api-text-key="name"></span></p>
+                    <p><b>Created By: </b> <span api-view-role="variation" api-text-key="creator"></span></p>
+                    <p><b>Created Date: </b> <span api-view-role="variation" api-text-key="created_date"></span></p>
+                    <p><b>Last Updated By: </b> <span api-view-role="variation" api-text-key="updator"></span></p>
+                    <p><b>Last Updated Date: </b> <span api-view-role="variation" api-text-key="updated_date"></span></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteVariation" tabindex="-1" role="dialog" aria-labelledby="editVariation"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/api/a/delete-variation" api-modal-form="delete" edit="true" method="post" class="ajaxForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editVariationLabel">Delete Variation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete <b api-text-key="name" api-delete-role="variation"></b> variation.
+                    <input type="hidden" name="id" api-field-key="id" api-delete-role="variation">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

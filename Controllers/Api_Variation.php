@@ -3,6 +3,7 @@
 use App\Core\Urls\Request;
 use App\Action\Urls\Controller;
 use App\Admin\Auth;
+use App\Product;
 use App\Variation;
 
 /** 
@@ -11,6 +12,11 @@ use App\Variation;
  */ 
 
 class Api_Variation extends Controller {
+
+    public function __construct()
+    {
+        $this->hasAuthAccess("auth", "/signin");
+    }
 
     public function add(Request $request) {
 
@@ -41,6 +47,74 @@ class Api_Variation extends Controller {
 
         return Json(["status" => 200, "success" => false, "error" => ["message" => $error_message]]);
         
+    }
+
+    public function edit_variation(Request $request) {
+
+        $variation = (new Variation)->where("id", $request->id)->get();
+        if($variation) {
+            if($request->variation != $variation->name) {
+
+                $check = (new Variation)->where("name", $request->variation)->get();
+                if($check) {
+
+                    $message = "Variation $request->variation already exists.";
+                    return Json(["status" => 200, "success" => false, "error"=>["message" => $message]]);
+                }
+                else {
+
+                    $update = $variation->where("id", $request->id)->update([
+                        "name" => $request->variation
+                    ]);
+
+                    $variation = (new Variation)->where("id", $variation->id)->get();
+
+                    if($update) {
+
+                        $message = "Variation $request->id has been updated successfully.";
+                        $creator = $variation->creator()->email;
+                        $updator = $variation->updator()->email;
+
+                        $data = array(
+                            $variation->id,
+                            $variation->name,
+                            $creator,
+                            $variation->created_date,
+                            // $updator,
+                            // $variation->last_updated_date
+                        );
+
+                        return Json(["status" => 200, "success" => true, "message" => $message, "data" => $data]);
+
+                    }
+
+                    $message = "Unable to save changes, Please try again.";
+                    return Json(["status" => 200, "success" => false, "error"=>["message" => $message]]);
+
+                }
+            }
+        }
+
+        return Json(array());
+    }
+
+    public function delete_variation(Request $request) {
+
+        $check = (new Variation)->where("id", $request->id)->get();
+
+        if($check) {
+            
+            if($check->delete("id", $check->id)){
+                $message = "Variation $check->name has been deleted successfully.";
+                return Json(["status" => 200, "success" => true, "message" => $message]);
+            }
+
+            $message = "Unable to delete this variation!";
+            return Json(["status" => 200, "success" => false, "error"=>["message" => $message]]);
+        }
+
+        $message = "Error occured. This variation does not exists!";
+        return Json(["status" => 200, "success" => false, "error"=>["message" => $message]]);
     }
 
     public function get_variations() {
@@ -85,5 +159,28 @@ class Api_Variation extends Controller {
 
         return Json($list);
     }    
+
+    public function get_variation_details(Request $request) {
+
+        $variation = (new Variation)->where("id", $request->param["id"])->get();
+        if($variation) {
+
+            $creator = $variation->creator()->firstname." ".$variation->creator()->lastname." (".$variation->creator()->email.")";
+            $updator = $variation->updator()->firstname." ".$variation->updator()->lastname." (".$variation->updator()->email.")";
+
+            $details = array(
+                "id" => $variation->id,
+                "name" => $variation->name,
+                "creator" => $creator,
+                "created_date" => $variation->created_date,
+                "updator" => $updator,
+                "updated_date" => $variation->last_updated_date
+            );
+
+            return Json($details);
+        }
+
+        return null;
+    }
 
 }

@@ -25,13 +25,16 @@
                                     <th> Actions </th>
                                 </tr>
                             </thead>
-                            <tbody api-table="/api/a/get-categories-table"></tbody>
+                            <tbody api-table="/api/a/get-categories-table" api-modal="Category" api-actions="edit, view, delete" 
+                            api-action-links="/api/a/collection/category/, /api/a/collection/category/, /api/a/collection/category/"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    @{{load "admin/modals/categories"}}
     
 </div>
 <!-- content-wrapper ends -->
