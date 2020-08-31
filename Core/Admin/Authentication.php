@@ -2,8 +2,8 @@
 
 namespace App\Admin;
 
-use App\Core\Database\Schema;
 use App\User;
+use Session;
 
 class Auth
 {
@@ -11,9 +11,9 @@ class Auth
     static public function user()
     {
 
-        if(isset($_SESSION["auth"])) 
+        if(Session::get("auth")) 
         {
-            $id = $_SESSION["auth"];
+            $id = Session::get("auth");
             return (new User)->where("id", $id)->get();
         }
 
@@ -22,12 +22,16 @@ class Auth
 
     static public function logout()
     {
-        unset($_SESSION["auth"]);
+        Session::end("auth");
+        Session::end("app_doors_locks");
+        Session::end("request_validation_message");
+
+        session_destroy();
     }
 
     static public function login($user) 
     {
-        $_SESSION["auth"] = $user->id;
+        Session::set("auth", $user->id);
     }
 
 }

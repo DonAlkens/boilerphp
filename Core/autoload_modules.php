@@ -12,9 +12,15 @@ class AppModules {
 
     public $modules =  array(
 
+        "middlewares" => [
+            "Engine::Middlewares::Session",
+            "Engine::Middlewares::Cookies",
+        ],
+
         "admin" => [
             "Admin::Authentication",
             "Admin::AuthProvider",
+            "Admin::Door"
         ],
 
         "helpers" => [
@@ -41,11 +47,6 @@ class AppModules {
             "Database::Model", 
             "Database::Migration",
             "Database::Config",
-        ],
-    
-        "middlewares" => [
-            "Engine::Middlewares::Session",
-            "Engine::Middlewares::Cookies",
         ],
     
         "dependencies" => [

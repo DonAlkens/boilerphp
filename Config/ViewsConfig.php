@@ -5,10 +5,19 @@ namespace App\Config;
 class ViewsConfig {
 
     /**
-    * ALl command run on the cli will be handle and 
+    * path to view files
+    * @value string
+    */
+    static public $views_path = "Views";
+
+
+    /**
+    * path to static files
     * @value string
     *
     */
-    static public $views_path = "Views";
+    static public $static_files_path = "public";
+
+    
 
 }
