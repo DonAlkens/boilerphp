@@ -30,8 +30,8 @@ class Door {
                 } 
                 else 
                 {
-                    return $callback();
-
+                    $callback();
+                    die();
                 }
 
             }
