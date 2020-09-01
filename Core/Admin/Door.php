@@ -24,12 +24,16 @@ class Door {
 
             if(!isset($doors[$lock])) 
             {
-                if(gettype($callback) !== "function")
+                if(!is_callable($callback))
                 {
                     throw new Exception("Callback expected on ".__LINE__);
+                } 
+                else 
+                {
+                    return $callback();
+
                 }
 
-                return $callback();
             }
         }
         
