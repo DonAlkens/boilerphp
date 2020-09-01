@@ -21,7 +21,7 @@ class Door {
         if(Session::get("app_doors_locks"))
         {
             $doors = Session::get("app_doors_locks");
-            
+
             if(!isset($doors[$lock])) 
             {
                 if(gettype($callback) !== "function")
@@ -32,8 +32,13 @@ class Door {
                 return $callback();
             }
         }
+        
+        else 
+        {
 
-        throw new Exception("Doors does not exists.");
+            throw new Exception("Doors does not exists.");
+        }
+
     }
 
     static public function createLocks(array $locks)
