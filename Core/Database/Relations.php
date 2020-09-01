@@ -97,7 +97,23 @@ class Relations extends Schema {
     public function hasMultiple($model, $key)
     {
 
-        return $this->hasOne($model, $key);
+        if($this->setModelProperties($model)) 
+        {
+    
+            if($this->setKeys($key)) 
+            {
+
+                $class = new $model;
+                $value_key = $this->value_key;
+                
+                $this->result = $class->where($this->foreign_key, $this->$value_key)->all();
+
+                return $this->result;
+            }
+
+        }
+
+        // return OCI_RETURN_NULLS;
     }
 
     public function attach($data) 
