@@ -19,7 +19,6 @@ class HomeController extends Controller {
 
     public function index(Request $request)
     {
-<<<<<<< HEAD
         return view("index");
     }
 
@@ -46,12 +45,6 @@ class HomeController extends Controller {
     public function details()
     {
         return view("details");
-=======
-        $locks = array("users", "members");
-        Door::createLocks($locks);
-
-        return view("home");
->>>>>>> 1ccbbde990cfc5eb525efb03da22118148580de4
     }
 
 }

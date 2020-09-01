@@ -5,6 +5,7 @@ use App\Action\Urls\Controller;
 use App\Hashing\Hash;
 use App\Permission;
 use App\Role;
+use App\RolePermissions;
 use App\User;
 
 /** 
@@ -23,12 +24,15 @@ class TestController extends Controller
 
     public static $permission;
 
+    public static $PRs;
+
 
     public function __construct()
     {
         static::$user = new User;
         static::$role  = new Role;
         static::$permission = new Permission;
+        static::$PRs = new RolePermissions;
 
         //$this->hasAuthAccess("user", "login");
     }
@@ -113,9 +117,19 @@ class TestController extends Controller
             )
         );
 
+        $index = 1;
         foreach ($permission_data as $permission) {
             # code...
             static::$permission->insert($permission);
+
+            $data = array(
+                "role_id" => 1,
+                "permission_id" => $index
+            );
+
+            static::$PRs->insert($data);
+
+            $index++;
         }
 
     }

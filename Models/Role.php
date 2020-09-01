@@ -12,7 +12,10 @@ class Role extends Model {
     **/
     protected $required = [];
 
+    public function permissions() {
 
+        return $this->hasMultiple(RolePermissions::class, ["role_id" => "id"]);
+    }
 
 }
 

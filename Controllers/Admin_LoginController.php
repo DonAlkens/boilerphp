@@ -3,7 +3,9 @@
 use App\Core\Urls\Request;
 use App\Action\Urls\Controller;
 use App\Admin\Auth;
+use App\Admin\Door;
 use App\Hashing\Hash;
+use App\Product;
 use App\Role;
 use App\User;
 
@@ -43,6 +45,18 @@ class Admin_LoginController extends Controller {
                     if(Hash::verify($request->password, $user->password))
                     {
                         $role = (new Role)->where("id", $user->role)->get();
+                        $permissions = $role->permissions();
+
+                        if($permissions != null) {
+                            $locks = array();
+
+                            foreach($permissions as $permission) {
+
+                                array_push($locks, strtolower($permission->permission()->name));
+                            }
+
+                            Door::createLocks($locks);
+                        }
 
                         Auth::login($user);
                         return redirect("dashboard");

@@ -20,9 +20,7 @@ class Door {
     {
         if(Session::get("app_doors_locks"))
         {
-            $doors = Session::get("app_doors_locks");
-            
-            if(!isset($doors[$lock])) 
+            if(!isset(Session::get("app_doors_locks")[$lock])) 
             {
                 if(gettype($callback) !== "function")
                 {

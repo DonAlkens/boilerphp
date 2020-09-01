@@ -2,6 +2,7 @@
 
 use App\Core\Urls\Request;
 use App\Action\Urls\Controller;
+use App\Admin\Door;
 use App\Product;
 
 /** 
@@ -14,6 +15,10 @@ class Admin_ProductController extends Controller {
     public function __construct()
     {
         $this->hasAuthAccess("auth","signin");
+
+        (new Door)->openWith("manage products", function(){
+            return content("<b>Access denied: You do not have permission to acces this page.<b>");
+        });
     }
 
     public function index()
