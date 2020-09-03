@@ -74,7 +74,7 @@ class QueryBuilder extends DataTypes
 		return $this->queryString;
 	}
 
-	public function whereQuery($key, $value)
+	public function whereQuery($key, $value, $operation = null)
 	{
 
 		if (is_array($key)) 
@@ -83,7 +83,14 @@ class QueryBuilder extends DataTypes
 
 			foreach ($key as $column => $val) 
 			{
-				$this->whereQuery .= "$column = :$column AND ";
+				if($operation != null) 
+				{
+					$this->whereQuery = "$column $operation :$column AND ";
+				}
+				else 
+				{
+					$this->whereQuery .= "$column = :$column AND ";
+				}
 			}
 
 			$this->whereQuery = trim($this->whereQuery, "AND ");
@@ -93,7 +100,13 @@ class QueryBuilder extends DataTypes
 		else if (!is_array($key) && $value != null) 
 
 		{
-			$this->whereQuery = " WHERE $key = :$key";
+			if($operation != null) {
+				$this->whereQuery = " WHERE $key $operation :$key";
+			}
+			else 
+			{
+				$this->whereQuery = " WHERE $key = :$key";
+			}
 			$this->whereData = array($key => $value);
 		}
 
