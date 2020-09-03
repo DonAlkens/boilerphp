@@ -231,6 +231,14 @@ class Schema extends Connection
 
     }
 
+    public function whereWithOperation($keys, $opration, $value = null) 
+    {
+
+        $this->whereQuery($keys, $value, $opration);
+        return $this;
+
+    }
+
     public function get() 
     {
 
