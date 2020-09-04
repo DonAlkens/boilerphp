@@ -67,7 +67,13 @@ class Schema extends Connection
 
     public function count() 
     {
-        return count($this->all());
+        if(!is_null($this->all())) {
+            return count($this->all());
+        }
+        else 
+        {
+            return 0;
+        }
     }
 
     public function first($key = null, $value = null) 
