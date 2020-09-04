@@ -114,7 +114,7 @@ class QueryBuilder extends DataTypes
 
 	public function groupQuery($column)
 	{
-		$this->$this->groupQuery = " GROUP BY $column";
+		$this->groupQuery = " GROUP BY $column";
 	}
 
 	public function orderQuery($key, $order)
