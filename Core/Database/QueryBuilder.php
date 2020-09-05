@@ -132,15 +132,16 @@ class QueryBuilder extends DataTypes
 				$this->queryString .= $this->whereQuery;
 			}
 			
+			if (isset($this->groupQuery)) 
+			{
+				$this->queryString .= $this->groupQuery;
+			}
+			
 			if (isset($this->orderQuery)) 
 			{
 				$this->queryString .= $this->orderQuery;
 			}
 
-			if (isset($this->groupQuery)) 
-			{
-				$this->queryString .= $this->groupQuery;
-			}
 
 			return $this->queryString;
 		}
