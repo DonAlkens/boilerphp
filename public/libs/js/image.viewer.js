@@ -45,7 +45,9 @@ function ImageViewer(element, options =
                 //Render image to browser
                 var imgbox = document.createElement(options.thumbnail.node);
                 imgbox.setAttribute("class", options.thumbnail.style);
-                imgbox.setAttribute("id", "image-viewer_file-id-" + (j))
+                if(options.clearInitial == undefined && options.clearInitial != true) {
+                    imgbox.setAttribute("id", "image-viewer_file-id-" + (j))
+                }
 
                 imgbox.appendChild(image);
 
@@ -56,6 +58,7 @@ function ImageViewer(element, options =
 
                     remove.setAttribute("image-viewer_remove-file-id", (j));
                     remove.setAttribute("class", "image-viewer_remove " + options.removeBtn.style);
+                    remove.setAttribute("type", "button");
 
                     remove.innerHTML = options.removeBtn.text;
 

@@ -31,6 +31,7 @@ class Api_Product extends Controller {
             "price" => "string",
             "condition" => "string",
             "brand" => "string",
+            "color" => "string",
             "description" => "string",
             "search_keywords" => "string"
         ]);
@@ -64,7 +65,9 @@ class Api_Product extends Controller {
                     "price" => $request->price,
                     "quantity" => $request->quantity,
                     "discount" => $request->discount,
+                    "discount_price" => $request->discount_price,
                     "brand" => $request->brand,
+                    "color" => $request->color,
                     "collection" => $request->collection,
                     "category" => isset($request->category) ? $request->category : 0,
                     "sub_category" => isset($request->sub_category) ? $request->sub_category : 0,
@@ -115,35 +118,46 @@ class Api_Product extends Controller {
                     // Product Variations
                     $index = 0;
                     foreach($request->variations as $variation) {
-                        if(!empty($variation) && !empty($request->variation_value[$index]) 
-                        && !empty($request->variation_quantity[$index])) {
+                        if(!empty($variation) && !empty($request->variation_options[$index])) {
 
                             $v_available = true;
 
-                            $price = !empty($request->variation_price[$index]) ? $request->variation_price[$index] : $created->price;
+                            $options = $request->variation_options[$index];
+                            if(strpos($options, ",")) {
+                                $options = explode(",", $options);
+                            }
+                            else 
+                            {
+                                $options = array($options);
+                            }
 
-                            $value = $request->variation_value[$index];
-                            $data = array(
-                                "product" => $product->id, 
-                                "variation" => $variation,  
-                                "value" => $value
-                            );
+                            foreach($options as $option) {
 
-                            $check = (new ProductVariation)->where($data)->get();
-
-                            if(!$check) {
-
-                                $data["price"] = $price;
-                                $data["quantity"] = $request->variation_quantity[$index];
-                                $data["created_by"] = Auth::user()->id;
-
-                                $create_variation = (new ProductVariation)->insert($data);
-                                if($create_variation) { $v = true; }
+                                $data = array(
+                                    "product" => $created->id, 
+                                    "variation" => $variation,  
+                                    "name" => $option
+                                );
+    
+                                $check = (new ProductVariation)->where($data)->get();
+    
+                                if(!$check) {
+    
+                                    $data["created_by"] = Auth::user()->id;
+    
+                                    $create_variation = (new ProductVariation)->insert($data);
+                                    if($create_variation) { $v = true; }
+    
+                                }
 
                             }
+
                         }
                         $index++;
                     }
+
+                    // Product Variation Options
+                    
 
 
                     // Product Setting 
@@ -202,7 +216,6 @@ class Api_Product extends Controller {
         }
     }
 
-
     public function get_products()
     {
         $products = (new Product)->orderBy("id", "desc")->all();
@@ -210,29 +223,22 @@ class Api_Product extends Controller {
 
         foreach($products as $product) {
 
-            if(strpos($product->price, "-") > 0) {
-                $product->price = str_replace(",", "", $product->price);
-                $split = explode("-", $product->price);
-                $product->price = "&#8358;".number_format($split[0], 2);
-                $product->price .= " - &#8358;". number_format($split[1], 2);
-            } else {
-
-                $product->price = str_replace(",", "", $product->price);
-                $product->price = "&#8358;".number_format($product->price, 2);
-
-            }
+            $product->price = str_replace(",", "", $product->price);
+            $product->price = "&#8358;".number_format((int)$product->price, 2);
 
             $data = array(
                 "id" => $product->id,
                 "name" => $product->name,
                 "brand" => $product->brand,
+                "color" => $product->color,
                 "price" => $product->price,
                 "quantity" => $product->quantity,
                 "discount" => $product->discount,
+                "discount_price" => $product->discount_price,
                 "description" => $product->description,
                 "collection" => $product->collection()->name,
-                "category" => $product->category()->name,
-                "sub_category" => $product->sub_category()->name,
+                "category" => ($product->category()) ? $product->category()->name : "",
+                "sub_category" => ($product->sub_category()) ? $product->sub_category()->name : "",
                 "image" => $product->images()->main,
                 "gallery" => !empty($product->images()->gallery) 
                             ? explode(",", $product->images()->gallery) : [],
@@ -253,7 +259,6 @@ class Api_Product extends Controller {
         return Json($list);
     }
 
-
     public function get_prouducts_table() {
 
         $products = (new Product)->orderBy("id", "asc")->all();
@@ -262,7 +267,10 @@ class Api_Product extends Controller {
         foreach($products as $product) {
 
             $product->name = '<img src="/src/images/'. $product->images()->main .'" alt="'. $product->name .'"> '.$product->name;
-            $category = $product->collection()->name."/".$product->category()->name;
+            $category = $product->collection()->name;
+            if($product->category()) {
+                $category .= "/".$product->category()->name;
+            }
             $price = "&dollar;".$product->price;
 
             $data = array(
@@ -291,6 +299,7 @@ class Api_Product extends Controller {
             "quantity" => "integer",
             "condition" => "string",
             "brand" => "string",
+            "color" => "string",
             "description" => "string",
         ]);
 
@@ -305,12 +314,15 @@ class Api_Product extends Controller {
                 $data = array(
                     "name" => $request->name,
                     "slug" => $slug,
+                    "brand" => $request->brand,
+                    "color" => $request->color,
                     "collection" => $request->collection,
                     "category" => isset($request->category) ? $request->category : 0,
                     "sub_category" => isset($request->sub_category) ? $request->sub_category : 0,
                     "price" => $request->price,
                     "quantity" => $request->quantity,
                     "discount" => $request->discount,
+                    "discount_price" => $request->discount_price,
                     "description" => $request->description,
                     "last_updated_date" => $request->timestamp(),
                     "last_updated_by" => Auth::user()->id
@@ -455,15 +467,13 @@ class Api_Product extends Controller {
          
         if($product) {
 
-            (new ProductSettings)->where("product", $id)->update(array("search_keywords" => $request->search_keywords));
-
             $v_available = $v = $p = $p_available = false;
 
             if(isset($request->pd_var))
             {
                 $variations = (new ProductVariation)->where("product", $id)->all();
 
-                if($variations) {
+                if($variations && is_array($variations)) {
 
                     foreach($variations as $variation) {
 
@@ -600,43 +610,57 @@ class Api_Product extends Controller {
 
     public function edit_product_settings(Request $request) {
 
-        // Product Setting 
-        $product = (new Product)->where("id", $request->param["id"])->select("id, name");
+        $request->required([
+            "search_keywords" => "string"
+        ]);
 
-        if($product) {
-
-            $featured = $out_of_stock = 0;
-            if(isset($request->featured)) { $featured = 1; } 
-            if(isset($request->out_of_stock)) { $out_of_stock = 1; }
+        if($request->validation == true)
+        {
+            // Product Setting 
+            $product = (new Product)->where("id", $request->param["id"])->select("id, name");
     
-            $settings = array(
-                "product" => $product->id,
-                "featured" => $featured,
-                "out_of_stock" => $out_of_stock,
-                "last_updated_date" => $request->timestamp(),
-                "last_updated_by" => Auth::user()->id
-            );
+            if($product) {
     
-            if((new ProductSettings)->where("product", $product->id)->update($settings)) {
-                
-                $message = "Settings has been saved successfully.";
-                $response = array("status" => 200, "success" => true, "message" => $message);
-
-                return Json($response);
+                $featured = $out_of_stock = 0;
+                if(isset($request->featured)) { $featured = 1; } 
+                if(isset($request->out_of_stock)) { $out_of_stock = 1; }
+        
+                $settings = array(
+                    "product" => $product->id,
+                    "featured" => $featured,
+                    "search_keywords" => $request->search_keywords,
+                    "out_of_stock" => $out_of_stock,
+                    "last_updated_date" => $request->timestamp(),
+                    "last_updated_by" => Auth::user()->id
+                );
+        
+                if((new ProductSettings)->where("product", $product->id)->update($settings)) {
+                    
+                    $message = "Settings has been saved successfully.";
+                    $response = array("status" => 200, "success" => true, "message" => $message);
+    
+                    return Json($response);
+                }
+                else  
+                {
+    
+                    $message = "Unable to save settings. Please try again";
+                    $response = array("status" => 200, "success" => false, "error" => ["message" => $message]);
+    
+                    return Json($response);
+    
+                }
             }
-            else  
-            {
+    
+            $message = "Error Occured. Product does not exists.";
+            $response = array("status" => 200, "success" => false, "error" => ["message" => $message]);
 
-                $message = "Unable to save settings. Please try again";
-                $response = array("status" => 200, "success" => false, "error" => ["message" => $message]);
-
-                return Json($response);
-
-            }
         }
-
-        $message = "Error Occured. Product does not exists.";
-        $response = array("status" => 200, "success" => false, "error" => ["message" => $message]);
+        else 
+        {
+            $message = "Some required fields are not filled correctly. Please check and try again.";
+            $response = array("status" => 200, "success" => false, "error" => ["message" => $message]);
+        }
 
         return Json($response);
 

@@ -8,11 +8,17 @@ use App\Core\Urls\Route;
  * */
 
 Route::httpAction("/","HomeController::index");
-Route::httpAction("/category", "HomeController::category");
+
+Route::httpAction("/collections/{collection:string}", "HomeController::collection");
+Route::httpAction("/collections/{collection:string}/{category:string}", "HomeController::collection");
+Route::httpAction("/collections/{collection:string}/{category:string}/{sub:string}", "HomeController::collection");
+
 Route::httpAction("/product", "HomeController::details");
 Route::httpAction("/cart", "HomeController::cart");
 Route::httpAction("/checkout", "HomeController::checkout");
 Route::httpAction("/contact", "HomeController::contact");
+
+
 
 
 Route::httpAction("/signin", "Admin_LoginController::index");
@@ -21,6 +27,7 @@ Route::get("/dashboard", "Admin_DashboardController::index");
 
 Route::get("/a/products", "Admin_ProductController::index");
 Route::get("/a/products/add", "Admin_ProductController::add_form");
+Route::post("/a/product/create_variations_list_options", "Admin_ProductController::create_variation_list_forms");
 Route::get("/a/products/view/{id:int}", "Admin_ProductController::view");
 Route::get("/a/products/edit/{id:int}", "Admin_ProductController::edit");
 Route::get("/a/products/delete/{id:int}", "Admin_ProductController::delete");

@@ -202,27 +202,29 @@
         let i = 0;
 
         function modal(action, modalName) {
+
             target = action+modalName;
             return 'type="button" data-toggle="modal" data-target="#' + target +'"';
+
         }
 
         actions.forEach(action => {
             action = action.toLowerCase().replace(" ", "");
             if (action == "edit") {
                 buttons += '<a href="' + links[i] + id + '" api-edit="'+ modalName.toLowerCase() +'" api-item-id="'+ id +'"';
-                if(modal) {  buttons +=  modal(action, modalName) }
+                if(modal && modalName != "") {  buttons +=  modal(action, modalName) }
                 buttons += 'class="btn btn-gradient-success btn-sm">' + action + '</a>';
             }
             
             if (action == "view") {
                 buttons += '<a href="' + links[i] + id + '" api-view="'+ modalName.toLowerCase() +'" api-item-id="'+ id +'"';
-                if(modal) {  buttons +=  modal(action, modalName) }
+                if(modal && modalName != "") {  buttons +=  modal(action, modalName) }
                 buttons += 'class="btn btn-gradient-info btn-sm" >' + action + '</a>';
             }
             
             if (action == "delete") {
                 buttons += '<a href="' + links[i] + id + '" api-delete="'+ modalName.toLowerCase() +'" api-item-id="'+ id +'"';
-                if(modal) {  buttons +=  modal(action, modalName) }
+                if(modal && modalName != "") {  buttons +=  modal(action, modalName) }
                 buttons += 'class="btn btn-gradient-danger btn-sm">' + action + '</a>';
             }
             i++;
@@ -238,7 +240,7 @@
         let links = $(this).attr("api-action-links");
 
         let modal = false, modalName = "";
-        if($(this).attr("api-modal")) {
+        if($(this).attr("api-modal") != null) {
             modal = true;
             modalName = $(this).attr("api-modal");
         }
@@ -322,9 +324,6 @@
                     data.forEach(item => {
                         let card = '<div class="'+ column_size +'">';
 
-                        card += '<div class="card">';
-                        card += '<div class="card-body">';
-
                         card += '<div class="product-img-outer">';
                         card += '<a href="/a/products/view/'+ item.id +'"><img class="product_image" src="'+ "/src/images/"+ item.image +'" alt="'+ item.name +'"></a>';
                         card += '</div>';
@@ -337,9 +336,6 @@
                         // card += '</div>';
 
                         card += '<p class="product-description"> <b> Category: </b>'+ item.collection + " / " + item.category +'.</p>';
-                        
-                        card += '</div>';
-                        card += '</div>';
 
                         card += '</div>';
 
@@ -520,5 +516,76 @@
 
     activate_button_actions();
 
+    $("[api-variation-creator]").blur(function(){
+
+        index = 0;
+        variations = [];
+
+        $("[api-variation-creator]").each(function(){
+
+            group = $(this).parent("div").parent("div").siblings(".var_type").children().find("select.variations");
+            value = $(this).val();
+
+            if(value != "") {
+
+                if(group.val() == "") {
+
+                    step.modal("error", "variation type is required and must be before adding options.");
+                    return;
+                }
+                else
+                {
+                    if(value.indexOf(",") > -1) { value = value.split(",");} else { value = Array(value); }
+
+                    if(index == 0) {
+
+                        value.forEach(name => { 
+                            variation = {name};
+                            variations.push(variation);
+                        });
+                    }
+                    else 
+                    {
+                        variation_holder = []
+                        counter = 0;
+                        for (let i = 0; i < variations.length; i++) {
+                            
+                            for (let j = 0; j < value.length; j++) {
+
+                                variation = {
+                                    name: variations[i].name + " / " + value[j]
+                                };
+                                variation_holder[counter] = variation;
+
+                                counter++;
+                            }
+                        }
+
+                        variations = variation_holder;
+                    }
+    
+                    index++;
+
+                }
+            }
+        });
+        
+        create_variations_combined_list(variations);
+
+    });
+
+
+    function create_variations_combined_list(variations) {
+        console.log(variations);
+        $.ajax({
+            url: "/a/product/create_variations_list_options", method: "POST", data: {variations},
+            success: function(resp) {
+                $("[api-variation-list]").fadeIn().html(resp);
+            }
+        })
+
+    }
+
     setTimeout(function () { $(".table").DataTable() }, 1000);
+
 })();

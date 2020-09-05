@@ -12,12 +12,11 @@ class ProductVariationTable extends Migration {
     public function create() {
 
         $this->table("product_variations");
+
         $this->field("id")->bigIncrements();
         $this->field("product")->integer()->foreign("products", "id")->cascade();
         $this->field("variation")->integer();
-        $this->field("value")->text();
-        $this->field("price")->float();
-        $this->field("quantity")->integer();
+        $this->field("name")->string();
         $this->field("created_date")->timestamp();
         $this->field("created_by")->integer();
         $this->field("last_updated_date")->timestamp();

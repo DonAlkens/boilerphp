@@ -16,10 +16,12 @@ class ProductTable extends Migration {
         $this->field("name")->string();
         $this->field("slug")->string();
         $this->field("brand")->string();
+        $this->field("color")->string();
         $this->field("description")->longtext();
         $this->field("price")->string();
         $this->field("quantity")->integer();
-        $this->field("discount")->float();
+        $this->field("discount")->integer();
+        $this->field("discount_price")->float();
         $this->field("collection")->integer();
         $this->field("category")->integer();
         $this->field("sub_category")->integer();

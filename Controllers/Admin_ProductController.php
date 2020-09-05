@@ -36,6 +36,11 @@ class Admin_ProductController extends Controller {
         return view("admin/product/add_form");
     }
 
+    public function create_variation_list_forms(Request $request) 
+    {
+        return view("/admin/product/variations_list_form", $request->variations);
+    }
+
     public function edit(Request $request)
     {
         $product = (new Product)->where("id", $request->param["id"])->get();

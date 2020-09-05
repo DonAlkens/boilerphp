@@ -1,411 +1,91 @@
-<header>
-	<div class="top-bar hidden-xs">
-		<div class="container">
-			<div class="top-bar-co row">
-				<li class="d-inline-block hidden-xs text-left col-xs-12 col-lg-4 col-md-5 col-sm-5 call-he">
-					Get 50% off on Selected Items
-				</li>
-				<ul class="d-inline text-right col-xs-12 col-lg-8 col-sm-7 head-la-cu text-right">
-					<li class="d-inline-block"><a href="index2724.html?route=information/contact"> <span
-								class="hidden-xs call-no"><svg width="18px" height="18px">
-									<use xlink:href="#hcall"></use>
-								</svg> +91(123456789)</span></a></li>
-					<li class="d-inline-block head-mail"><span class="hidden-xs call-no"><svg width="18px"
-								height="18px">
-								<use xlink:href="#hmail"></use>
-							</svg> demo@demo.com</span></li>
-				</ul>
-			</div>
-		</div>
+<header class="header">
+	<div class="col-lg-12 col-md-12 col-sm-12 top-promotion">
+
 	</div>
-	<div class="hsticky">
-		<div class="container">
-			<div class="row hbottom">
-				<div id="logo" class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
-					<a href="index9328.html?route=common/home">
-						<img src="/public/image/catalog/logo.png" title="Mendiz" alt="Mendiz" class="img-responsive" />
-					</a>
-				</div>
-				<div class="col-lg-7 col-md-6 col-sm-6">
-					<li class="desktop-search d-inline-block">
-						<div id="search" class="wbSearch">
-							<div id="search_block_top">
-								<select id="madebyhand-search-category">
-									<option value="0">Categories</option>
-									<option value="69">Fruits</option>
-									<option value="68">furniture</option>
-									<option value="31">Ceiling Lamps</option>
-									<option value="32">Dining Tables</option>
-									<option value="20">Sofa</option>
-									<option value="26">&nbsp;&nbsp;&nbsp;&nbsp;PC</option>
-									<option value="62">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Curtains</option>
-									<option value="63">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sofa beads</option>
-									<option value="45">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Windows</option>
-									<option value="27">&nbsp;&nbsp;&nbsp;&nbsp;Mac</option>
-									<option value="46">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Macs</option>
-									<option value="60">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Paintings</option>
-									<option value="61">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Stickers</option>
-									<option value="30">Tables</option>
-									<option value="18">lamp</option>
-									<option value="25">Chairs</option>
-									<option value="28">&nbsp;&nbsp;&nbsp;&nbsp;Monitors</option>
-									<option value="35">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test 1</option>
-									<option value="36">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test 2</option>
-									<option value="66">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wardrobes</option>
-									<option value="29">&nbsp;&nbsp;&nbsp;&nbsp;Trackballs</option>
-									<option value="65">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Beds</option>
-									<option value="64">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bulbs</option>
-									<option value="67">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Curtains</option>
-									<option value="33">Watches</option>
-								</select>
-								<div class="input-group">
-									<input type="text" name="search" value="" placeholder="Search"
-										class="search_query form-control input-lg madebyhand-search" />
-									<div class="input-group-btn">
-										<button type="button" class="btn btn-primary btn-lg"><svg width="20px"
-												height="20px">
-												<use xlink:href="#hsearch"></use>
-											</svg></button>
-									</div>
-									<!-- madebyhand Search Start  -->
-									<div class="madebyhand-search text-left">
-										<div class="madebyhand-search-loader" style="display: none;">
-											<div class="loaders"></div>
-										</div><!-- Add Loader -->
-										<div class="madebyhand-search-result">
-											<!-- search results -->
+	<div class="col-md-12" id="header-middle">
+		<div class="row pt-3 pb-2 header-inner">
+			<div class="col-md-3">
+				<div class="d-flex justify-content-between">
+					<div class="d-flex">
+						<div class="menu">
+							<div class="menu-btn mr-3">
+								<i class="icofont-navigation-menu"></i>
+							</div>
+							<div class="menu-bar">
+								<div class="menu-inner">
+									<div class="col-md-12">
+										<div class="row">
+											@if(~collections~)
+												{{$collections = ~collections~}}
+												@foreach($collections as $collection)
+													<div class="col-md-2 mb-3">
+														<a href="/collections/@{{$collection->slug}}"><h6>@{{$collection->name}}</h6></a>
+														<ul class="p-0">
+															@if(is_array($collection->categories()))
+																{{$categories = $collection->categories()}}
+																@foreach($categories as $category)
+																	<a href="/collections/@{{$collection->slug}}/@{{$category->slug}}">
+																		<li><small>@{{$category->name}}</small></li>
+																	</a>
+																@endforeach
+															@endif
+														</ul>
+													</div>
+												@endforeach
+											@endif
 										</div>
 									</div>
-									<!-- madebyhand Search End  -->
 								</div>
 							</div>
 						</div>
-					</li>
-				</div>
-
-				<div class="col-lg-3 col-md-4 col-sm-3 col-xs-6 text-right head-right">
-					<ul class="list-inline">
-						<li class="dropdown inuser d-inline-block">
-							<div href="indexe223.html?route=account/account" title="My Account" class="dropdown-toggle"
-								data-toggle="dropdown">
-								<svg class="d-inline-block" width="35px" height="35px">
-									<use xlink:href="#huser"></use>
-								</svg>
-								<div class="hdis d-inline-block text-left hidden-sm hidden-xs">
-									<h3>My Account</h3>
-									<h4>
-						<li><a href="indexe223.html?route=account/login">Login</a></li>
-						</h4>
+						<div class="logo pt-1">
+							<a href="/">
+								<h4 class="text-white"><b>WEARSLOT</b></h4>
+							</a>
+						</div>
+					</div>
+					<div class="mobile-search-button">
+						<i class="pe-7s-search"></i>
+					</div>
 				</div>
 			</div>
-			<ul class="dropdown-menu dropdown-menu-right haccount">
-				<li><a href="index5502.html?route=account/register"><i class="fa fa-user-plus"></i>Register</a></li>
-				<li><a href="indexe223.html?route=account/login"><i class="fa fa-lock"></i>Login</a></li>
-				<li><a class="topbe" href="index6431.html?route=product/compare"><i
-							class="fa fa-compress"></i>compare</a>
-				</li>
-				<li><a class="topbe" href="indexe223.html?route=account/wishlist" id="wishlist-total"
-						title="Wish List (0)"><i class="fa fa-heart"></i><span>Wish List (0)</span></a></li>
-				<li class="xsla">
-					<form
-						action="https://madebyhand.in/opencart/MS05/Multistore04/index.php?route=common/currency/currency"
-						method="post" enctype="multipart/form-data" id="form-currency">
-						<div class="btn-group">
-							<button class="btn-link dropdown-toggle test" data-toggle="dropdown">
-
-
-
-								<strong>$</strong>
-
-								<span>Currency</span>&nbsp;<i class="fa fa-angle-down"></i></button>
-							<ul class="dropdown-menu dropdown-menu-right langcdrop">
-								<li>
-									<button class="currency-select btn btn-link" type="button" name="EUR">€
-										Euro</button>
-								</li>
-								<li>
-									<button class="currency-select btn btn-link" type="button" name="GBP">£ Pound
-										Sterling</button>
-								</li>
-								<li>
-									<button class="currency-select btn btn-link" type="button" name="USD">$ US
-										Dollar</button>
-								</li>
-							</ul>
+			<div class="col-md-6 col-xs-12 col-sm-12 search">
+				<div class="row">
+					<div class="col-xs-2 col-sm-12 col-md-2">
+						<div class="row">
+							<select name="category" id="" class="selectpicker form-control">
+								<option value="all">All</option>
+							</select>
 						</div>
-						<input type="hidden" name="code" value="" />
-						<input type="hidden" name="redirect" value="index9328.html?route=common/home" />
-					</form>
-				</li>
-				<li class="xscu">
-					<form
-						action="https://madebyhand.in/opencart/MS05/Multistore04/index.php?route=common/language/language"
-						method="post" enctype="multipart/form-data" id="form-language">
-						<div class="btn-group">
-							<button class="btn-link dropdown-toggle test" data-toggle="dropdown">
-
-								<img src="/public/catalog/language/en-gb/en-gb.png" alt="English" title="English">
-								<span>Language</span>&nbsp;<i class="fa fa-angle-down"></i></button>
-							<ul class="dropdown-menu dropdown-menu-right langcdrop">
-								<li>
-									<button class="btn btn-link language-select" type="button" name="en-gb"><img
-											src="/public/catalog/language/en-gb/en-gb.png" alt="English"
-											title="English" /> English</button>
-								</li>
-								<li>
-									<button class="btn btn-link language-select" type="button" name="ar"><img
-											src="/public/catalog/language/ar/ar.png" alt="Arabic" title="Arabic" />
-										Arabic</button>
-								</li>
-							</ul>
-						</div>
-						<input type="hidden" name="code" value="" />
-						<input type="hidden" name="redirect" value="index9328.html?route=common/home" />
-					</form>
-				</li>
-			</ul>
-			</li>
-
-			<div id="cart" class="btn-group d-inline-block">
-				<button type="button" data-toggle="dropdown" data-loading-text="Loading..." class="dropdown-toggle">
-					<svg class="d-inline-block" width="35px" height="35px">
-						<use xlink:href="#hcart"></use>
-					</svg>
-					<div class="hdis d-inline-block text-left">
-						<h3 class="hidden-sm hidden-xs">My Cart</h3><span id="cart-total"><span
-								class="cartta">0</span><span class="hidden-xs hidden-sm"> Item</span></span>
 					</div>
-				</button>
-				<ul class="dropdown-menu pull-right">
-					<li>
-						<p class="text-center">Your shopping cart is empty!</p>
+					<div class="col-xs-9 col-sm-9 col-md-9">
+						<div class="row">
+							<div class="input-group">
+								<input type="text" name="keywords" class="form-control">
+								<div class="input-group-append">
+									<button class="btn btn-primary btn-sm">
+										<i class="pe-7s-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 top-side">
+				<ul class="d-flex justify-content-between">
+					<li class="text-center text-white">
+						<a href=""><i class="pe-7s-user"></i> Account</a>
 					</li>
+					<li class="text-center text-white">
+						<a href=""><i class="pe-7s-cart"></i> Cart</a>
+					</li>
+					<a href="">
+						<li class="text-center text-white">
+							<i class="pe-7s-info"></i> Help
+						</li>
+					</a>
 				</ul>
-			</div>
-
-			</ul>
-		</div>
-	</div>
-	</div>
-	</div>
-	<div class="menu-part">
-		<div class="container">
-			<div class="row">
-				<div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-12 head-menu">
-
-					<div class="menurel">
-						<nav id="menu" class="navbar">
-							<div class="navbar-header">
-								<button type="button" class="btn btn-navbar navbar-toggle" onclick="openNav()"
-									data-toggle="collapse" data-target=".navbar-ex1-collapse"><i
-										class="fa fa-bars"></i></button>
-							</div>
-
-							<div id="pt_vegamenu" class="title-menu wr-left-menu hidden-xs">
-								<div id="wr-menu-icon">
-									<div class="wr-menu" data-toggle="collapse" data-target="#under-menu">
-										<button class="btn-navbar navbar-toggle" type="button" data-toggle="collapse">
-											<div class="ico-menu">
-												<div class="bar"></div>
-												<div class="bar"></div>
-												<div class="bar"></div>
-											</div>
-										</button>
-										<span class="cate">All Categories</span>
-										<i class="fa fa-angle-down"></i>
-									</div>
-								</div>
-							</div>
-
-
-							<div id="mySidenav" class="sidenav">
-								<div id="under-menu" class="collapse">
-									<div class="close-nav hidden-sm hidden-md hidden-lg hidden-xl">
-										<span class="categories">Category</span>
-										<a href="javascript:void(0)" class="closebtn pull-right" onclick="closeNav()"><i
-												class="fa fa-close"></i></a>
-									</div>
-									<div class="collapse navbar-collapse navbar-ex1-collapse">
-										<ul class="nav navbar-nav">
-											<li class="moremenu"><a
-													href="indexe1fb.html?route=product/category&amp;path=69"
-													class="bmenu">
-													Fruits</a></li>
-											<li class="moremenu"><a
-													href="index370c.html?route=product/category&amp;path=68"
-													class="bmenu">
-													furniture</a></li>
-											<li class="moremenu"><a
-													href="index8e1e.html?route=product/category&amp;path=31"
-													class="bmenu">
-													Ceiling Lamps</a></li>
-											<li class="moremenu"><a
-													href="index103d.html?route=product/category&amp;path=32"
-													class="bmenu">
-													Dining Tables</a></li>
-											<li class="dropdown moremenu"><a
-													href="index98dc.html?route=product/category&amp;path=20"
-													class="dropdown-toggle header-menu" data-toggle="dropdown">
-													Sofa
-													<i class="fa fa-angle-down pull-right enangle"></i></a>
-												<div class="dropdown-menu">
-													<div class="dropdown-inner">
-														<ul class="list-unstyled">
-															<!--3rd level-->
-															<li class="dropdown-submenu"> <a
-																	href="indexd9fe.html?route=product/category&amp;path=20_26"
-																	class="submenu-title">
-																	PC (9) </a>
-																<ul class="list-unstyled grand-child">
-																	<li> <a
-																			href="index1e65.html?route=product/category&amp;path=26_62">
-																			Curtains (1)
-																		</a> </li>
-																	<li> <a
-																			href="index5aaf.html?route=product/category&amp;path=26_63">
-																			Sofa beads (4)
-																		</a> </li>
-																	<li> <a
-																			href="index2997.html?route=product/category&amp;path=26_45">
-																			Windows (5)
-																		</a> </li>
-																</ul>
-															</li>
-															<!--3rd level over-->
-														</ul>
-														<ul class="list-unstyled">
-															<!--3rd level-->
-															<li class="dropdown-submenu"> <a
-																	href="indexf345.html?route=product/category&amp;path=20_27"
-																	class="submenu-title">
-																	Mac (8) </a>
-																<ul class="list-unstyled grand-child">
-																	<li> <a
-																			href="index0345.html?route=product/category&amp;path=27_46">
-																			Macs (2) </a>
-																	</li>
-																	<li> <a
-																			href="index6b95.html?route=product/category&amp;path=27_60">
-																			Paintings (3)
-																		</a> </li>
-																	<li> <a
-																			href="index9e0b.html?route=product/category&amp;path=27_61">
-																			Stickers (4)
-																		</a> </li>
-																</ul>
-															</li>
-															<!--3rd level over-->
-														</ul>
-														<a href="index98dc.html?route=product/category&amp;path=20"
-															class="see-all visible-xs">Show
-															All Sofa</a>
-													</div>
-												</div>
-											</li>
-											<li class="moremenu"><a
-													href="indexc262.html?route=product/category&amp;path=30"
-													class="bmenu">
-													Tables</a></li>
-											<li class="moremenu"><a
-													href="index7fa3.html?route=product/category&amp;path=18"
-													class="bmenu">
-													lamp</a></li>
-											<li class="dropdown moremenu"><a
-													href="index1647.html?route=product/category&amp;path=25"
-													class="dropdown-toggle header-menu" data-toggle="dropdown">
-													Chairs
-													<i class="fa fa-angle-down pull-right enangle"></i></a>
-												<div class="dropdown-menu">
-													<div class="dropdown-inner">
-														<ul class="list-unstyled">
-															<!--3rd level-->
-															<li class="dropdown-submenu"> <a
-																	href="indexe177.html?route=product/category&amp;path=25_28"
-																	class="submenu-title">
-																	Monitors (15) </a>
-																<ul class="list-unstyled grand-child">
-																	<li> <a
-																			href="index43ee.html?route=product/category&amp;path=28_35">
-																			test 1 (10)
-																		</a> </li>
-																	<li> <a
-																			href="indexf6ce.html?route=product/category&amp;path=28_36">
-																			test 2 (9) </a>
-																	</li>
-																	<li> <a
-																			href="index67cc.html?route=product/category&amp;path=28_66">
-																			Wardrobes (6)
-																		</a> </li>
-																</ul>
-															</li>
-															<!--3rd level over-->
-														</ul>
-														<ul class="list-unstyled">
-															<!--3rd level-->
-															<li class="dropdown-submenu"> <a
-																	href="indexc219.html?route=product/category&amp;path=25_29"
-																	class="submenu-title">
-																	Trackballs (6) </a>
-																<ul class="list-unstyled grand-child">
-																	<li> <a
-																			href="indexbf8b.html?route=product/category&amp;path=29_65">
-																			Beds (2) </a>
-																	</li>
-																	<li> <a
-																			href="indexb3a0.html?route=product/category&amp;path=29_64">
-																			Bulbs (2) </a>
-																	</li>
-																	<li> <a
-																			href="index05fb.html?route=product/category&amp;path=29_67">
-																			Curtains (2)
-																		</a> </li>
-																</ul>
-															</li>
-															<!--3rd level over-->
-														</ul>
-														<a href="index1647.html?route=product/category&amp;path=25"
-															class="see-all visible-xs">Show
-															All Chairs</a>
-													</div>
-												</div>
-											</li>
-											<li class="moremenu"><a
-													href="index68ea.html?route=product/category&amp;path=33"
-													class="bmenu">
-													Watches</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-
-						</nav>
-					</div>
-
-
-
-					<script type="text/javascript">
-						function headermenu() {
-							if (jQuery(window).width() < 768) {
-								jQuery('ul.nav li.dropdown a.header-menu').attr("data-toggle", "dropdown");
-							}
-							else {
-								jQuery('ul.nav li.dropdown a.header-menu').attr("data-toggle", "");
-							}
-						}
-						$(document).ready(function () { headermenu(); });
-						jQuery(window).resize(function () { headermenu(); });
-						jQuery(window).scroll(function () { headermenu(); });
-					</script>
-				</div>
-				<div class="col-lg-8 col-md-9 col-sm-8 hidden-xs manun ">
-					<ul class="list-inline">
-						<li><a href="indexf110.html?route=product/special">special</a></li>
-						<li><a href="index2724.html?route=information/contact">contact us</a></li>
-						<li><a href="index7cb2.html?route=information/sitemap">sitemap</a></li>
-						<li><a href="indexd773.html?route=product/manufacturer">Brand</a></li>
-						<li><a href="index71ba.html?route=account/return/add">returns</a></li>
-					</ul>
-				</div>
 			</div>
 		</div>
 	</div>

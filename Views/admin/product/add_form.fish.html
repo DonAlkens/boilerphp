@@ -101,6 +101,26 @@
                                             name="name" id="Name" placeholder="Enter Product Name">
                                             <span class="text-danger">{{validation("name")}}</span>
                                         </div>
+
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="Color"><b>Color <span>*</span></b></label>
+                                                    <input type="text" class="form-control" step-field-required="true" 
+                                                    step-validation-message="product color is required*"
+                                                    name="color" id="Color" placeholder="Enter Product Color">
+                                                    <span class="text-danger">{{validation("color")}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="Brand"><b>Brand <span>*</span></b></label>
+                                                    <input type="text" class="form-control" step-field-required="true"
+                                                    step-validation-message="product brand is required*" name="brand" id="Brand">
+                                                    <span class="text-danger">{{validation("brand")}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
     
                                     <div class="form-light-box mb-3">
@@ -110,11 +130,11 @@
                                                     <label for="price"><b>Price <span>*</span></b></label>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
-                                                            <span class="input-group-text">$</span>
+                                                            <span class="input-group-text">NGN</span>
                                                         </div>
-                                                        <div class="input-group-prepend">
+                                                        <!-- <div class="input-group-prepend">
                                                             <span class="input-group-text">0.00</span>
-                                                        </div>
+                                                        </div> -->
                                                         <input type="text" class="form-control" step-field-required="true"
                                                         step-validation-message="price is required*"
                                                         name="price" id="Price" placeholder="0.00">
@@ -124,7 +144,7 @@
                                             </div>
                                             <div class="col-lg-6 col-sm-6">
                                                 <div class="form-group">
-                                                    <label for="Discount"><b>Sales Discount (%) </b></label>
+                                                    <label for="Discount"><b>Sales/Discount (%) </b></label>
                                                     <div class="input-group">
                                                         <input type="number" max="100" min="0" class="form-control" name="discount" id="Discount" value="0">
                                                         <span class="text-danger">{{validation("discount")}}</span>
@@ -136,6 +156,24 @@
                                             </div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="DiscountPrice"><b>Sales/Discount (Price) </b></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">NGN</span>
+                                                        </div>
+                                                        <!-- <div class="input-group-prepend">
+                                                            <span class="input-group-text">0.00</span>
+                                                        </div> -->
+                                                        <input class="form-control" step-field-required="true"
+                                                        step-validation-message="Discount price is required <small>(use 0.00 if not discount is applied)</small>*"
+                                                        name="discount_price" value="0.00" id="DiscountPrice"/>
+                                                        <span class="text-danger">{{validation("discount_price")}}</span>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
                                             <div class="col-lg-6 col-sm-6">
                                                 <div class="form-group">
                                                     <label for="Quantity"><b>Quantity <span>*</span></b></label>
@@ -143,14 +181,6 @@
                                                     step-validation-message="product quantity is required*"
                                                     name="quantity" id="Quantity"/>
                                                     <span class="text-danger">{{validation("quantity")}}</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-sm-6">
-                                                <div class="form-group">
-                                                    <label for="Brand"><b>Brand <span>*</span></b></label>
-                                                    <input type="text" class="form-control" step-field-required="true"
-                                                    step-validation-message="product brand is required*" name="brand" id="Brand">
-                                                    <span class="text-danger">{{validation("brand")}}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -209,24 +239,14 @@
                                                     <div class="row">
                                                         <div class="col-md-3 p-1">
                                                             <div class="form-group">
-                                                                <select api-options="/api/a/get-variations" class="form-control" name="variations[]" id="variations">
+                                                                <select api-options="/api/a/get-variations" class="form-control variations" name="variations[]">
                                                                     <option value="">**select a variation**</option>
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-3 p-1">
+                                                        <div class="col-md-8 p-1">
                                                             <div class="form-group">
-                                                                <input name="variation_value[]" class="form-control var_name" placeholder="Value" onblur="handleblur2(this);">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 p-1">
-                                                            <div class="form-group">
-                                                                <input name="variation_quantity[]" class="form-control" placeholder="Quantity">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3 p-1">
-                                                            <div class="form-group">
-                                                                <input name="variation_price[]" class="form-control" placeholder="Price">
+                                                                <textarea name="variation_options[]" class="form-control var_name" api-variation-creator="" placeholder="options" onblur="handleblur2(this);"></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-1 rmVar hide p-1" onclick="remover2(this);">
@@ -250,12 +270,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-light-box mb-3">
-                                        <label class="mb-2"><b>Search Keywords*</b></label>
-                                        <div class="form-group">
-                                            <textarea name="search_keywords" step-field-required="true"  step-validation-message="please enter product search keywords. examples: white shirts, long sleeve, fitted, casual..."
-                                             cols="30" rows="6" class="form-control" placeholder="ex. blue trousers, shirts, jeans.."></textarea>
-                                        </div>
+                                    <div class="form-light-box hide mb-3" api-variation-list="">
+                                        
                                     </div>
                                 </div>
     
@@ -300,6 +316,14 @@
                                                 </div>
                                             </div>
                                         </div> -->
+                                    </div>
+
+                                    <div class="form-light-box mb-3">
+                                        <label class="mb-2"><b>Search Keywords*</b></label>
+                                        <div class="form-group">
+                                            <textarea name="search_keywords" step-field-required="true"  step-validation-message="please enter product search keywords. examples: white shirts, long sleeve, fitted, casual..."
+                                             cols="30" rows="6" class="form-control" placeholder="ex. blue trousers, shirts, jeans.."></textarea>
+                                        </div>
                                     </div>
                                 </div>
     
