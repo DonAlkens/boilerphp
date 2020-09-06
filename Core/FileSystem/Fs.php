@@ -105,6 +105,11 @@ class Fs
 		return $file_name;
 	}
 
+	static public function reset() 
+	{
+		static::$filelist = array();
+	}
+
 	static public function uploadImage($properties, $extensions = null)
 	{
 
@@ -190,6 +195,7 @@ class Fs
 
 	static public function uploadMultipleImage($properties, $extensions = null)
 	{
+		static::reset();
 
 		if (is_null($extensions)) 
 		{
@@ -289,7 +295,12 @@ class Fs
 
 	static public function get_filename()
 	{
-		return self::$filename;
+		return static::$filename;
+	}
+
+	static public function get_filelist()
+	{
+		return static::$filelist;
 	}
 
 	static public function rename($oldname, $newname)
