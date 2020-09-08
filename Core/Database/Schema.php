@@ -21,6 +21,7 @@ class Schema extends Connection
     {
 
         parent::__construct();
+        $this->clearInitalQuery();
 
     }
 
@@ -74,6 +75,14 @@ class Schema extends Connection
         {
             return 0;
         }
+    }
+
+    public function clearInitalQuery()
+    {
+        $this->queryString = "";
+        $this->whereQuery = "";
+        $this->orderQuery = "";
+        $this->groupQuery = "";
     }
 
     public function first($key = null, $value = null) 
