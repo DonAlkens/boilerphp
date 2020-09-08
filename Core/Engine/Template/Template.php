@@ -106,8 +106,8 @@ class TemplateEngine {
     }
 
     static public function FunctionStatement($fcontent){
-        $fcontent = preg_replace("/\@func (.*)\((.*)\)/", '<?php function $1($2){ ?>',$fcontent);
-        $fcontent = preg_replace("/\@endfunc/", '<?php } ?>',$fcontent);
+        $fcontent = preg_replace("/\@func (.*)\((.*)\)/", '<?php function $1($2){ ',$fcontent);
+        $fcontent = preg_replace("/\@endfunc/", ' } ?>',$fcontent);
 
         return $fcontent;
     }
