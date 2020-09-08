@@ -16,7 +16,7 @@ class QueryBuilder extends DataTypes
 
 	public function allQuery()
 	{
-		$this->queryString = "SELECT * FROM $this->table";
+		$this->queryString = "SELECT * FROM $this->table ";
 	}
 
 	public function insertQuery($data)
