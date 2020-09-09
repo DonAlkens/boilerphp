@@ -148,10 +148,10 @@ class Schema extends Connection
 
     }
 
-    public function orderBy($key, $order = "ASC") 
+    public function orderBy($key, $order = "ASC", $limit = null) 
     {
 
-        $this->orderQuery($key, $order);
+        $this->orderQuery($key, $order, $limit);
         return $this;
 
     }

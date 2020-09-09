@@ -117,9 +117,12 @@ class QueryBuilder extends DataTypes
 		$this->groupQuery = " GROUP BY $column";
 	}
 
-	public function orderQuery($key, $order)
+	public function orderQuery($key, $order, $limit)
 	{
 		$this->orderQuery = " ORDER BY $key $order";
+		if($limit != null) {
+			$this->orderQuery .= " LIMIT ".$limit;
+		}
 	}
 
 	public function queryString()
