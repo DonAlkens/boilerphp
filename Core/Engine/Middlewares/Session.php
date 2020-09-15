@@ -8,6 +8,7 @@ class Session extends App
     public function initialize() {
 
         ini_set('session.gc_maxlifetime', $this->session_lifetime);
+        ini_set('session.cookie_lifetime', $this->session_lifetime);
         session_start();
     }
 
