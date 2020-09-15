@@ -1,41 +1,50 @@
 <?php 
 
-class Session 
+use App\Config\App;
+
+class Session extends App
 {
 
-    static public function exists($name) 
-    {
-        if(isset($_SESSION[$name]))
-        {
+    public function initialize() {
+
+        ini_set('session.gc_maxlifetime', $this->session_lifetime);
+        session_start();
+    }
+
+    public static function exists($name) {
+        
+        if(isset($_SESSION[$name])) {
+
             return true;
         }
         return false;
     }
 
-    static function set($name, $value) 
-    {
+    public static function set($name, $value) {
+        
         $_SESSION[$name] = $value;
     }
 
-    static function end($name) 
-    {
+    public static function end($name) {
+        
         unset($_SESSION[$name]);
     }
 
-    static function get($name)
-    {
-        if(isset($_SESSION[$name]))
-        {
+    public static function get($name) {
+
+        if(isset($_SESSION[$name])) {
+
             return $_SESSION[$name];
         } 
 
         return false;
     }
 
-    static function endall()
-    {
-        $_SESSION == null;
-        session_destroy();
+    public static function clear() {
+
+        $_SESSION == null; 
+        if(session_destroy()) { return true; }
+
     }
 }
 

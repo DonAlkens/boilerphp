@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use Session;
 use App\Core\Urls\Route;
 
 class Server  {
@@ -11,7 +12,7 @@ class Server  {
         
         $this->setEnv();
         
-        $this->app_configurations = $app_modules->configurations;
+        $this->app_configurations = $app_modules->configs;
         $this->app_modules = $app_modules->modules;
 
     }
@@ -96,7 +97,7 @@ class Server  {
     public function start() 
     {
 
-        session_start();
+        (new Session)->initialize();
 
         /*
         * checks if subdomains is enable and

@@ -3,7 +3,8 @@ namespace App\Core\Modules;
 
 class AppModules {
 
-    public $configurations = array(
+    public $configs = array(
+        "Config::App",
         "Config::ErrorsConfig",
         "Config::RoutesConfig",
         "Config::ViewsConfig",
