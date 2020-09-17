@@ -15,7 +15,7 @@ class Command extends Actions {
     public function start(...$parameters) {
 
         $port = isset($parameters[0][0]) ? $parameters[0][0] : 8000;
-        
+        $this->runServer($port);
     }
 
     /*

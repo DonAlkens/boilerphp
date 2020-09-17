@@ -12,16 +12,8 @@ use App\FileSystem\Fs;
 
 class HomeController extends Controller {
 
-    public function __construct()
+    public function index()
     {
-        //$this->hasAuthAccess("user", "login");
-    }
-
-    public function index(Request $request)
-    {
-        $locks = array("users", "members");
-        Door::createLocks($locks);
-
         return view("home");
     }
 

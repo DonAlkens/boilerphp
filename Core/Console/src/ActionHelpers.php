@@ -394,6 +394,15 @@ class ActionHelpers implements ActionHelpersInterface {
 
     }
 
+
+    public function runServer($port) 
+    {
+        $server_command = "php -S localhost:".$port;
+        print_r("Server listening on http://127.0.0.1:".$port);
+        exec($server_command);
+    }
+
+
     public function runMigrations()
     {
         $alters = array();

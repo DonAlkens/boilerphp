@@ -14,7 +14,6 @@ class TestTable extends Migration {
         $this->table("tests");
 
         $this->field("id")->bigIncrements();
-        $this->field("name")->string();
         $this->field("created_date")->timestamp();
 
         $this->sign();

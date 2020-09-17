@@ -10,11 +10,6 @@ use App\Action\Urls\Controller;
 
 class TestController extends Controller {
 
-    public function __construct()
-    {
-        //$this->hasAuthAccess("user", "login");
-    }
-
     public function index()
     {
         return view("test/index");
