@@ -4,6 +4,7 @@ namespace App\Action\Urls\Controllers;
 
 
 use App\Core\Urls\Request;
+use Auth;
 
 /** 
  * @param 'optional' [Request $request]
@@ -14,6 +15,7 @@ class TestController extends Controller {
 
     public function index()
     {
+        Auth::login(1);
         return view("test/index");
     }
 
