@@ -2,9 +2,9 @@
 
 namespace App\Core\Urls;
 
-use App\Config\RoutesConfig;
 
 use Error, Exception;
+use App\Config\RoutesConfig;
 
 
 class Route extends RoutesConfig {
@@ -18,6 +18,9 @@ class Route extends RoutesConfig {
 
 
     static private $route_lookup_list;
+
+
+    static private $controller_namespace = 'App\Action\Urls\Controllers\\';
 
 
     public function __construct()
@@ -149,11 +152,15 @@ class Route extends RoutesConfig {
 
             $path = static::$route_lookup_list[$uri];
 
-            $controller = explode("::", $path["action"])[0];
-            //Call Coutroller to Load All MiddleWare and Auth
-            new $controller();
+            $split_action = explode("::", $path["action"]);
 
-            call_user_func($path["action"], new Request($method) );
+            $controller = static::$controller_namespace.$split_action[0];
+            $action = static::$controller_namespace.$path["action"];
+
+            //Call Coutroller to Load All MiddleWare and Auth
+            new $controller;
+
+            call_user_func($action, new Request($method) );
             
         } 
         else 
@@ -196,15 +203,17 @@ class Route extends RoutesConfig {
                 $request->param = static::$route_lookup_list[$pattern]["param"];
 
 
-                $controller = explode("::", $path["action"])[0];
+                $split_action = explode("::", $path["action"]);
 
+                $controller = static::$controller_namespace.$split_action[0];
+                $action = static::$controller_namespace.$path["action"];
 
 
                 //Call Coutroller to Load All MiddleWare and Auth
                 new $controller();
 
                 
-                call_user_func($path["action"], $request);
+                call_user_func($action, $request);
 
                 return;
             }

@@ -1,7 +1,9 @@
 <?php
 
+namespace App\Action\Urls\Controllers;
+
+
 use App\Core\Urls\Request;
-use App\Action\Urls\Controller;
 
 /** 
  * @param 'optional' [Request $request]
@@ -12,7 +14,7 @@ class AddressBookController extends Controller {
 
     public function index() {
 
-        
+
     }
 
 }

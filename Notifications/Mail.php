@@ -43,9 +43,15 @@ class Mail extends MailConfig
     public $header;
 
 
-    public $smtp_host = "mail.aprilvines.com";
-    public $smtp_user = "info@aprilvines.com";
-    public $smtp_pass = "Aprilvines2020!";
+    public $smtp_host;
+
+
+    public $smtp_user;
+
+
+    public $smtp_pass;
+
+    
 
     public function __construct($sender = null, $receiver = null, $subject = null,$message = null, $header = null)
     {

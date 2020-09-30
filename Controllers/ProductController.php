@@ -1,7 +1,9 @@
 <?php
 
+namespace App\Action\Urls\Controllers;
+
+
 use App\Core\Urls\Request;
-use App\Action\Urls\Controller;
 use App\Admin\Auth;
 use App\Cart;
 use App\Product;

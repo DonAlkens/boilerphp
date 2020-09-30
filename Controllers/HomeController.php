@@ -1,8 +1,10 @@
-<?php
+<?
+namespace App\Action\Urls\Controllers;
+
 
 use App\Core\Urls\Request;
 use App\Action\Urls\Controller;
-use App\Admin\Auth;
+use Auth;
 use App\Admin\Door;
 use App\Cart;
 use App\Category;

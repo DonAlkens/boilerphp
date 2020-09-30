@@ -11,7 +11,7 @@ class Fs
 
 	static public $filelist = array();
 
-	static public function copy($source, $destination)
+	public static function copy($source, $destination)
 	{
 
 		if (copy($source, $destination)) {
@@ -21,7 +21,7 @@ class Fs
 		return false;
 	}
 
-	static public function copyr($source, $dest)
+	public static function copyr($source, $dest)
 	{
 		// Simple copy for a file
 		if (is_file($source)) {
@@ -52,7 +52,7 @@ class Fs
 		return true;
 	}
 
-	static public function copy_directory($src, $dst)
+	public static function copy_directory($src, $dst)
 	{
 		$dir = opendir($src);
 		@mkdir($dst);
@@ -68,17 +68,26 @@ class Fs
 		closedir($dir);
 	}
 
-	static public function mkdir($dirname)
+	public static function is_active_directory($dirname) 
+	{
+		if(is_dir($dirname)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static function create_directory($dirname)
 	{
 		return mkdir($dirname);
 	}
 
-	static public function rmdir($dirname)
+	public static function rmdir($dirname)
 	{
 		rmdir($dirname);
 	}
 
-	static public function delete($filename)
+	public static function delete($filename)
 	{
 
 		if (unlink($filename)) {
@@ -88,7 +97,7 @@ class Fs
 		return false;
 	}
 
-	static public function exists($filename)
+	public static function exists($filename)
 	{
 
 		if (file_exists($filename)) {
@@ -98,19 +107,19 @@ class Fs
 		return false;
 	}
 
-	static public function filename($index)
+	public static function filename($index)
 	{
 		$file_name = $_FILES[$index]["name"];
 
 		return $file_name;
 	}
 
-	static public function reset() 
+	public static function reset() 
 	{
 		static::$filelist = array();
 	}
 
-	static public function uploadImage($properties, $extensions = null)
+	public static function uploadImage($properties, $extensions = null)
 	{
 
 		if (is_null($extensions)) {
@@ -122,7 +131,7 @@ class Fs
 		$path = $properties["path"];
 
 		if (!file_exists($path)) {
-			Fs::mkdir($path);
+			Fs::create_directory($path);
 		}
 
 		$new_name = null;
@@ -193,7 +202,7 @@ class Fs
 		}
 	}
 
-	static public function uploadMultipleImage($properties, $extensions = null)
+	public static function uploadMultipleImage($properties, $extensions = null)
 	{
 		static::reset();
 
@@ -208,7 +217,7 @@ class Fs
 
 		if (!file_exists($path)) 
 		{
-			Fs::mkdir($path);
+			Fs::create_directory($path);
 		}
 
 		$prefix_name = null;
@@ -265,7 +274,7 @@ class Fs
 
 	}
 
-	static public function uploadFile($properties, $extensions = null)
+	public static function uploadFile($properties, $extensions = null)
 	{
 
 		if (is_null($extensions)) 
@@ -279,7 +288,7 @@ class Fs
 		return Fs::uploadImage($properties, $extensions);
 	}
 
-	static public function unzip($zipfile, $destination)
+	public static function unzip($zipfile, $destination)
 	{
 		$zip = new ZipArchive;
 		
@@ -293,17 +302,17 @@ class Fs
 		return false;
 	}
 
-	static public function get_filename()
+	public static function get_filename()
 	{
 		return static::$filename;
 	}
 
-	static public function get_filelist()
+	public static function get_filelist()
 	{
 		return static::$filelist;
 	}
 
-	static public function rename($oldname, $newname)
+	public static function rename($oldname, $newname)
 	{
 		$rn = rename($oldname, $newname);
 		return $rn;

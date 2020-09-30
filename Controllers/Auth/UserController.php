@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Action\Urls\Controllers[Namespace];
+namespace App\Action\Urls\Controllers\Auth;
 
-[Controller_Base_Namespace]
+
+use App\Action\Urls\Controllers\Controller;
 use App\Core\Urls\Request;
 
 /** 
@@ -10,12 +11,12 @@ use App\Core\Urls\Request;
  * used to get action's request data get/post
  */ 
 
-class [Controller] extends Controller {
+class UserController extends Controller {
 
     public function index() {
         
 
-        return view("[View]/index");
+        return view("home");
     }
 
 }
