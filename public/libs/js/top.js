@@ -18,6 +18,6 @@ function handleblur(object) {
 
 function handleblur2(object) {
     if($(object).val() != null) {
-        $(object).parent(".form-group").parent(".col-md-3").siblings(".rmVar").removeClass("hide").fadeIn();
+        $(object).parent(".form-group").parent(".col-md-8").siblings(".rmVar").removeClass("hide").fadeIn();
     }
 }

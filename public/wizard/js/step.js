@@ -3,6 +3,36 @@ var stepLength = () => {
     return $('[step-id]').length;
 }
 
+function badgeClick() {
+    $('[step-badge]').click(function(){
+        index = $(this).attr("step-badge");
+        index = Number(index);
+
+        let current = currentIndex($('.step-next')); current = Number(current);
+        let change = true;
+
+        if(index > current) {
+            for (let i = 1; i < index; i++) {
+               if(!validateCurrentStep(i)) { stepError(i); change = false; } 
+               else { stepCompleted(i); next(i) } 
+            }
+            
+            if(change) { next((index - 1)); }
+        } 
+        else if(index < current) {
+            
+            for (let i = 1; i < current; i++) {
+                previous((current - i));
+                if((current - i) == index) { break; }
+            }
+
+        }
+
+
+
+
+    })
+}
 
 function validateCurrentStep(current) {
 
@@ -12,7 +42,7 @@ function validateCurrentStep(current) {
         $(this).css("border-color","#dcdcdc").siblings('[step-validation-result="true"]').remove();
         if ($(this).val() === "") { 
             var message = $(this).attr("step-validation-message");
-            $(this).css("border-color","red").after('<span class="text-danger" step-validation-result="true">'+ message +'</span>');
+            $(this).css("border-color","red").after('<span class="text-danger step-validation-message" step-validation-result="true">'+ message +'</span>');
             valid = false; 
         }
     });
@@ -60,7 +90,7 @@ function next(current) {
     }
 
     if (index <= stepLength()) {
-        if (index > 1) { setPreviousButton(index); }
+        if (index > 1) { setPreviousButton(current); }
         nextStep(current, index);
     }
 }
@@ -162,13 +192,12 @@ function initActions() {
 
 function init() {
     initActions();
+    badgeClick();
     nextAction();
     previousAction();
 }
 
-function Step() {
-
-}
+function Step() {}
 
 Step.prototype.init = function () {
     return init();

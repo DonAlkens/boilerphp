@@ -1,0 +1,163 @@
+@{{extends "shared/layout"}}
+
+{{$customer = ~customer~}}
+
+<section class="uac-wrapper mb-5">
+    <div class="uac-inner">
+
+        @{{load "user/shared/_menubar"}}
+
+        <div class="container mt-4">
+            
+            <div class="page-title col-md-12 border-radius p-2 mb-3">
+                <div class="d-flex">
+                    <div class="title">
+                        <h5>Dashboard - <small>Overview</small> </h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 bg-white border-radius">
+                        <div class="title">
+                            <h6>Account Information</h6>
+                        </div>
+                        <div class="d-flex mt-2 p-2">
+                            <div class="avater">
+                                <i class="flaticon-user" style="font-size: 65px;"></i>
+                            </div>
+                            <div class="details ml-2">
+                                <strong> @{{$customer->firstname." ".$customer->lastname}} </strong>
+                                <p> @{{$customer->email}}</p>
+                                
+                                <div class="actions">
+                                    <div class="d-flex justify-content-end">
+                                        <a href="" class="btn btn-sm btn-inverse-info">
+                                            Edit <i class="flaticon2-edit"></i> 
+                                        </a>
+                                        <a href="" class="btn btn-sm btn-light ml-2">
+                                            <i class="flaticon2-user-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 bg-white border-radius">
+                        <div class="title">
+                            <h6>Orders</h6>
+                        </div>
+                        <div class="mt-2 pb-2">
+                            <div class="order-stats">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <div class="stat-message text-center">
+                                        <i class="flaticon-file-1"></i> New: <span class="">0</span>
+                                    </div>
+                                    <div class="stat-message text-center">
+                                       <i class="flaticon-list-3"></i>  Confirmed: <span class="">0</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between stats">
+                                    <div class="stat-message text-center">
+                                        <i class="flaticon2-notepad"></i> Completed: <span class="">0</span>
+                                    </div>
+                                    <div class="stat-message text-center">
+                                        <i class="flaticon-close"></i> Cancelled: <span class="">0</span>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="actions mt-3">
+                                    <div class="d-flex justify-content-end">
+                                        <a href="" class="btn btn-sm btn-light mr-2">
+                                            <i class="flaticon-open-box"></i> All
+                                        </a>
+                                        <a href="" class="btn btn-sm btn-inverse-primary mr-2">
+                                            <i class="flaticon-map-location"></i> Track order 
+                                        </a>
+                                        <a href="" class="btn btn-sm btn-inverse-info">
+                                            <i class="flaticon-map-location"></i> Return 
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 bg-white border-radius">
+                        <div class="title">
+                            <h6>Wallet Balance</h6>
+                        </div>
+                        <div class="mt-2 pb-2">
+                            <div class="order-stats">
+                                <div class="balance-summary">
+                                    <div class=""> 
+                                        <p class="mb-2"> <strong>&#8358;0.00</strong> </p> 
+                                        <p >
+                                            <small>Get 15% discount on any purchase. 
+                                            <a href="" class="text-primary">Learn more</a></small>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="actions mt-3">
+                                    <div class="d-flex justify-content-end">
+                                        <a href="" class="btn btn-sm btn-inverse-info">
+                                            <i class="icofont-credit-card"></i> Deposit 
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6 mb-3">
+                    <div class="p-3 bg-white border-radius">
+                        <div class="title">
+                            <h6>Default Shipping Address</h6>
+                        </div>
+                        <div class="mt-2 pb-2">
+                            <div class="">
+                                
+                                <div class="actions mt-3">
+                                    <div class="d-flex justify-content-end">
+                                        <a href="" class="btn btn-sm btn-light mr-2">
+                                            <i class="flaticon-map-location"></i> Set default Address 
+                                        </a>
+                                        <a href="" class="btn btn-sm btn-inverse-info">
+                                            <i class="flaticon-add"></i> Add new address
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="p-3 bg-white border-radius">
+                        <div class="title"><h6>Recently Saved Items</h6></div>
+                        <div class="mt-2 pb-2">
+                            <div class="">
+                    
+                                <div class="actions mt-3">
+                                    <div class="d-flex justify-content-center">
+                                        <a href="" class="btn btn-sm btn-light"> See all saved items</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>

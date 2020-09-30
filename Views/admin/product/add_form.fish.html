@@ -39,8 +39,8 @@
                                                 <a class="step-counter">3</a>
                                             </div>
                                             <div class="mt-1 ml-2 step-title">
-                                                <b>Variations & Search</b>
-                                                <span>more items & search..</span>
+                                                <b>Variations</b>
+                                                <span>variant options..</span>
                                             </div>
                                         </div>
                                     </li>
@@ -137,7 +137,7 @@
                                                         </div> -->
                                                         <input type="text" class="form-control" step-field-required="true"
                                                         step-validation-message="price is required*"
-                                                        name="price" id="Price" placeholder="0.00">
+                                                        name="price" id="Price" placeholder="0">
                                                         <span class="text-danger">{{validation("price")}}</span>
                                                     </div>
                                                 </div>
@@ -166,9 +166,9 @@
                                                         <!-- <div class="input-group-prepend">
                                                             <span class="input-group-text">0.00</span>
                                                         </div> -->
-                                                        <input class="form-control" step-field-required="true"
-                                                        step-validation-message="Discount price is required <small>(use 0.00 if not discount is applied)</small>*"
-                                                        name="discount_price" value="0.00" id="DiscountPrice"/>
+                                                        <input class="form-control" step-field-required="true" value="0"
+                                                        step-validation-message="Discount price is required <small>(use 0 if not discount is applied)</small>*"
+                                                        name="discount_price" placeholder="0" id="DiscountPrice"/>
                                                         <span class="text-danger">{{validation("discount_price")}}</span>
                                                     </div>
                                                     
@@ -177,9 +177,9 @@
                                             <div class="col-lg-6 col-sm-6">
                                                 <div class="form-group">
                                                     <label for="Quantity"><b>Quantity <span>*</span></b></label>
-                                                    <input class="form-control" step-field-required="true"
+                                                    <input type="number" min="0" class="form-control" step-field-required="true"
                                                     step-validation-message="product quantity is required*"
-                                                    name="quantity" id="Quantity"/>
+                                                    name="quantity" value="1" id="Quantity"/>
                                                     <span class="text-danger">{{validation("quantity")}}</span>
                                                 </div>
                                             </div>
@@ -232,7 +232,7 @@
                                 
                                 <div class="step-content hide" step-id="3">
                                     <div class="form-light-box mb-3">
-                                        <label class="mb-2"><b>Variations</b></label>
+                                        <label class="mb-2"><b>Variation Options</b></label>
                                         <div class="row" id="skeletonForm">
                                             <div class="col-md-12" id="skeleton">
                                                 <div class="col-md-12">

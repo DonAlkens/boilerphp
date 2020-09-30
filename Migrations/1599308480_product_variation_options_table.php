@@ -15,11 +15,12 @@ class ProductVariationOptionsTable extends Migration {
 
         $this->field("id")->bigIncrements();
         $this->field("product")->integer()->foreign("products", "id")->cascade();
-        $this->field("combined")->integer();
-        $this->field("name")->text();
+        $this->field("variant")->string();
         $this->field("price")->float();
         $this->field("quantity")->integer();
-        $this->field("sold_out")->boolean();
+        $this->field("images")->text();
+        $this->field("image_holder")->integer();
+        $this->field("in_stock")->boolean();
         $this->field("created_date")->timestamp();
         $this->field("created_by")->integer();
         $this->field("last_updated_date")->timestamp();

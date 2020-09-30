@@ -1,0 +1,210 @@
+@{{extends "shared/layout"}}
+
+{{$product = ~product~}}
+
+
+
+<section class="product-details bg-white pt-2 pb-5">
+    <div class="col-lg-12 col-md-12">
+        <p>
+            <a href="/" class=""><small> Home / </small></a>
+            @if(~breadcumb~)
+                {{$breadcumbs = ~breadcumb~}}
+                @foreach($breadcumbs as $breadcumb)
+                    @foreach($breadcumb as $bread => $link)
+                    <a href="@{{$link}}" class=""><small> @{{$bread}} / </small></a>
+                    @endforeach
+                @endforeach
+            @endif
+        </p>
+    </div>
+    <div class="col-lg-12 col-md-12 pt-3">
+        <div class="row">
+            <div class="col-md-6 details">
+                <div class="row">
+                    <div class="col-md-2 slides-gallery">
+                        <div class="images-slides owl-carousel">
+                            @if($product->images()->gallery)
+                                {{$images = explode(",", $product->images()->gallery)}}
+                                @foreach($images as $image)
+                                    <div class="img-slide-box">
+                                        <img src="/src/images/@{{$image}}" data-im-tg="@{{$image}}" alt="" width="100%">
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-md-10 main-image-frame">
+                        <div class="text-center product-details-image">
+                            <img src="/src/images/@{{$product->images()->main}}" alt="" data-im-main="true">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="product-details">
+                    <p class="m-0 p-0">@{{strtoupper($product->brand)}}</p>
+                    <h1 class="product-details-name">@{{$product->name}}</h1>
+                    <div class="d-flex">
+                        <p class="rate" app-rating="0"></p>
+                        <p class="text-underline ml-3"><a href="#review"><small>Review this product</small></a></p>
+                        <p class="text-secondary ml-5"> <small>WS #@{{$product->id}}</small> </p>
+                    </div>
+                </div>
+                <div class="price-box mt-1 d-flex">
+                    <div class="d-flex pt-2" data-pd-price="true">
+                        @if($product->price_range() != null)
+                        {{$prices = $product->price_range()}}
+                        <h5 class="mr-1"><b>&#8358;@{{number_format($prices["lowest"])}} - &#8358;@{{number_format($prices["highest"])}}</b></h5>
+                        @elif($product->discount_price > 0)
+                        <h5 class="mr-1"><b>&#8358;@{{number_format($product->discount_price)}}</b></h5>
+                        <h5 class="text-secondary"><del>&#8358;@{{number_format($product->price)}}</del></h5>
+                        @else 
+                        <h5 class="mr-1"><b>&#8358;@{{number_format($product->price)}}</b></h5>
+                        @endif
+                    </div>
+                    <div class="availabily-message-box pt-2 ml-5"></div>
+                </div>
+                @if($product->variation_colors() != null)
+                <div class="col-md-12 p-0 mt-1 pt-1 variation">
+                    <p> <small><b>Color:</b></small> <small class="active-color">@{{ucfirst($product->color)}}</small></p>
+                    <div class="d-flex color-variation-box mt-2">
+                        {{$colors = $product->variation_colors()}}
+                        {{$index = 0}}
+                        @foreach($colors as $color)
+                        <input type="radio" value="@{{$color['color']}}" @{{($index == 0) ? "checked" : null}}
+                        name="color" id="@{{$color['color']}}" data-vr-opt="color" 
+                        @{{($color['image'] != null) ? 'data-vr-im="true"' : null}} class="variant-radio-hide">
+                        <label for="@{{$color['color']}}" class="im-box p-2 border-50">
+                            @if($color["image"] != null)
+                                <img src="/src/images/@{{$color['image']}}" alt="" data-mg-fr="@{{$color['color']}}" width="50px" class="border-50">
+                            @else
+                                @{{$color["color"]}}
+                            @endif
+                        </label>
+                        {{$index++}}
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                @if($product->variation_sizes() != null)
+                <div class="col-md-12 p-0 mt-1 pt-1 variation">
+                    <p class="msgCenter mb-2"></p>
+                    <p> <small><b>Sizes:</b></small> <small class="active-size">choose an option</small></p>
+                    <div class="d-flex color-variation-box mt-3">
+                        {{$sizes = $product->variation_sizes()}}
+                        @foreach($sizes as $size)
+                        <input type="radio" value="@{{$size['size']}}" name="size" id="@{{$size['size']}}" 
+                        data-vr-opt="size" class="variant-radio-hide">
+                        <label for="@{{$size['size']}}" class="im-box p-1 pr-4 pl-4 border-50">
+                            @{{$size["size"]}}
+                        </label>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                <div class="col-md-12 col-lg-12 mt-4 p-0 ">
+                    <div class="d-flex">
+                        <label for="">Qty:</label>
+                    </div>
+                    <div class="d-flex">
+                        <div class="qty-box">
+                            <div class="bts">
+                                <span data-qt-nm="false" for="qty"><i class="pe-7s-angle-down"></i></span>
+                                <span data-qt-nm="true" for="qty"><i class="pe-7s-angle-up"></i></span>
+                            </div>
+                            <input type="text" name="qty" data-qt-tg="qty" min="1" max="@{{$product->quantity}}" value="1" class="qty border-50 form-control text-center">
+                        </div>
+                        <div class="actions-box ml-3">
+                            <button data-add-cart="@{{$product->id}}" enable-response="true" class="btn btn-primary border-50"><i class="pe-7s-cart"></i> Add to Cart</button>
+                            <button class="btn btn-light border-50"><i class="pe-7s-refresh-2"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="col-lg-12 col-md-12 mt-5 pt-5 border-top">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="product-about">
+                    <h5 class="mb-2">About This Item</h5>
+                    <p class="mb-5">
+                        <small>
+                            <b>We aim to show you accurate product information.</b> Manufacturers, 
+                            suppliers and others provide what you see here, and we have not verified it. 
+                            <a href="" style="text-decoration-line: underline;"><b>See our disclaimer</b></a>
+                        </small>
+                    </p>
+    
+                    <div class="description-box p-3 border-top m-no-p">
+                        <span style="font-size: 13px;">@{{$product->description}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <p class="border-bottom">Latest Review(s) - @{{($product->reviews()) ? count($product->reviews())." reviews" : "0 review";}}</p>
+                @if($product->reviews())
+
+                @else 
+                    <p class="p-3 text-center">No review(s) found</p>
+                @endif
+
+                <div class="review-form border-top pt-2 mt-3">
+                    <p class="p-2"><b>Submit your review for this product</b></p>
+                    <div class="col-md-12 col-lg-12">
+                        <form action="/pd/reviews/@{{$product->id}}" data-tr-o="true" method="post">
+                            <div class="form-group text-center">
+                                <input type="hidden" name="rate" value="0" id="rate">
+                                <h5>
+                                    <i class="icofont-star star" trg="1"></i>
+                                    <i class="icofont-star star" trg="2"></i>
+                                    <i class="icofont-star star" trg="3"></i>
+                                    <i class="icofont-star star" trg="4"></i>
+                                    <i class="icofont-star star" trg="5"></i>
+                                </h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 p-2">
+                                    <div class="form-group">
+                                        <input type="text" name="fullname" 
+                                        validate-field="true" validation-message="<small>Please enter your name.</small>"
+                                        placeholder="Enter your name" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 p-2">
+                                    <div class="form-group">
+                                        <input type="email" name="email" 
+                                        validate-field="true" validation-message="<small>Kindly enter a valid email address.</small>"
+                                        placeholder="Enter your email" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <div class="form-group">
+                                    <textarea name="message" id="" class="form-control" 
+                                    validate-field="true" validation-message="<small>Please enter your comment.</small>"
+                                    placeholder="comment..." maxlength="150" rows="5"></textarea>
+                                </div>
+                                <div class="form-group text-left">
+                                    <button class="btn btn-outline-primary border-50 btn-">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 mt-2 pt-3 border-top">
+        <h5>Related products to this Item</h5>
+
+    </div>
+</section>
+
+<script>
+    var product = '@{{$product->id}}';
+</script>

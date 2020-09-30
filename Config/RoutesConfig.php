@@ -19,6 +19,6 @@ class RoutesConfig {
     * @var bool
     *
     */
-    static public $enable_subdomains = false;
+    static public $enable_subdomains = true;
 
 }

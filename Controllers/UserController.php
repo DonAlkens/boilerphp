@@ -2,6 +2,8 @@
 
 use App\Core\Urls\Request;
 use App\Action\Urls\Controller;
+use App\Collection;
+use App\Customer;
 
 /** 
  * @param 'optional' [Request $request]
@@ -10,14 +12,31 @@ use App\Action\Urls\Controller;
 
 class UserController extends Controller {
 
+    public static $data;
+
     public function __construct()
     {
-        //$this->hasAuthAccess("user", "login");
+        $request = new Request("get");
+        $location = str_replace("/", "_", $request->location());
+
+        $this->hasAuthAccess("auth", "/sign-in/rd/".$location);
+
+        
+        
+        $customer = Session::get("auth");
+        $customer = (new Customer)->where('id', $customer)->get();
+        
+        
+        $get_collections = (new Collection)->all();
+        static::$data = array( 
+            "customer" => $customer,
+            "collections" => $get_collections
+        );
     }
 
     public function index()
     {
-        return view("user/index");
+        return view("user/index", static::$data);
     }
 
 }

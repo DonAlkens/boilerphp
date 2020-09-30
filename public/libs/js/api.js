@@ -3,6 +3,8 @@
     var step = new Step();
     step.init();
 
+    var selected = [];
+
     var options = {
         display: "#GalleryBox",
         thumbnail: {
@@ -24,9 +26,10 @@
 
         imageArr = ImageViewer("#Gallery", options).images;
         if (imageArr.length != 0) {
-            $("#GalleryBox").removeClass("hide");
+            $("#GalleryBox").removeClass("hide").show();
         }
     });
+
 
     $("#Image").change(function () {
         options2 = {
@@ -92,6 +95,9 @@
             if (form.attr("add-product") == "true") {
                 step.loader(true, "Saving Product...");
             }
+            else if(edit) {
+                step.loader(true, "Saving changes...");
+            }
 
             if (imageArr.length > 0) { imageArr.forEach(image => { data.append("gallery[]", image); }); }
 
@@ -104,6 +110,7 @@
                     console.log(res);
 
                     if (res !== null && JSON.parse(res)) {
+                        
                         res = JSON.parse(res);
                         step.loader(false);
 
@@ -111,10 +118,15 @@
 
                         if (res.success) {
 
-                            if (!edit && form.attr("class") != "add-product") {
+                            if (!edit) {
                                 imageArr = [];
                                 $("input, textarea").val("");
-                                $("#img-preview").html("");
+                            }
+
+                            if(!edit && form.attr("add-product") == "true") {
+                                $("#mainImage").html("");
+                                $("#GalleryBox").html("").hide();
+                                $("[api-variation-list]").html("");
                             }
 
                             step.modal("success", res.message);
@@ -391,8 +403,12 @@
                     res = JSON.parse(res);
 
                     if (res.success) {
+
                         object.remove();
                         step.modal("success", res.message);
+
+                        $("[api-variation-creator]").trigger("blur");
+
                     }
                     else if (res.error) {
 
@@ -516,75 +532,137 @@
 
     activate_button_actions();
 
-    $("[api-variation-creator]").blur(function(){
-
-        index = 0;
-        variations = [];
-
-        $("[api-variation-creator]").each(function(){
-
-            group = $(this).parent("div").parent("div").siblings(".var_type").children().find("select.variations");
-            value = $(this).val();
-
-            if(value != "") {
-
-                if(group.val() == "") {
-
-                    step.modal("error", "variation type is required and must be before adding options.");
-                    return;
-                }
-                else
-                {
-                    if(value.indexOf(",") > -1) { value = value.split(",");} else { value = Array(value); }
-
-                    if(index == 0) {
-
-                        value.forEach(name => { 
-                            variation = {name};
-                            variations.push(variation);
-                        });
-                    }
-                    else 
-                    {
-                        variation_holder = []
-                        counter = 0;
-                        for (let i = 0; i < variations.length; i++) {
-                            
-                            for (let j = 0; j < value.length; j++) {
-
-                                variation = {
-                                    name: variations[i].name + " / " + value[j]
-                                };
-                                variation_holder[counter] = variation;
-
-                                counter++;
-                            }
-                        }
-
-                        variations = variation_holder;
-                    }
-    
-                    index++;
-
-                }
-            }
-        });
+    if($("#addSkeletonBtn2"))
+    {
+        let skeleton = "";
+        setTimeout(function(){ skeleton = $("#skeleton").html()}, 2000);
         
-        create_variations_combined_list(variations);
-
-    });
-
-
-    function create_variations_combined_list(variations) {
-        console.log(variations);
-        $.ajax({
-            url: "/a/product/create_variations_list_options", method: "POST", data: {variations},
-            success: function(resp) {
-                $("[api-variation-list]").fadeIn().html(resp);
-            }
-        })
+        $("#addSkeletonBtn2").click(function(){
+            $("#skeletonForm").append('<div class="col-md-12 mt-1 pt-2 bordered-top">'+skeleton+"</div>");
+            variation_selection();
+            variation_creator();
+            rni++;
+        });
 
     }
+
+    function variation_creator()
+    {
+        $("[api-variation-creator]").blur(function(){
+    
+            index = 0;
+            variations = [];
+    
+            $("[api-variation-creator]").each(function(){
+    
+                group = $(this).parent("div").parent("div").siblings(".var_type").children().find("select.variations");
+                value = $(this).val();
+    
+                if(value != "") {
+    
+                    if(group.val() == "") {
+    
+                        step.modal("error", "variation type is required and must be before adding options.");
+                        return;
+                    }
+                    else
+                    {
+                        if(value.indexOf(",") > -1) { value = value.replace(" ", "").split(",") } 
+                        else { value = Array(value.replace(" ","")); }
+    
+                        if(index == 0) {
+    
+                            value.forEach(name => { 
+    
+                                variation = JSON.stringify({name});
+    
+                                if(variations.indexOf(variation) > -1) {
+    
+                                    step.modal("error", "Duplicate variant <b>"+ JSON.parse(variation).name +"</b> cannot be created.");
+                                    return;
+                                }
+                                else {
+                                    variations.push(variation);
+                                }
+                            });
+                        }
+                        else 
+                        {
+                            variation_holder = []
+                            counter = 0;
+                            for (let i = 0; i < variations.length; i++) {
+                                
+                                for (let j = 0; j < value.length; j++) {
+    
+                                    var_index = JSON.parse(variations[i]);
+                                    variation = JSON.stringify({name: var_index.name + "/" + value[j]});
+    
+                                    if(variation_holder.indexOf(variation) > -1) {
+    
+                                        step.modal("error", "Duplicate variant <b>"+ var_index.name +"</b> cannot be created.");
+                                        break;
+    
+                                    }
+                                    else {
+                                        variation_holder[counter] = variation;
+                                    }
+    
+                                    counter++;
+                                }
+                            }
+    
+                            variations = variation_holder;
+                        }
+        
+                        index++;
+    
+                    }
+                }
+            });
+            
+            create_variations_combined_list(variations);
+    
+        });
+
+    }
+
+    function create_variations_combined_list(variations) {
+        // console.log(variations);
+
+        variations = JSON.stringify(variations);
+
+        price = $("#Price").val(); discount = $("#Discount").val();
+        if(Number(discount) > 0) { price = $("#DiscountPrice").val(); }
+        
+        $.ajax({
+            url: "/a/product/create_variations_list_options", method: "POST", data: {variations, price},
+            success: function(resp) {
+                // console.log(resp);
+                $("[api-variation-list]").removeClass("hide").html(resp);
+            }
+        });
+
+    }
+
+    variation_creator();
+
+    function variation_selection() {
+
+        $(".variations").change(function(){
+            let val = $(this).val();
+            if(selected.indexOf(val) < 0) 
+            {
+                selected.push(val);
+            }
+            else 
+            {
+                step.modal("error", "This option has been selected. kindly select another variant");
+                $(this).children("option").first().attr("selected","selected");
+            }
+        });
+    }
+
+    variation_selection();
 
     setTimeout(function () { $(".table").DataTable() }, 1000);
 

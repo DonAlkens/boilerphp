@@ -1,0 +1,100 @@
+{{$product = ~product~}}
+
+<div class="carting-body-inner mb-5">
+    <div class="carting-product-image-slider">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8 slides-gallery">
+                <div class="carting-slideshow owl-carousel">
+                    @if($product->images()->gallery)
+                        {{$images = explode(",", $product->images()->gallery)}}
+                        @foreach($images as $image)
+                            <div class="slide"><img src="/src/images/@{{$image}}" alt="@{{$product->name}}"></div>
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+    
+    <div class="carting-product-details">
+        <a href="/pd/@{{$product->slug}}/@{{base64_encode($product->id)}}">
+            <h6 class="mb-0">@{{ucfirst($product->brand)}}</h6>
+            <p class="mt-0">@{{$product->name}}</p>
+        </a>
+    
+        <div class="carting-product-pricing d-flex" data-pd-price="true">
+            @if($product->price_range() != null)
+            {{$prices = $product->price_range()}}
+            <h5 class="mr-1"><b>&#8358;@{{number_format($prices["lowest"])}} - &#8358;@{{number_format($prices["highest"])}}</b></h5>
+            @elif($product->discount_price > 0)
+            <h5 class="mr-1"><b>&#8358;@{{number_format($product->discount_price)}}</b></h5>
+            <h5 class="text-secondary"><del>&#8358;@{{number_format($product->price)}}</del></h5>
+            @else 
+            <h5 class="mr-1"><b>&#8358;@{{number_format($product->price)}}</b></h5>
+            @endif
+        </div>
+    </div>
+    
+    <div class="availabily-message-box pt-2"></div>
+    @if($product->variation_colors() != null)
+    <div class="col-md-12 p-0 mt-3 pt-3 variation">
+        <p> <small><b>Color:</b></small> <small class="active-color">@{{ucfirst($product->color)}}</small></p>
+        <div class="d-flex color-variation-box mt-3">
+            {{$colors = $product->variation_colors()}}
+            {{$index = 0}}
+            @foreach($colors as $color)
+            <input type="radio" value="@{{$color['color']}}" @{{($index == 0) ? "checked" : null}}
+            name="color" id="@{{$color['color']}}" data-vr-opt="color" carting="true"
+            @{{($color['image'] != null) ? 'data-vr-im="true"' : null}} class="variant-radio-hide">
+            <label for="@{{$color['color']}}" class="im-box p-2 border-50">
+                @if($color["image"] != null)
+                    <img src="/src/images/@{{$color['image']}}" alt="" data-mg-fr="@{{$color['color']}}" width="50px" class="border-50">
+                @else
+                    @{{$color["color"]}}
+                @endif
+            </label>
+            {{$index++}}
+            @endforeach
+        </div>
+    </div>
+    @endif
+    
+    @if($product->variation_sizes() != null)
+    <div class="col-md-12 p-0 mt-1 pt-3 variation">
+        <p> <small><b>Sizes:</b></small> <small class="active-color">choose an option</small></p>
+        <div class="d-flex color-variation-box mt-3">
+            {{$sizes = $product->variation_sizes()}}
+            @foreach($sizes as $size)
+            <input type="radio" value="@{{$size['size']}}" name="size" id="@{{$size['size']}}" 
+            data-vr-opt="size" class="variant-radio-hide">
+            <label for="@{{$size['size']}}" class="im-box p-1 pr-4 pl-4 border-50">
+                @{{$size["size"]}}
+            </label>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    <div class="text-center msgCenter mb-5"></div>
+</div>
+
+
+<div class="carting-footer border-top bg-white">
+    <div class="col-md-12 col-lg-12 p-0">
+        <div class="d-flex">
+            <div class="qty-box">
+                <div class="bts">
+                    <span data-qt-nm="false" for="qty"><i class="pe-7s-angle-down"></i></span>
+                    <span data-qt-nm="true" for="qty"><i class="pe-7s-angle-up"></i></span>
+                </div>
+                <input type="text" name="qty" data-qt-tg="qty" value="1" class="qty border-50 form-control text-center">
+            </div>
+            <div class="actions-box ml-3">
+                <button data-add-cart="@{{$product->id}}" class="btn btn-primary border-50"><i class="pe-7s-cart"></i> Add to Cart</button>
+                <button class="btn btn-light border-50"><i class="pe-7s-refresh-2"></i></button>
+            </div>
+        </div>
+    </div>
+</div>

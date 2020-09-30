@@ -18,7 +18,7 @@
 											@if(~collections~)
 												{{$collections = ~collections~}}
 												@foreach($collections as $collection)
-													<div class="col-md-2 mb-3">
+													<div class="col-md-3 mb-3">
 														<a href="/collections/@{{$collection->slug}}"><h6>@{{$collection->name}}</h6></a>
 														<ul class="p-0">
 															@if(is_array($collection->categories()))
@@ -75,16 +75,27 @@
 			<div class="col-md-3 top-side">
 				<ul class="d-flex justify-content-between">
 					<li class="text-center text-white">
-						<a href=""><i class="pe-7s-user"></i> Account</a>
+						@if(auth())
+							<a href="/uac/dashboard">
+								<i class="pe-7s-user"></i> 
+								<span style="font-weight: 600;">Hi! @{{auth()->firstname}}</span> 
+							</a>
+						@else
+							<a href="/sign-in"><i class="pe-7s-user"></i> <span>Account</span> </a>
+						@endif
 					</li>
+					<li class="text-center text-white cart-btn">
+						<a href="/cart"><i class="pe-7s-cart"></i> <span>Cart</span> </a>
+					</li>
+					@if(auth())
 					<li class="text-center text-white">
-						<a href=""><i class="pe-7s-cart"></i> Cart</a>
+						<a href="/uac/logout"><i class="flaticon-logout" style="font-size: 15px;"></i> <span>Logout</span> </a>
 					</li>
-					<a href="">
-						<li class="text-center text-white">
-							<i class="pe-7s-info"></i> Help
-						</li>
-					</a>
+					@else
+					<li class="text-center text-white">
+						<a href="/help"><i class="flaticon-questions-circular-button"></i> <span>Help</span> </a>
+					</li>
+					@endif
 				</ul>
 			</div>
 		</div>

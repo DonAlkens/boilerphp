@@ -15,7 +15,7 @@ class ProductVariation extends Model {
 
     public $table = "product_variations";
 
-    public function varition() {
+    public function variation() {
         
         return $this->hasOne(Variation::class, ["id" => "variation"]);
     }

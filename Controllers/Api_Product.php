@@ -3,12 +3,14 @@
 use App\Core\Urls\Request;
 use App\Action\Urls\Controller;
 use App\Admin\Auth;
+use App\Admin\Door;
 use App\Category;
 use App\FileSystem\Fs;
 use App\Product;
 use App\ProductImage;
 use App\ProductSettings;
 use App\ProductVariation;
+use App\ProductVariationOptions;
 
 /** 
  * @param 'optional' [Request $request]
@@ -20,13 +22,24 @@ class Api_Product extends Controller {
     public function __construct()
     {
         $this->hasAuthAccess("auth", "/signin");
+
+        (new Door)->openWith("manage products", function(){
+
+            $response = array(
+                "status" => 200,
+                "success" => false,
+                "error" => array(
+                    "message" => "Access denied: You do not have permission to manage products"
+                )
+            );
+            return Json($response);
+        });
     }
 
     public function add(Request $request) {
 
         $request->required([
             "collection" => "integer",
-            "category" => "integer",
             "name" => "string",
             "price" => "string",
             "condition" => "string",
@@ -38,7 +51,8 @@ class Api_Product extends Controller {
 
         if($request->validation == true) {
 
-            $p = false; $m = false; $v = false; $v_available = false; $s = false;
+            $p = false; $m = false; $v = false; $v_available = false; 
+            $v_options = false; $v_options_available = false; $s = false;
 
             $product = (new Product);
 
@@ -57,15 +71,17 @@ class Api_Product extends Controller {
 
             else {
 
+                $product_slug = $product->create_slug($request->name);
+
                 # creating new Product
                 $created = $product->insert([
                     "name" => $request->name,
-                    "slug" => $product->create_slug($request->name),
+                    "slug" => $product_slug,
                     "description" => $request->description,
-                    "price" => $request->price,
+                    "price" => str_replace(",", "",  $request->price),
                     "quantity" => $request->quantity,
                     "discount" => $request->discount,
-                    "discount_price" => $request->discount_price,
+                    "discount_price" => str_replace(",", "",  $request->discount_price),
                     "brand" => $request->brand,
                     "color" => $request->color,
                     "collection" => $request->collection,
@@ -79,7 +95,7 @@ class Api_Product extends Controller {
                     $properties = array(
                         "filename"=> "image", 
                         "path" => "src/images/", 
-                        "rename" => "pd-".$created->id."-main-image-".date("Ymdhis")
+                        "rename" => $product_slug."-".$created->id."-".date("ymdhis")
                     );
                     
 
@@ -100,7 +116,7 @@ class Api_Product extends Controller {
                                 $properties = array(
                                     "filename"=> "gallery", 
                                     "path" => "src/images/", 
-                                    "prefix" => "pd-".$created->id
+                                    "prefix" =>  $product_slug."-".$created->id."-".date("ymdhis")
                                 );
 
                                 if(Fs::uploadMultipleImage($properties)) {
@@ -118,20 +134,18 @@ class Api_Product extends Controller {
                     // Product Variations
                     $index = 0;
                     foreach($request->variations as $variation) {
+
                         if(!empty($variation) && !empty($request->variation_options[$index])) {
 
                             $v_available = true;
 
-                            $options = $request->variation_options[$index];
-                            if(strpos($options, ",")) {
-                                $options = explode(",", $options);
-                            }
-                            else 
-                            {
-                                $options = array($options);
-                            }
+                            $options = str_replace(", ", ",", $request->variation_options[$index]);
+                            if(strpos($options, ",")) { $options = explode(",", $options);}
+                            else { $options = array($options); }
 
                             foreach($options as $option) {
+
+                                $option = trim($option);
 
                                 $data = array(
                                     "product" => $created->id, 
@@ -144,9 +158,7 @@ class Api_Product extends Controller {
                                 if(!$check) {
     
                                     $data["created_by"] = Auth::user()->id;
-    
-                                    $create_variation = (new ProductVariation)->insert($data);
-                                    if($create_variation) { $v = true; }
+                                    if((new ProductVariation)->insert($data)) { $v = true; }
     
                                 }
 
@@ -157,7 +169,88 @@ class Api_Product extends Controller {
                     }
 
                     // Product Variation Options
-                    
+                    if($v_available == true && $v == true) {
+                        if(isset($request->variants)) {
+                            $v_options_available = true; $index = 0; 
+
+                            $image_holder = null;
+
+                            foreach($request->variants as $variant) {
+
+                                if(!empty($request->variant_price[$index]) && !empty($request->variant_qty[$index])) {
+
+                                    $_v_price = $request->variant_price[$index];
+                                    $_v_qty = $request->variant_qty[$index];
+                                    $_v_in_stock = 1;
+
+                                    if(!isset($request->variant_stock[$index])) {
+                                        $_v_in_stock = 0;
+                                    }
+
+                                    $variant = trim($variant);
+                                    
+                                    $data = array(
+                                        "product" => $created->id,
+                                        "variant" => $variant,
+                                    );
+
+                                    // Check 
+                                    $product_variation_options = new ProductVariationOptions;
+                                    $check = $product_variation_options->where($data)->get();
+
+                                    if(!$check) {
+                                        
+                                        $details = array(
+                                            "price" => $_v_price,
+                                            "quantity" => $_v_qty,
+                                            "in_stock" => $_v_in_stock,
+                                            "created_by" => Auth::user()->id
+                                        );
+
+                                        if($image_holder != null) {
+                                            $details["image_holder"] = $image_holder;
+                                        }
+
+                                        $data = array_merge($data, $details);
+
+                                        $product_variation_options =  $product_variation_options->insert($data);
+                                        if($product_variation_options) { 
+                                            $v_options = true;
+                                            $image__key = "variant_".$index."_images";
+        
+                                            if(!empty($request->$image__key)) {
+        
+                                                $v__slug = (new Product)->create_slug($variant);
+        
+                                                $properties = array(
+                                                    "filename"=> $image__key, 
+                                                    "path" => "src/images/", 
+                                                    "prefix" =>  $product_slug."-".$created->id."-".$v__slug."-".date("ymdhis")
+                                                );
+        
+                                                if(Fs::uploadMultipleImage($properties)) {
+        
+                                                    $images = implode(",", Fs::get_filelist());
+                                                    $image_holder = $product_variation_options->id;
+
+                                                    $product_variation_options
+                                                        ->where("id", $product_variation_options->id)
+                                                        ->update(["images" => $images, "image_holder" => $image_holder]);
+
+                                                    
+                                                }
+        
+                                            }
+                                        }
+                                    }
+
+
+                                }
+
+                                $index++;
+                            }
+                        }
+                    }
 
 
                     // Product Setting 
@@ -193,6 +286,19 @@ class Api_Product extends Controller {
                         (new Product)->delete_images($created->id);
                         (new Product)->delete("id", $created->id);
                     }
+
+                    if($v_available == true && $v == true) {
+                        if($v_options_available == true && $v_options == false) {
+
+                            $message = "Error occurred while saving. Please try again!";
+                            $response = array("status" => 200, "success" => false, "error" => ["message" => $message]);
+
+                            (new Product)->delete_images($created->id);
+                            (new ProductVariationOptions)->delete_images($created->id);
+                            (new Product)->delete("id", $created->id);
+
+                        }
+                    }
                 }
                 else 
                 {
@@ -216,8 +322,8 @@ class Api_Product extends Controller {
         }
     }
 
-    public function get_products()
-    {
+    public function get_products() {
+
         $products = (new Product)->orderBy("id", "desc")->all();
         $list = array();
 
@@ -271,7 +377,7 @@ class Api_Product extends Controller {
             if($product->category()) {
                 $category .= "/".$product->category()->name;
             }
-            $price = "&dollar;".$product->price;
+            $price = "&#8358;".$product->price;
 
             $data = array(
                 $product->id,
@@ -293,7 +399,6 @@ class Api_Product extends Controller {
 
         $request->required([
             "collection" => "integer",
-            "category" => "integer",
             "name" => "string",
             "price" => "string",
             "quantity" => "integer",
@@ -319,10 +424,10 @@ class Api_Product extends Controller {
                     "collection" => $request->collection,
                     "category" => isset($request->category) ? $request->category : 0,
                     "sub_category" => isset($request->sub_category) ? $request->sub_category : 0,
-                    "price" => $request->price,
+                    "price" => str_replace(",", "", $request->price),
                     "quantity" => $request->quantity,
                     "discount" => $request->discount,
-                    "discount_price" => $request->discount_price,
+                    "discount_price" => str_replace(",", "", $request->discount_price),
                     "description" => $request->description,
                     "last_updated_date" => $request->timestamp(),
                     "last_updated_by" => Auth::user()->id
@@ -460,108 +565,251 @@ class Api_Product extends Controller {
 
     public function edit_product_variations(Request $request) {
 
-         // Product Variations
-         $id = $request->param["id"];
-         $product = (new Product)->where("id", $id)->get();
+        // Product Variations
+        $id = $request->param["id"];
+        $product = (new Product)->where("id", $id)->get();
 
          
         if($product) {
 
-            $v_available = $v = $p = $p_available = false;
+            $v_available = $v_options_available = $v_options = $v = false;
 
-            if(isset($request->pd_var))
+            if(isset($request->variants_ids))
             {
-                $variations = (new ProductVariation)->where("product", $id)->all();
+                $v_available = true; $v = true; $v_options_available = true; 
+                
+                $index = 0; 
+                foreach($request->variants_ids as $variant) {
 
-                if($variations && is_array($variations)) {
+                    if(!empty($request->variant_price[$index]) && !empty($request->variant_qty[$index])) {
 
-                    foreach($variations as $variation) {
+                        $_var_name = $request->variants[$index];
+                        $_v_price = $request->variant_price[$index];
+                        $_v_qty = $request->variant_qty[$index];
+                        $_v_in_stock = 1;
 
-                        if(isset($request->pd_var[$variation->id])) { $p_available = true;
+                        if(!isset($request->variant_stock[$index])) {
+                            $_v_in_stock = 0;
+                        }
+                        
 
-                            $data = array(
-                                "variation" => $request->pd_var[$variation->id],
-                                "value" => $request->pd_var_value[$variation->id],
-                                "price" => $request->pd_var_price[$variation->id],
-                                "quantity" => $request->pd_var_quantity[$variation->id],
-                                "last_updated_date" => $request->timestamp(),
-                                "last_updated_by" => Auth::user()->id
-                            );
+                        $data = array(
+                            "product" => $product->id,
+                            "price" => str_replace(",","",$_v_price),
+                            "quantity" => $_v_qty,
+                            "in_stock" => $_v_in_stock,
+                            "last_updated_by" => Auth::user()->id,
+                            "last_updated_date" => $request->timestamp()
+                        );
 
-                            if($variation->where("id", $variation->id)->update($data)) {
-                                $p = true;
+                        // Check 
+                        $product_variation_options = new ProductVariationOptions;
+
+                        $where = ["id" => $variant, "product" => $product->id, "variant" => $_var_name];
+                        $update = $product_variation_options
+                            ->where($where)
+                            ->update($data);
+                        
+                        if($update) {
+
+                            $v_options = true;
+                            $image__key = "variant_".$index."_images";
+
+                            if(!empty($request->$image__key)) {
+
+                                $v__slug = (new Product)->create_slug($_var_name);
+
+                                $properties = array(
+                                    "filename"=> $image__key, 
+                                    "path" => "src/images/", 
+                                    "prefix" =>  $product->slug."-".$product->id."-".$v__slug."-".date("ymdhis")
+                                );
+
+                                if(Fs::uploadMultipleImage($properties)) {
+
+                                    $images = implode(",", Fs::get_filelist());
+
+                                    $previous_images = $product_variation_options->where($where)->select("images");
+                                    $images .= $previous_images->images.",".$images;
+                                    $product_variation_options->where($where)->update(["images" => $images]);
+                                    
+                                }
+
+                            }
+                        }
+
+
+                    }
+
+                    $index++;
+                }
+            } 
+            else {
+                # Delete Existing Ones and Creating another 
+                (new ProductVariation)->delete("product", $product->id);
+
+                if(isset($request->variations)) {
+
+                    $index = 0;
+                    foreach($request->variations as $variation) {
+
+                        if(!empty($variation) && !empty($request->variation_options[$index])) {
+
+                            $v_available = true;
+
+                            $options = str_replace(", ", ",", $request->variation_options[$index]);
+                            if(strpos($options, ",")) { $options = explode(",", $options);}
+                            else { $options = array($options); }
+
+                            foreach($options as $option) {
+
+                                $option = trim($option);
+
+                                $data = array(
+                                    "product" => $product->id, 
+                                    "variation" => $variation,  
+                                    "name" => $option
+                                );
+
+                                $check = (new ProductVariation)->where($data)->get();
+
+                                if(!$check) {
+
+                                    $data["created_by"] = $product->created_by;
+                                    $data["created_date"] = $product->created_date;
+                                    $data["last_updated_by"] = Auth::user()->id;
+                                    $data["last_updated_date"] = $request->timestamp();
+
+                                    if((new ProductVariation)->insert($data)) { $v = true; }
+
+                                }
+
                             }
 
                         }
+                        $index++;
                     }
 
                 }
-            }
 
-            if(isset($request->variations)) {
 
-                $index = 0;
-                foreach($request->variations as $variation) {
+                # Delete Existing Options and Creating another
+                (new ProductVariationOptions)->delete_images($product->id);
+                (new ProductVariationOptions)->delete("product", $product->id);
 
-                    if(!empty($variation) && !empty($request->variation_value[$index]) 
-                    && !empty($request->variation_quantity[$index])) {
-        
-                        $v_available = true;
-        
-                        $price = !empty($request->variation_price[$index]) 
-                                ? $request->variation_price[$index] 
-                                : $product->price;
-                        
-                        $value = $request->variation_value[$index];
-        
-                        $data = array(
-                            "product" => $product->id, 
-                            "variation" => $variation,  
-                            "value" => $value
-                        );
+                if($v_available == true && $v == true) {
+                    if(isset($request->variants)) {
 
-                        $check = (new ProductVariation)->where($data)->get();
+                        $v_options_available = true; $index = 0; 
 
-                        if(!$check) {
+                        foreach($request->variants as $variant) {
 
-                            $data["price"] = $price;
-                            $data["quantity"] = $request->variation_quantity[$index];
-                            $data["created_by"] = Auth::user()->id;
+                            if(!empty($request->variant_price[$index]) && !empty($request->variant_qty[$index])) {
 
-                            $create_variation = (new ProductVariation)->insert($data);
-                            if($create_variation) { $v = true; }
+                                $_v_price = $request->variant_price[$index];
+                                $_v_qty = $request->variant_qty[$index];
+                                $_v_in_stock = 1;
 
+                                if(!isset($request->variant_stock[$index])) {
+                                    $_v_in_stock = 0;
+                                }
+                                
+                                $variant = trim($variant);
+
+                                $data = array(
+                                    "product" => $product->id,
+                                    "variant" => $variant,
+                                );
+
+                                // Check 
+                                $product_variation_options = new ProductVariationOptions;
+                                $check = $product_variation_options->where($data)->get();
+
+                                if(!$check) {
+                                    
+                                    $details = array(
+                                        "price" => str_replace(",","",$_v_price),
+                                        "quantity" => $_v_qty,
+                                        "in_stock" => $_v_in_stock,
+                                        "created_by" => $product->created_by,
+                                        "created_date" => $product->created_date,
+                                        "last_updated_by" => Auth::user()->id,
+                                        "last_updated_date" => $request->timestamp()
+                                    );
+
+                                    $data = array_merge($data, $details);
+
+                                    $product_variation_options =  $product_variation_options->insert($data);
+                                    if($product_variation_options) { 
+                                        $v_options = true;
+                                        $image__key = "variant_".$index."_images";
+
+                                        if(!empty($request->$image__key)) {
+
+                                            $v__slug = (new Product)->create_slug($variant);
+
+                                            $properties = array(
+                                                "filename"=> $image__key, 
+                                                "path" => "src/images/", 
+                                                "prefix" =>  $product->slug."-".$product->id."-".$v__slug."-".date("ymdhis")
+                                            );
+
+                                            if(Fs::uploadMultipleImage($properties)) {
+
+                                                $images = implode(",", Fs::get_filelist());
+                                                $product_variation_options
+                                                    ->where("id", $product_variation_options->id)
+                                                    ->update(["images" => $images]);
+                                                
+                                            }
+
+                                        }
+                                    }
+                                }
+
+
+                            }
+
+                            $index++;
                         }
-        
                     }
-        
-                    $index++;
                 }
-
             }
 
-            if($v_available && !$v) {
-                
-                $message = "Unable to create new variation(s). Please try again";
+
+            #responses 
+            if($v_available == true && $v == false) 
+            {
+                $message = "Unable to update variation(s). Please try again";
                 $response = array("status" => 200, "success" => false, "error" => ["message" => $message]);
 
-                return Json($response);
-            } 
-            else if($p_available && !$p) {
-
-                $message = "Unable to save changes. Please try again";
-                $response = array("status" => 200, "success" => false, "error" => ["message" => $message]);
-
-                return Json($response);
+                (new ProductVariation)->delete("product", $product->id);
 
             }
-            else  {
 
-                $message = "Changes has been saved successfully.";
-                $response = array("status" => 200, "success" => true, "message" => $message);
+            else if($v_available == true && $v == true) {
 
-                return Json($response);
+                if($v_options_available == true && $v_options == false) {
+
+                    $message = "Unable to update variant(s). Please try again";
+                    $response = array("status" => 200, "success" => false, "error" => ["message" => $message]);
+
+                    (new ProductVariationOptions)->delete_images($product->id);
+                    (new ProductVariationOptions)->delete("product", $product->id);
+
+                    return Json($response);
+
+                }
+                else {
+
+                    $message = "Changes has been saved successfully.";
+                    $response = array("status" => 200, "success" => true, "message" => $message);
+
+                    return Json($response);
+
+                }
             }
+
         }
 
         $message = "Error Occured. Product does not exists.";
@@ -573,27 +821,28 @@ class Api_Product extends Controller {
 
     public function remove_variations(Request $request) {
 
-        if(isset($request->param["id"])) {
+        if(isset($request->param["variation"]) && isset($request->param["product"])) {
             
-            $id = $request->param["id"];
-            $variation = (new ProductVariation)->where("id", $id)->get();
+            $group = $request->param["variation"];
+            $product = $request->param["product"];
 
-            if($variation) {
+            $variations = (new ProductVariation)
+                    ->where(["variation" => $group, "product" => $product])
+                    ->all();
 
-                if($variation->where("id", $id)->delete())
-                {
-                    $message = "Variation has been removed successfully.";
-                    $response = array("status" => 200, "success" => true, "message" => $message);
+            if($variations) {
 
-                    return Json($response);
+                foreach($variations as $variation) {
+
+                    ($variation->delete("id", $variation->id)); 
+
                 }
-                else 
-                {
-                    $message = "Unable to remove variation. Please try again";
-                    $response = array("status" => 200, "success" => false, "error" => ["message" => $message]);
 
-                    return Json($response);
-                }
+                $message = "Varition Option(s) has been successfully removed.";
+                $response = array("status" => 200, "success" => true, "message" => $message);
+
+                return Json($response);
+
             }
             else 
             {

@@ -1,0 +1,11 @@
+
+@if(~images~)
+    <div class="images-slides carting-slideshow owl-carousel">
+        {{$images = ~images~}}
+        @foreach($images as $image)
+            <div class="slide img-slide-box">
+                <img src="/src/images/@{{$image}}" data-im-tg="@{{$image}}" alt="" width="100%">
+            </div>
+        @endforeach
+    </div>
+@endif

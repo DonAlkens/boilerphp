@@ -108,8 +108,12 @@ class Request extends Validator
 
     public function timestamp() 
     {
-        
         return date("Y-m-d H:i:s");
+    }
+
+    public function location() 
+    {
+        return $uri = trim($_SERVER["REQUEST_URI"],"/");
     }
 
 }

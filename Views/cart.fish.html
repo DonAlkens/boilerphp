@@ -1,167 +1,292 @@
 @{{extends "shared/layout"}}
 
-<!-- cart section end -->
-<section class="cart-section spad">
-    <div class="container">
+<section class="cart bg-white">
+    <div class="col-md-12 border-bottom pt-3">
         <div class="row">
-            <div class="col-lg-8">
-                <div class="cart-table">
-                    <h3>Your Cart</h3>
-                    <div class="cart-table-warp">
-                        <table>
-                        <thead>
-                            <tr>
-                                <th class="product-th">Product</th>
-                                <th class="quy-th">Quantity</th>
-                                <th class="size-th">SizeSize</th>
-                                <th class="total-th">Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="product-col">
-                                    <img src="public/img/cart/1.jpg" alt="">
-                                    <div class="pc-title">
-                                        <h4>Animal Print Dress</h4>
-                                        <p>&dollar;45.90</p>
-                                    </div>
-                                </td>
-                                <td class="quy-col">
-                                    <div class="quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="size-col"><h4>Size M</h4></td>
-                                <td class="total-col"><h4>&dollar;45.90</h4></td>
-                            </tr>
-                            <tr>
-                                <td class="product-col">
-                                    <img src="public/img/cart/2.jpg" alt="">
-                                    <div class="pc-title">
-                                        <h4>Ruffle Pink Top</h4>
-                                        <p>&dollar;45.90</p>
-                                    </div>
-                                </td>
-                                <td class="quy-col">
-                                    <div class="quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="size-col"><h4>Size M</h4></td>
-                                <td class="total-col"><h4>&dollar;45.90</h4></td>
-                            </tr>
-                            <tr>
-                                <td class="product-col">
-                                    <img src="public/img/cart/3.jpg" alt="">
-                                    <div class="pc-title">
-                                        <h4>Skinny Jeans</h4>
-                                        <p>&dollar;45.90</p>
-                                    </div>
-                                </td>
-                                <td class="quy-col">
-                                    <div class="quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="size-col"><h4>Size M</h4></td>
-                                <td class="total-col"><h4>&dollar;45.90</h4></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    </div>
-                    <div class="total-cost">
-                        <h6>Total <span>&dollar;99.90</span></h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 card-right">
-                <form class="promo-code-form">
-                    <input type="text" placeholder="Enter promo code">
-                    <button>Submit</button>
-                </form>
-                <a href="" class="site-btn">Proceed to checkout</a>
-                <a href="" class="site-btn sb-dark">Continue shopping</a>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- cart section end -->
+            <div class="col-md-9 m-no-p pr-0 cart-items-wrapper">
+                @if(~items~ == null)
 
-<!-- Related product section -->
-<section class="related-product-section">
-    <div class="container">
-        <div class="section-title text-uppercase">
-            <h2>Continue Shopping</h2>
-        </div>
-        <div class="row">
-            <div class="col-lg-3 col-sm-6">
-                <div class="product-item">
-                    <div class="pi-pic">
-                        <div class="tag-new">New</div>
-                        <img src="public/img/product/2.jpg" alt="">
-                        <div class="pi-links">
-                            <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
+                <div class="col-md-12 pb-1 pt-1 border-bottom">
+                    {{$cart = ~items~}}
+                    <p>Your Cart:  <b>0 item</b></p>
+                </div>
+
+                <div class="empty-cart-indicator text-center">
+                    <i class="icofont-cart-alt" style="font-size:70px;"></i>
+                    <p class="alert alert-warning p-2 mt-2 mb-5">
+                        You cart is currently empty. You can get up to <b>30% discount</b> on our daily deals. <a href="" class="text-underline">Start shopping</a>
+                    </p>
+                </div>
+
+                @else 
+                    <div class="col-md-12 pb-1 pt-1 border-bottom">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                {{$cart = ~items~}}
+                                <h5>Your Cart:  <b>@{{(count($cart) > 1) ? count($cart)." items" : count($cart)." item"}}</b></h5>
+                            </div>
+                            <div>
+                                <a href="" class="btn btn-sm btn-light"> 
+                                    <i class="flaticon-refresh"></i> Refresh
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    <div class="pi-text">
-                        <h6>&dollar;35,00</h6>
-                        <p>Black and White Stripes Dress</p>
+
+                    @if(~removed~) 
+                        <div class="col-md-12">
+                            <p class="alert alert-warning p-2 mt-2 mb-1">
+                                {{$product = ~rproduct~}}
+                                Item <b>@{{$product->name}}</b> has been removed from your cart.
+                            </p>
+                        </div>
+                    @endif
+
+                    {{$index = 1}}
+                    @foreach($cart as $item)
+                    <!-- border-bottom -->
+                    <div class="col-lg-12 mb-5 cart-item pb-3">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="d-flex">
+                                    <div class="cart-item-img">
+                                        <a href="/pd/@{{$item->product()->slug}}/@{{base64_encode($item->product()->id)}}">
+                                            @if($item->variant != 0)
+
+                                                {{$image = $item->get_item_props()["image"]}}
+                                                @if($image != null) 
+                                                <img src="/src/images/@{{$image}}" alt="" width="100px">
+                                                @else
+                                                <img src="/src/images/@{{$item->product()->images()->main}}" alt="" width="100px">
+                                                @endif
+                                            @else
+                                            <img src="/src/images/@{{$item->product()->images()->main}}" alt="" width="100px">
+                                            @endif
+
+                                        </a>
+                                    </div>
+                                    <div class="cart-item-name pt-3">
+                                        <a href="/pd/@{{$item->product()->slug}}/@{{base64_encode($item->product()->id)}}">
+                                            <h6 class="m-0">@{{$item->product()->brand}}</h6>
+                                            <p>@{{$item->product()->name}}</p>
+                                        </a>
+                                        @if($item->variant != 0)
+                                            {{$vars =  $item->get_item_props()["variant"]}}
+                                            @foreach($vars as $var)
+                                            <p class="text-secondary mb-1"><small>@{{$var["type"]}}: @{{$var["name"]}} </small></p>
+                                            @endforeach
+                                        @endif
+                                        <div class="d-flex mt-3">
+                                            <a href="" class="pr-2 border-right rmCartItem" item="@{{ (auth()) ? $item->id : $index}}" style="text-decoration:underline;"> <small>Remove item</small> </a>
+                                            <a href="" class="pl-2 svCartItem" item="@{{ (auth()) ? $item->id : $index}}" style="text-decoration:underline;"> <small>Save to list</small> </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 d-flex justify-content-between">
+                                <div class="qty-info mt-2">
+                                    <div class="d-flex"><label for=""> <small><b>Qty:</b></small></label></div>
+                                    <div class="d-flex">
+                                        <div class="qty-box">
+                                            <div class="bts">
+                                                <span data-qt-nm="false" for="qty-@{{$index}}" item-update="@{{ (auth()) ? $item->id : $index}}"><i class="pe-7s-angle-down"></i></span>
+                                                <span data-qt-nm="true" for="qty-@{{$index}}" item-update="@{{ (auth()) ? $item->id : $index}}"><i class="pe-7s-angle-up"></i></span>
+                                            </div>
+    
+                                            {{$max = $item->product()->quantity}}
+                                            @if($item->variant != 0)
+                                                {{$max = $item->variation()->quantity}}
+                                            @endif
+    
+                                            <input type="text" name="qty" data-qt-tg="qty-@{{$index}}" min="1" 
+                                            max="@{{$max}}" value="@{{$item->quantity}}" 
+                                            class="qty border-50 form-control text-center">
+    
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="text-right mt-4">
+    
+                                    @if($item->variant != 0)
+                                        <p> <small>@{{$item->quantity}} x <b>&#8358;@{{number_format($item->variation()->price)}}</b></small> </p>
+                                    @else 
+                                        {{$price = $item->product()->price}}
+                                        @if((int) $item->product()->discount > 0)
+                                            {{$price = $item->product()->discount_price}}
+                                        @endif
+                                        <p> <small>@{{$item->quantity}} x <b>&#8358;@{{number_format($price)}}</b></small> </p>
+                                    @endif
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    {{$index++}}
+                    @endforeach
+
+                    <form action="" method="post" id="removeForm">
+                        <input type="hidden" name="remove" value="true">
+                        <input type="hidden" name="id" remove-id value="">
+                    </form>
+
+                @endif
+            </div>
+            <div class="col-md-3 border-left">
+                {{$subtotal = 0}}
+                {{$total_items = 0}}
+
+                @if($cart != null) 
+
+                    @foreach($cart as $item)
+
+                        {{$total_items = ($total_items + $item->quantity)}}
+
+                        @if($item->variant != 0)
+                            {{$itm_amount = ($item->variation()->price *  $item->quantity)}}
+                            {{$subtotal = ($subtotal + $itm_amount)}}
+                        @else
+
+                            @if($item->product()->discount_price != '0.00')
+                                {{$itm_amount = ($item->product()->discount_price *  $item->quantity)}}
+                            @else
+                                {{$itm_amount = ($item->product()->price *  $item->quantity)}}
+                            @endif
+                            {{$subtotal = ($subtotal + $itm_amount)}}
+                        @endif
+
+                    @endforeach
+
+                @endif
+
+                <div class="cart-summary pb-3 border-bottom">
+                    <div class="sm-title mb-2">
+                        <p><b>Cart Summary</b></p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <small>Total Items:</small>
+                        <small><b>@{{$total_items}}</b></small>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <small>Subtotal:</small>
+                        <small><b>&#8358;@{{number_format($subtotal)}}</b></small>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-2">
+                        <small>
+                            Delivery:<br>
+                            <span style="font-size:11px;">(will be decided on checkout)</span>
+                        </small>
+                        <small>---</small>
+                    </div>
+
+                    <div class="d-flex justify-content-between pt-2 border-top mt-2">
+                        <small><b>Est Total:</b></small>
+                        <small><b>&#8358;@{{number_format($subtotal)}}</b></small>
+                    </div>
+
+                    <div class="mt-3">
+                        @if($total_items == 0) 
+                        <button class="btn btn-light border-50 col-md-12" disabled><b>Check out</b></button>
+                        @else
+                        <a href="/checkout" class="btn btn-primary border-50 col-md-12"><b>Check out</b></a >
+                        @endif
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="product-item">
-                    <div class="pi-pic">
-                        <img src="public/img/product/5.jpg" alt="">
-                        <div class="pi-links">
-                            <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
+
+                <div class="coupon-section pt-3">
+                    <div class="cp-title mb-2">
+                        <p><b>Coupon Code</b></p>
+                    </div>
+                    <div class="mt-3">
+                        <div class="form-group">
+                            <input type="text" class="form-control coupon-field" placeholder="Enter coupon">
                         </div>
                     </div>
-                    <div class="pi-text">
-                        <h6>&dollar;35,00</h6>
-                        <p>Flamboyant Pink Top </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="product-item">
-                    <div class="pi-pic">
-                        <img src="public/img/product/9.jpg" alt="">
-                        <div class="pi-links">
-                            <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between">
+                            <small><a href="" class="text-primary text-underline">Get coupon code.</a></small>
+                            @if($total_items == 0) 
+                            <button class="btn btn-sm btn-light border-50" disabled> Apply </button>
+                            @else
+                            <button class="btn btn-sm btn-primary border-50"> Apply </button>
+                            @endif
                         </div>
-                    </div>
-                    <div class="pi-text">
-                        <h6>&dollar;35,00</h6>
-                        <p>Flamboyant Pink Top </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="product-item">
-                    <div class="pi-pic">
-                        <img src="public/img/product/1.jpg" alt="">
-                        <div class="pi-links">
-                            <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
-                        </div>
-                    </div>
-                    <div class="pi-text">
-                        <h6>&dollar;35,00</h6>
-                        <p>Flamboyant Pink Top </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- Related product section end -->
+
+<div class="super-sales mt-2 bg-white">
+	<div class="container p-0">
+		<div class="sales-box bg-white border-radius p-1 pb-4">
+			<div class="super-sales-title text-center mt-3 mb-3 pt-2 pb-2 ">
+				<h5>Shop on Sales</h5>
+			</div>
+			<div class="super-sales-items sss-scroll owl-carousel">
+				@if(~sales~ && is_array(~sales~))
+					{{$sales = ~sales~}}
+					@foreach($sales as $product)
+						<div class="sale-item">
+							@if($product->discount_price > 0)
+								<span class="discount-badge">-@{{$product->discount}}%</span>
+							@endif
+							<div class="sales-img">
+								<a href="/pd/@{{$product->slug.'/'.base64_encode($product->id)}}">
+									<img src="/src/images/@{{$product->images()->main}}" alt="">
+								</a>
+							</div>
+							@if($product->variation_colors() != null)
+								<div class="sales-var-colors">
+									<div class="d-flex">
+										
+									</div>
+								</div>
+							@endif
+							<div class="sales-details">
+								<a href="/pd/@{{$product->slug.'/'.base64_encode($product->id)}}">
+									<span class="product-brand-name">
+										<strong>@{{ucfirst($product->brand)}}</strong>
+									</span>
+									<p class="item-name m-0"><small>@{{$product->name}}</small></p>
+								</a>
+								<p class="rate" app-rating="0"></p>
+								<div class="d-flex pt-2">
+									@if($product->price_range() != null)
+									{{$prices = $product->price_range()}}
+									<small class="mr-1">
+										<b>&#8358;@{{number_format($prices["lowest"])}} - &#8358;@{{number_format($prices["highest"])}}</b>
+									</small>
+									@elif($product->discount_price > 0)
+									<small class="mr-1"><b>&#8358;@{{number_format($product->discount_price)}}</b></small>
+									<small class="text-secondary"><del>&#8358;@{{number_format($product->price)}}</del></small>
+									@else 
+									<small class="mr-1"><b>&#8358;@{{number_format($product->price)}}</b></small>
+									@endif
+								</div>
+							</div>
+							<div class="sales-actions mt-3">
+								<div class="d-flex justify-content-center">
+									<button class="btn btn-outline-primary btn-sm mr-1 border-50" data-prepare-cart="@{{$product->id}}">
+										<i class="pe-7s-cart"></i>	Add to cart
+									</button>
+									<button class="btn btn-light btn-sm border-50">
+										<i class="pe-7s-refresh-2"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					@endforeach
+				@endif
+			</div>
+			<div class="col-md-12 col-lg-12 col-sm-12 mt-5">
+				<div class="text-center">
+					<a href="/super-sales" class="text-secondary">Shop now <i class="pe-7s-angle-right"></i></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

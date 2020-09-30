@@ -18,13 +18,14 @@ class ProductTable extends Migration {
         $this->field("brand")->string();
         $this->field("color")->string();
         $this->field("description")->longtext();
-        $this->field("price")->string();
+        $this->field("price")->float();
         $this->field("quantity")->integer();
         $this->field("discount")->integer();
         $this->field("discount_price")->float();
         $this->field("collection")->integer();
         $this->field("category")->integer();
         $this->field("sub_category")->integer();
+        $this->field("sponsored")->boolean();
         $this->field("created_date")->timestamp();
         $this->field("created_by")->integer();
         $this->field("last_updated_date")->timestamp();

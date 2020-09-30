@@ -38,7 +38,8 @@ class Admin_ProductController extends Controller {
 
     public function create_variation_list_forms(Request $request) 
     {
-        return view("/admin/product/variations_list_form", $request->variations);
+        return view("/admin/product/variations_list_form", 
+        ["variations" => json_decode($request->variations), "price" => $request->price]);
     }
 
     public function edit(Request $request)

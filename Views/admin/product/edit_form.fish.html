@@ -52,7 +52,9 @@
                                                 <div class="col-lg-6 col-sm-6">
                                                     <div class="form-group">
                                                         <label for="Collection"><b>Collection</b></label>
-                                                        <select api-options="/api/a/get-collections" api-change="/api/a/get-categories" api-selected="@{{$product->collection}}" api-result-target="#Category"
+                                                        <select api-options="/api/a/get-collections" api-change="/api/a/get-categories" 
+                                                        api-selected="@{{$product->collection}}" api-result-target="#Category"
+                                                        validation-message="Select a collection*"
                                                         class="form-control" validate-field="true" name="collection" id="Collection">
                                                             <option value="">**select product collection**</option>
                                                         </select>
@@ -126,7 +128,7 @@
                                                             </div> -->
                                                             <input type="text" class="form-control" validate-field="true" 
                                                             value="@{{$product->price}}" validation-message="Price is required*"
-                                                            name="price" id="Price" placeholder="0.00">
+                                                            name="price" id="Price" placeholder="0">
                                                             <span class="text-danger">{{validation("price")}}</span>
                                                         </div>
                                                     </div>
@@ -135,7 +137,7 @@
                                                     <div class="form-group">
                                                         <label for="Discount"><b>Sales Discount (%) </b></label>
                                                         <div class="input-group">
-                                                            <input type="number" max="100" min="0" class="form-control" name="discount" value="@{{$product->discount}}">
+                                                            <input type="number" max="100" min="0" class="form-control" name="discount" id="Discount" value="@{{$product->discount}}">
                                                             <span class="text-danger">{{validation("discount")}}</span>
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">%</span>
@@ -156,7 +158,7 @@
                                                                 <span class="input-group-text">0.00</span>
                                                             </div> -->
                                                             <input class="form-control" validate-field="true"
-                                                            validation-message="Discount price is required <small>(use 0.00 if not discount is applied)</small>*"
+                                                            validation-message="Discount price is required <small>(use 0 if no discount is applied)</small>*"
                                                             name="discount_price" value="@{{$product->discount_price}}" id="DiscountPrice"/>
                                                             <span class="text-danger">{{validation("discount_price")}}</span>
                                                         </div>
@@ -166,7 +168,7 @@
                                                 <div class="col-lg-6 col-sm-6">
                                                     <div class="form-group">
                                                         <label for="Quantity"><b>Quantity <span>*</span></b></label>
-                                                        <input class="form-control" validate-field="true"
+                                                        <input type="number" min="0" class="form-control" validate-field="true"
                                                         validation-message="Quantity is required*"
                                                         name="quantity" id="Quantity" value="@{{$product->quantity}}"/>
                                                         <span class="text-danger">{{validation("quantity")}}</span>
@@ -185,7 +187,7 @@
                                         <div class="mt-3">
                                             <div class="d-flex justify-content-between flex-row-reverse">
                                                 <button type="submit" class="btn btn-primary btn-fw">Save Changes</button>
-                                                <button type="button" class="btn btn-light btn-fw">Cancel</button>
+                                                <a href="/a/products" class="btn btn-light btn-fw">Cancel</a>
                                             </div>
                                         </div>
                                     </div>
@@ -248,7 +250,7 @@
                                         <div class="mt-3">
                                             <div class="d-flex justify-content-between flex-row-reverse">
                                                 <button type="submit" class="btn btn-primary btn-fw">Save Changes</button>
-                                                <button type="button" class="btn btn-light btn-fw">Cancel</button>
+                                                <a href="/a/products" class="btn btn-light btn-fw">Cancel</a>
                                             </div>
                                         </div>
                                     </div>
@@ -260,7 +262,7 @@
                                 <form action="/api/a/edit-product-variations/@{{$product->id}}" edit="true" method="post" class="ajaxForm">
                                     <div>
                                         <div class="form-light-box mb-3">
-                                            <label class="mb-2"><b>Variations</b></label>
+                                            <label class="mb-2"><b>Variation Options</b></label>
                                             <div class="row" id="skeletonForm">
                                                 <div class="col-md-12 hide" id="skeleton">
                                                     <div class="col-md-12">
@@ -287,6 +289,21 @@
     
                                                 {{$variations = $product->variations()}}
                                                 @if($variations != null)
+
+                                                    @func var_names($var)
+
+                                                        $names = $var
+                                                                ->where(["product" => $var->product, "variation" => $var->variation])
+                                                                ->all();
+                                                        $var_names = "";
+                                                        if($names != null) {
+                                                            foreach($names as $name) {
+                                                                $var_names .= $name->name .", ";
+                                                            }
+                                                        }
+
+                                                        return trim($var_names, ", ");
+                                                    @endfunc
     
                                                     @foreach($variations as $variation)
                                                         <div class="col-md-12" id="variation@{{$variation->id}}">
@@ -294,8 +311,8 @@
                                                                 <div class="row">
                                                                     <div class="col-md-3 p-1 var_type">
                                                                         <div class="form-group">
-                                                                            <select api-options="/api/a/get-variations" api-selected="@{{$variation->id}}" 
-                                                                                class="form-control variations" name="pd_var[@{{$variation->id}}]">
+                                                                            <select api-options="/api/a/get-variations" api-selected="@{{$variation->variation}}" 
+                                                                                class="form-control variations" name="variations[]">
                                                                                 <option value="">**select a variation**</option>
                                                                             </select>
                                                                         </div>
@@ -303,12 +320,13 @@
                                                                     <div class="col-md-8 p-1">
                                                                         <div class="form-group">
                                                                             <textarea name="variation_options[]" class="form-control var_name" 
-                                                                            api-variation-creator="" placeholder="options" onblur="handleblur2(this);">@{{$variation->name}}</textarea>
+                                                                            api-variation-creator="" placeholder="options" onblur="handleblur2(this);">@{{var_names($variation)}}</textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-1 rmVar p-1" 
-                                                                        api-variation-remover="/api/a/remove-variations/@{{$variation->id}}" 
-                                                                        object-item="#variation@{{$variation->id}}" onclick="remover2(this);">
+                                                                        api-variation-remover="/api/a/remove-variations/@{{$variation->product}}/@{{$variation->variation}}" 
+                                                                        object-item="#variation@{{$variation->id}}">
+                                                                        <!-- onclick="remover2(this);" -->
                                                                         <button type="button" class="btn btn-danger btn-sm"> <i class="mdi mdi-delete-forever"></i> </button>
                                                                     </div>
                                                                 </div>
@@ -332,14 +350,76 @@
                                             </div>
                                         </div>
     
-                                        <div class="form-light-box hide mb-3" api-variation-list="">
-                                            
+                                        <div class="form-light-box mb-3" api-variation-list="">
+                                            @if($variations != null)
+                                                {{$index = 0}}
+                                                @if($product->options())
+                                                    {{$options = $product->options()}}
+                                                    @foreach($options as $option)
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <input type="hidden" name="variants_ids[]" value="@{{$option->id}}">
+                                                                <div class="col-md-2 p-1">
+                                                                    <div class="form-group">
+                                                                        <small>Variant</small><br>
+                                                                        <span class="text-primary">
+                                                                            <b>@{{$option->variant}}</b>
+                                                                            <input type="hidden" value="@{{$option->variant}}" name="variants[]">
+                                                                            <!-- @{{str_replace(' ', '',$option->variant)}} -->
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3 p-1">
+                                                                    <div class="form-group">
+                                                                        <div class="input-group">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">NGN</span>
+                                                                            </div>
+                                                                            <input name="variant_price[]" 
+                                                                            validate-field="true" validation-message="<small>Enter the price for this item*</small>"
+                                                                            step-field-required="true" step-validation-message="<small>Enter the price for this item*</small>"
+                                                                            value="@{{$option->price}}" class="form-control" placeholder="Price">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3 p-1">
+                                                                    <div class="form-group">
+                                                                        <input type="number" name="variant_qty[]" validate-field="true" 
+                                                                        validation-message="<small>Enter the quantity for this item*</small>"
+                                                                        step-field-required="true" step-validation-message="<small>Enter the quantity for this item*</small>"
+                                                                        value="@{{$option->quantity}}" class="form-control" min="0" placeholder="quantity">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2 p-1">
+                                                                    <div class="form-group">
+                                                                        {{$img = explode(",", $option->images)}}
+                                                                        <small>@{{(count($img) > 1) ? count($img)." images" : count($img)." image"}} </small>
+                                                                        <label for="Item@{{$index}}Images" class="btn btn-sm btn-inverse-success">
+                                                                            + add images
+                                                                            <input type="file" class="hide" id="Item@{{$index}}Images" name="variant_@{{$index}}_images[]" multiple >
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2 p-1">
+                                                                    <div class="form-group">
+                                                                        <div class="custom-control custom-switch">
+                                                                            <input name="variant_stock[]" type="checkbox"  class="custom-control-input" id="Item@{{$index}}InStock" @{{($option->in_stock == "1") ? "checked" : null}}>
+                                                                            <label class="custom-control-label ln-16" for="Item@{{$index}}InStock">In Stock</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {{$index++}}
+                                                    @endforeach
+                                                @endif
+                                            @endif
                                         </div>
 
                                         <div class="mt-3">
                                             <div class="d-flex justify-content-between flex-row-reverse">
                                                 <button type="submit" class="btn btn-primary btn-fw">Save Changes</button>
-                                                <button type="button" class="btn btn-light btn-fw">Cancel</button>
+                                                <a href="/a/products" class="btn btn-light btn-fw">Cancel</a>
                                             </div>
                                         </div>
                                     </div>
@@ -403,7 +483,7 @@
                                         <div class="mt-3">
                                             <div class="d-flex justify-content-between flex-row-reverse">
                                                 <button type="submit" class="btn btn-primary btn-fw">Save Changes</button>
-                                                <button type="button" class="btn btn-light btn-fw">Cancel</button>
+                                                <a href="/a/products" class="btn btn-light btn-fw">Cancel</a>
                                             </div>
                                         </div>
                                     </div>

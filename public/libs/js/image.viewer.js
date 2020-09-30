@@ -45,7 +45,7 @@ function ImageViewer(element, options =
                 //Render image to browser
                 var imgbox = document.createElement(options.thumbnail.node);
                 imgbox.setAttribute("class", options.thumbnail.style);
-                if(options.clearInitial == undefined && options.clearInitial != true) {
+                if(options.clearInitial != undefined && options.clearInitial != true) {
                     imgbox.setAttribute("id", "image-viewer_file-id-" + (j))
                 }
 

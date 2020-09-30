@@ -10,6 +10,6 @@ class App {
     * @var string
     *
     */
-    public $session_lifetime = 3600;
+    public $session_lifetime = 172800;
 
 }

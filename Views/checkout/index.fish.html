@@ -1,0 +1,255 @@
+@{{extends "shared/auth/auth"}}
+
+<section class="checkout-section pt-5 pb-5 bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-8">
+                <div class="checkout-form">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <div class="step-box">
+                            <div class="checkout-step-one">
+                                <div class="checkout-title active" step-validate="1" step-badge="1">
+                                    <div class="d-flex justify-content-between">
+                                        <p>
+                                            <span class="index">1</span>
+                                            <span class="indicator"><i class="flaticon2-check-mark"></i></span>
+                                            Delivery Address
+                                        </p>
+                                        <span class="flaticon2-down"></span>
+                                    </div>
+                                </div>
+                                <div class="step-content show active" step-id="1">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="firstname"><small>Firstname *</small></label>
+                                                <input type="text" class="form-control" name="firstname" id="firstname"
+                                                step-field-required="true" step-validation-message="Firstname is required*">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="lastname"><small>Lastname *</small></label>
+                                                <input type="text" class="form-control" name="lastname" id="lastname"
+                                                step-field-required="true" step-validation-message="Lastname is required*">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="address"><small>Address *</small></label>
+                                                <input type="text" class="form-control" name="address" id="address"
+                                                step-field-required="true" step-validation-message="Address is required*">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="address2"><small>Suite, Apt, etc. (optional) </small></label>
+                                                <input type="text" class="form-control" name="address2" id="address2">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="city"><small>City *</small></label>
+                                                <input type="text" class="form-control" name="city" id="city"
+                                                step-field-required="true" step-validation-message="City is required*">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <label for="state"><small>State *</small></label>
+                                                        <input type="text" class="form-control" name="state" id="state"
+                                                        step-field-required="true" step-validation-message="State is required*">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="zip"><small>Zip (optional)</small></label>
+                                                        <input type="text" class="form-control" name="zip" id="zip">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="phone"><small>Phone *</small></label>
+                                                <input type="text" class="form-control" name="phone" id="phone"
+                                                step-field-required="true" step-validation-message="Phone is required*">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="checkout-step-two">
+                                <div class="checkout-title" step-validate="2" step-badge="2">
+                                    <div class="d-flex justify-content-between">
+                                        <p>
+                                            <span class="index">2</span>
+                                            <span class="indicator">
+                                                <i class="flaticon2-check-mark"></i>
+                                            </span>
+                                            Payment Method
+                                        </p>
+                                        <span class="flaticon2-down"></span>
+                                    </div>
+                                </div>
+                                <div class="step-content hide" step-id="2">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="checkbox checkbox-light-info" for="py_card">
+                                                <input type="radio" name="pay_method" class="" id="py_card" value="Card">
+                                                <span></span> 
+                                                <b class="ml-2">Pay Online Using Bank Card </b> 
+                                                <img src="/public/image/payments/cards.png" alt="">
+                                            </label>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="checkbox checkbox-light-info" for="py_paypal">
+                                                <input type="radio" name="pay_method" class="" id="py_paypal" value="Paypal">
+                                                <span></span> 
+                                                <b class="ml-2">Pay with Paypal </b> 
+                                                <img src="/public/image/payments/paypal.png" alt="">
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="step-actions mt-3">
+                                <div class="d-flex justify-content-between flex-row-reverse">
+                                    <button type="submit" class="step-submit btn btn-primary border-50">
+                                        <b>Place Order</b>
+                                    </button>
+                                    <button type="button" class="step-next btn btn-primary border-50">
+                                        <b>Continue</b>
+                                    </button>
+                                    <button type="button"  class="step-previous btn btn-light border-50">
+                                        <b>Previous</b>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-1"></div>
+            <div class="col-md-3 col-lg-3">
+                <div class="cart-summary pb-3">
+                    <!-- <div class="sm-title mb-2">
+                        <p><b>Summary</b></p>
+                    </div> -->
+
+                    {{$cart = ~cart~}}
+
+                    {{$subtotal = 0}}
+                    {{$total_items = 0}}
+
+                    @if($cart != null) 
+
+                        @foreach($cart as $item)
+
+                            {{$total_items = ($total_items + $item->quantity)}}
+
+                            @if($item->variant != 0)
+                                {{$itm_amount = ($item->variation()->price *  $item->quantity)}}
+                                {{$subtotal = ($subtotal + $itm_amount)}}
+                            @else
+
+                                @if($item->product()->discount_price != '0.00')
+                                    {{$itm_amount = ($item->product()->discount_price *  $item->quantity)}}
+                                @else
+                                    {{$itm_amount = ($item->product()->price *  $item->quantity)}}
+                                @endif
+                                {{$subtotal = ($subtotal + $itm_amount)}}
+                            @endif
+
+                        @endforeach
+
+                    @endif
+                    <div class="d-flex justify-content-between">
+                        <small>Total Items:</small>
+                        <small><b>@{{$total_items}}</b></small>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <small>Subtotal:</small>
+                        <small><b>&#8358;@{{number_format($subtotal)}}</b></small>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-2">
+                        <small>
+                            Delivery:
+                        </small>
+                        <small>---</small>
+                    </div>
+
+                    <div class="d-flex justify-content-between pt-2 border-top mt-2">
+                        <h6>Total:</h6>
+                        <h6>&#8358;@{{number_format($subtotal)}}</h6>
+                    </div>
+
+                    <div class="items-list mt-3 border-top">
+                        <div class="d-flex justify-content-between mt-2">
+                            <small class="text-underline">Items</small> 
+                            <small class="it-toggle"><i class="flaticon2-down"></i></small>
+                        </div>
+                        <div class="checkout-items">
+                            @foreach($cart as $item)
+
+                            <div class="d-flex mt-3">
+                                <div class="it-img">
+                                    <a href="/pd/@{{$item->product()->slug}}/@{{base64_encode($item->product()->id)}}">
+                                        @if($item->variant != 0)
+                                            {{$image = $item->get_item_props()["image"]}}
+                                            @if($image != null) 
+                                            <img src="/src/images/@{{$image}}" alt="" width="40px" class="mr-2">
+                                            @else
+                                            <img src="/src/images/@{{$item->product()->images()->main}}" alt="" width="40px" class="mr-2">
+                                            @endif
+                                        @else
+                                            <img src="/src/images/@{{$item->product()->images()->main}}" alt="" width="40px" class="mr-2">
+                                        @endif
+                                    </a>
+                                </div>
+
+                                <div class="it-detail">
+                                    <a href="/pd/@{{$item->product()->slug}}/@{{base64_encode($item->product()->id)}}">
+                                        <h6 class="m-0"><small><b> @{{$item->product()->brand}}</b></small></h6>
+                                        <small>@{{$item->product()->name}}</small>
+                                    </a>
+                                    @if($item->variant != 0)
+                                        {{$vars =  $item->get_item_props()["variant"]}}
+                                        @foreach($vars as $var)
+                                            <p class="text-secondary mb-1"><small>@{{$var["type"]}}: @{{$var["name"]}} </small></p>
+                                        @endforeach
+                                    @endif
+                                    <p> <small><b>Qty: @{{$item->quantity}}</b></small> </p>
+                                </div>
+                            </div>
+                            
+
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="mt-3 text-center border-top">
+                        <a href="/cart" class="text-primary"><b>Modify cart</b></a >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
