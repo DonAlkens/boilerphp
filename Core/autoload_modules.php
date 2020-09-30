@@ -3,15 +3,17 @@ namespace App\Core\Modules;
 
 class AppModules {
 
-    public $configs = array(
+    public $configs = [
+
         "Config::App",
         "Config::ErrorsConfig",
         "Config::RoutesConfig",
         "Config::ViewsConfig",
         "Config::MailConfig",
-    );
+        
+    ];
 
-    public $modules =  array(
+    public $modules =  [
 
         "middlewares" => [
             "Engine::Middlewares::Session",
@@ -21,7 +23,8 @@ class AppModules {
         "admin" => [
             "Admin::Authentication",
             "Admin::AuthProvider",
-            "Admin::Door"
+            "Admin::Door",
+            "Admin::Auth"
         ],
 
         "helpers" => [
@@ -29,13 +32,6 @@ class AppModules {
             "Helpers::routes",
             "Helpers::views",
             "Helpers::auth"
-        ],
-    
-        "router" => [
-            "Engine::Router::Validator",
-            "Engine::Router::Route",
-            "Engine::Router::Request",
-            "Engine::Router::Response",
         ],
     
         "database" => [
@@ -51,6 +47,7 @@ class AppModules {
         ],
     
         "dependencies" => [
+            "Actions::BaseController",
             "Actions::Controller",
             "Engine::Template::Template",
         ],
@@ -62,7 +59,19 @@ class AppModules {
         "hash" => [
             "Hash::Hash",
         ]
-    );
+
+    ];
+
+    public $router_modules =  [
+
+        "Engine::Router::Validator",
+        "Engine::Router::Route",
+        "Engine::Router::Request",
+        "Engine::Router::Response",
+
+    ];
+
+
 
     public function addModule(array $module) 
     {

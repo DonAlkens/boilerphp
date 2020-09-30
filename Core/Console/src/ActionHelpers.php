@@ -3,6 +3,7 @@
 namespace Console\Support;
 
 use App\Core\Database\Schema;
+use App\FileSystem\Fs;
 use Console\Support\Interfaces\ActionHelpersInterface;
 
 
@@ -221,6 +222,36 @@ class ActionHelpers implements ActionHelpersInterface {
         }
     }
 
+    /**
+     * usage: checkes  is controller has namespace prefix
+     * @param string controller_name
+     * @return string namespace
+     */
+    public function checkNamaspacePrefix($_name) 
+    {
+        if(strpos($_name, "\\") || strpos($_name, "/")) {
+
+            $split = (strpos($_name, "/")) 
+            ? explode("/", $_name) 
+            : explode("\\", $_name);
+
+            $_namespace = $split[0];
+            $this->controller_name = $split[1];
+
+            $folder = "./Controllers/".$_namespace;
+            if(!Fs::is_active_directory($folder)) 
+            {
+                Fs::create_directory($folder);
+            }
+            
+            $this->use_namespace = "\\".$_namespace;
+
+            return true;
+        }
+
+        return false;
+    } 
+
 
     /**
      * usage: configures controller structure and inital setup
@@ -232,6 +263,19 @@ class ActionHelpers implements ActionHelpersInterface {
 
         if($this->readComponent($component_path) !== "") 
         {
+
+            if($this->checkNamaspacePrefix($controller_name)) {
+
+                $this->component = preg_replace("/\[Namespace\]/", $this->use_namespace, $this->component);
+                $this->component = preg_replace("/\[Controller_Base_Namespace\]/", 'use App\Action\Urls\Controllers\Controller;', $this->component);
+                $controller_name = $this->controller_name;
+            }
+            else 
+            {
+                $this->component = preg_replace("/\[Namespace\]/", '', $this->component);
+                $this->component = preg_replace("/\[Controller_Base_Namespace\]/", '', $this->component);
+            }
+
 
             $this->module = preg_replace("/\[Controller\]/", $controller_name, $this->component);
             $view_folder = str_replace("controller", "", strtolower($controller_name));
@@ -278,7 +322,7 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function writeModule($path)
     {
-        $module = fopen($path, "w"); fwrite($module, $this->module); return fclose($module);
+        $module = fopen($path, "w+"); fwrite($module, $this->module); return fclose($module);
     }
 
 

@@ -2,10 +2,10 @@
 
 namespace App\Admin;
 
-use App\User;
 use Session;
+use App\User;
 
-class Auth
+class Authentication
 {
     
     static public function user()

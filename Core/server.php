@@ -14,6 +14,7 @@ class Server  {
         
         $this->app_configurations = $app_modules->configs;
         $this->app_modules = $app_modules->modules;
+        $this->route_modules = $app_modules->router_modules;
 
     }
 
@@ -46,6 +47,17 @@ class Server  {
         
     }
 
+    public function load_router_modules() {
+
+        foreach($this->route_modules as $module) 
+        {
+            $path_array = explode("::", $module);
+            $full_file_path = join("/", $path_array);
+            require  __DIR__."/".$full_file_path.".php";
+        }
+
+    }
+
     public function setEnv()
     {
         $get_env_file = fopen(".env", "r");
@@ -56,8 +68,10 @@ class Server  {
                 $line = fgets($get_env_file);
                 $key_value = explode("=", $line);
 
-                $key = trim($key_value[0], " ");
-                $_ENV[$key] = trim($key_value[1], " "); 
+                if(isset($key_value[0]) && isset($key_value[1])) {
+                    $key = trim($key_value[0], " ");
+                    $_ENV[$key] = trim($key_value[1], " "); 
+                }
             }
         }
         
@@ -66,6 +80,7 @@ class Server  {
     public function init_route_handler() 
     {
         require __DIR__."/../route.php";
+
         // Route::pattern();
         Route::listen();
     }
@@ -86,27 +101,41 @@ class Server  {
         }
     }
 
-    public function load_app_controllers() 
+    public function load_app_controllers($_path) 
     {
-        foreach(glob("Controllers/*.php") as $controller) 
-        {
-            require __DIR__."/../".$controller;
+        // Scan controller director
+        $controllers = scandir($_path);
+    
+        foreach($controllers as $controller) {
+    
+            if (($controller != '.') && ($controller != '..')) {
+                
+                if (is_dir($_path . '/' . $controller)) {
+    
+                    $this->load_app_controllers($_path . '/' . $controller);
+    
+                } 
+                else 
+                {
+    
+                    $check_extension = explode(".", $_path . '/' . $controller);
+
+                    if(end($check_extension) == "php") {
+
+                        $path_to_controller = $_path . '/' . $controller;
+                        require __DIR__."/../".$path_to_controller;
+                    }
+                }
+            }
+    
         }
+
     }
 
     public function start() 
     {
 
         (new Session)->initialize();
-
-        /*
-        * checks if subdomains is enable and
-        * cnfigures app for subdomain urls
-        */ 
-        if(Route::$enable_subdomains) 
-        {
-            Route::configure();
-        }
         
         /*
         * Load all app models
@@ -121,7 +150,22 @@ class Server  {
         /*
         * Load all app controllers
         */ 
-        $this->load_app_controllers();
+        $this->load_app_controllers("Controllers");
+
+
+        /*
+        * Load router modules
+        */ 
+        $this->load_router_modules();
+
+        /*
+        * checks if subdomains is enable and
+        * configures app for subdomain urls
+        */ 
+        if(Route::$enable_subdomains) 
+        {
+            Route::configure();
+        }
 
         /*
         * Initialize route handler

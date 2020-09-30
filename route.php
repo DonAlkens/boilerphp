@@ -7,4 +7,4 @@ use App\Core\Urls\Route;
  * Route::get("/, "BaseController::home");
  * */
 
-Route::httpAction("/","HomeController::index");
+Route::httpAction("/", "Auth\UserController::index");

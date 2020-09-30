@@ -22,7 +22,7 @@ class Migration extends Schema {
             $this->trimmer($this->primary_keys)
         ); 
 
-        $this->foreignKeyProccessor($this->table,);
+        $this->foreignKeyProccessor($this->table);
 
         return $this->run($diagram->TableQuery);
     }
