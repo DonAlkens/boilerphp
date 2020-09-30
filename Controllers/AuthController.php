@@ -8,6 +8,7 @@ use Auth;
 use App\Customer;
 use App\Cart;
 use App\Hashing\Hash;
+use Session;
 
 /** 
  * @param 'optional' [Request $request]

@@ -1,9 +1,9 @@
-<?
+<?php
+
 namespace App\Action\Urls\Controllers;
 
 
 use App\Core\Urls\Request;
-use App\Action\Urls\Controller;
 use Auth;
 use App\Admin\Door;
 use App\Cart;
@@ -12,6 +12,7 @@ use App\Collection;
 use App\FileSystem\Fs;
 use App\Product;
 use App\SubCategory;
+use Session;
 
 /** 
  * @param 'optional' [Request $request]

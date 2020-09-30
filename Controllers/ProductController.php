@@ -9,6 +9,7 @@ use App\Cart;
 use App\Product;
 use App\ProductVariation;
 use App\ProductVariationOptions;
+use Session;
 
 /** 
  * @param 'optional' [Request $request]
