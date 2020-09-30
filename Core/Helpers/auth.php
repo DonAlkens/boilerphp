@@ -1,13 +1,13 @@
 <?php
 
-use App\Admin\Auth;	
+use Auth;	
 use App\Admin\Door;
 
 if(!function_exists("auth")) 
 {
     /** 
      * 
-     * @return App\Admin\Auth::user|null
+     * @return Auth::user|null
     */
     function auth() {
 
