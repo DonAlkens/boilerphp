@@ -1,6 +1,5 @@
 <?php
 
-use Auth;	
 use App\Admin\Door;
 
 if(!function_exists("auth")) 

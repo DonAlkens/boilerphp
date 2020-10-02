@@ -67,7 +67,7 @@ function redirectToHost($location)
 
 function unhandledPost() 
 {
-    return view("core/errors/unhadledPost.fish.php");
+    return view("core/errors/unhadledPost");
 }
 
 function error404()

@@ -19,72 +19,114 @@
                                     </div>
                                 </div>
                                 <div class="step-content show active" step-id="1">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="firstname"><small>Firstname *</small></label>
-                                                <input type="text" class="form-control" name="firstname" id="firstname"
-                                                step-field-required="true" step-validation-message="Firstname is required*">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="lastname"><small>Lastname *</small></label>
-                                                <input type="text" class="form-control" name="lastname" id="lastname"
-                                                step-field-required="true" step-validation-message="Lastname is required*">
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="address"><small>Address *</small></label>
-                                                <input type="text" class="form-control" name="address" id="address"
-                                                step-field-required="true" step-validation-message="Address is required*">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="address2"><small>Suite, Apt, etc. (optional) </small></label>
-                                                <input type="text" class="form-control" name="address2" id="address2">
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @if(~addresses~ != null)
 
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="city"><small>City *</small></label>
-                                                <input type="text" class="form-control" name="city" id="city"
-                                                step-field-required="true" step-validation-message="City is required*">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="row">
-                                                <div class="col-md-8">
-                                                    <div class="form-group">
-                                                        <label for="state"><small>State *</small></label>
-                                                        <input type="text" class="form-control" name="state" id="state"
-                                                        step-field-required="true" step-validation-message="State is required*">
-                                                    </div>
+                                        {{$addresses = ~addresses~}}
+                                        <div class="address-list row">
+                                            @foreach($addresses as $address)
+                                                <div class="col-md-6 col-lg-6">
+                                                    <label class="option-card @{{($address->is_default) ? 'selected' : null}}" for="address-@{{$address->id}}">
+                                                        <h6 class="card-title"> @{{$address->firstname}} @{{$address->lastname}}</h6>
+                                                        <p>@{{$address->street}} @{{($address->zip != '') ? $address->zip : null }} </p>
+                                                        <p>@{{$address->city}}, @{{$address->state}}</p>
+                                                        <p> @{{($address->zip != '') ? $address->zip : null }} </p>
+                                                        <div class="form-group">
+                                                            <input type="radio" name="address" class="shaddress hide" @{{($address->is_default) ? 'checked' : null}}
+                                                            id="address-@{{$address->id}}" value="@{{$address->id}}">
+                                                            <span></span> 
+                                                            <b class="ml-2"> 
+                                                                @if($address->is_default) 
+                                                                    Default
+                                                                @endif
+                                                            </b> 
+                                                        </div>
+                                                    </label>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="zip"><small>Zip (optional)</small></label>
-                                                        <input type="text" class="form-control" name="zip" id="zip">
-                                                    </div>
+                                            @endif
+                                        </div>
+
+                                        <div class="address-other mt-3">
+                                            <div class="form-group">
+                                                <label class="checkbox checkbox-light-info" for="diffent_address">
+                                                    <input type="radio" name="address" class="diffent_address" id="diffent_address" value="different">
+                                                    <span></span> 
+                                                    <b class="ml-2">Use different address </b> 
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    @endif
+                                    
+
+                                    <div class="address-form @{{(~addresses~ != null) ? 'hide' : null}}">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="firstname"><small>Firstname *</small></label>
+                                                    <input type="text" class="form-control" name="firstname" id="firstname"
+                                                    step-field-required="true" step-validation-message="Firstname is required*">
                                                 </div>
                                             </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="lastname"><small>Lastname *</small></label>
+                                                    <input type="text" class="form-control" name="lastname" id="lastname"
+                                                    step-field-required="true" step-validation-message="Lastname is required*">
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="phone"><small>Phone *</small></label>
-                                                <input type="text" class="form-control" name="phone" id="phone"
-                                                step-field-required="true" step-validation-message="Phone is required*">
+    
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="street"><small>Address *</small></label>
+                                                    <input type="text" class="form-control" name="street" id="street"
+                                                    step-field-required="true" step-validation-message="Address is required*">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="suite"><small>Suite, Apt, etc. (optional) </small></label>
+                                                    <input type="text" class="form-control" name="suite" id="suite">
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="city"><small>City *</small></label>
+                                                    <input type="text" class="form-control" name="city" id="city"
+                                                    step-field-required="true" step-validation-message="City is required*">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label for="state"><small>State *</small></label>
+                                                            <input type="text" class="form-control" name="state" id="state"
+                                                            step-field-required="true" step-validation-message="State is required*">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="zip"><small>Zip (optional)</small></label>
+                                                            <input type="text" class="form-control" name="zip" id="zip">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="phone"><small>Phone *</small></label>
+                                                    <input type="text" class="form-control" name="phone" id="phone"
+                                                    step-field-required="true" step-validation-message="Phone is required*">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -191,9 +233,10 @@
                     
                     <div class="d-flex justify-content-between mt-2">
                         <small>
-                            Delivery:
+                            Delivery:<br>
+                            <span style="font-size:11px;">(price will be decided by address)</span>
                         </small>
-                        <small>---</small>
+                        <small id="shippingFee">---</small>
                     </div>
 
                     <div class="d-flex justify-content-between pt-2 border-top mt-2">
@@ -202,9 +245,9 @@
                     </div>
 
                     <div class="items-list mt-3 border-top">
-                        <div class="d-flex justify-content-between mt-2">
-                            <small class="text-underline">Items</small> 
-                            <small class="it-toggle"><i class="flaticon2-down"></i></small>
+                        <div class="d-flex justify-content-between mt-2 it-toggle">
+                            <small class="text-underline" style="cursor: pointer;">Items</small> 
+                            <small class=""><i class="flaticon2-down"></i></small>
                         </div>
                         <div class="checkout-items">
                             @foreach($cart as $item)

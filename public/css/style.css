@@ -1071,8 +1071,8 @@ footer .social-icons i:hover {
     border-bottom-color:#000 !important;
 }
 
-.checkout-form {
-    min-height: 95vh;
+.checkout-section {
+    min-height: 80vh;
 }
 
 .checkout-items {
@@ -1142,6 +1142,35 @@ footer .social-icons i:hover {
 .checkout-form input.form-control:focus {
     border-color: #000;
     color: #000;
+}
+
+.address-card {
+    border-width: .15em !important;
+}
+
+/* .address-card.selected {
+    border-color: #8950FC;
+} */
+
+.payment-option {
+    width: 70%;
+    margin: 50px auto;
+}
+
+.option-card {
+    border: .15em solid rgba(0, 0, 0, 0.125);
+    max-width: 100%;
+    border-radius: 10px;
+    padding: 40px 20px;
+}
+
+.option-card.selected {
+    border-color: #8950FC !important;
+}
+
+.so-icon {
+    font-size: 70px;
+    margin-bottom: 10px;
 }
 
 .step-overlay {

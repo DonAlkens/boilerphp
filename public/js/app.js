@@ -273,4 +273,24 @@
         $('.checkout-items').slideToggle();
     });
 
+    $("#diffent_address").change(function(){
+
+        if($(this).prop("checked") == true) {
+            $(".address-form").slideDown();
+        } 
+        else {
+            $(".address-form").slideUp();
+        }
+
+    });
+
+    $(".gateway, .shaddress").change(function(){
+
+        $(".option-card").removeClass("selected");
+
+        if($(this).prop("checked") == true) {
+            $(this).parent(".option-card").addClass("selected");
+        } 
+    });
+
 })();

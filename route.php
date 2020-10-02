@@ -21,7 +21,9 @@ Route::httpAction("/cart", "HomeController::cart");
 
 # Secure Checkout
 Route::httpAction("/checkout", "SecureCheckout::index");
-
+Route::httpAction("/order/payment", "SecureCheckout::card_payment");
+Route::httpAction("/order/payment/p/verify", "SecureCheckout::paystack");
+Route::httpAction("/order/payment/f/verify", "SecureCheckout::flutterwave");
 
 
 # Product Controller Routes
@@ -48,6 +50,9 @@ Route::get("/uac/logout", "AuthController::logout");
 
 # Customer Account Routes
 Route::get("/uac/dashboard", "UserController::index");
+
+#Customer Order Routes
+Route::get("/uac/order/success/{order:int}", "Customer\OrderController::success");
 
 
 

@@ -3,19 +3,17 @@
 namespace App;
 
 use App\Core\Database\Model;
-use Session;
 
-class Cart extends Model {
+
+class OrderItem extends Model {
 
     /**
     * defining all required fields 
     **/
     protected $required = [];
 
-    public function clear($customer) {
 
-        return $this->delete("user", $customer);
-    }
+    public $table = "order_items";
 
     public function product() {
 
@@ -77,23 +75,6 @@ class Cart extends Model {
             }
         }
 
-    }
-
-    public function propagate($user, $cart) {
-
-        foreach($cart as $item) {
-
-            $cart_item = array(
-                "user" => $user,
-                "product" => $item["product"],
-                "quantity" => $item["quantity"],
-                "variant" => $item["variant"]
-            );
-
-            $this->insert($cart_item);
-        }
-
-        Session::end("cart");
     }
 
 }

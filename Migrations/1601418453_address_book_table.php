@@ -18,7 +18,7 @@ class AddressBookTable extends Migration {
         $this->field("firstname")->string();
         $this->field("lastname")->string();
         $this->field("street")->string();
-        $this->field("additonal_address")->string();
+        $this->field("additional_address")->string();
         $this->field("city")->string();
         $this->field("state")->string();
         $this->field("zip")->string();

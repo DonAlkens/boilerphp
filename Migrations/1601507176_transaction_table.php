@@ -2,7 +2,7 @@
 
 use App\Core\Database\Migration;
 
-class OrderTable extends Migration {
+class TransactionTable extends Migration {
 
     /**
      * creates database table
@@ -11,21 +11,15 @@ class OrderTable extends Migration {
      */
     public function create() {
 
-        $this->table("orders");
+        $this->table("transactions");
 
         $this->field("id")->bigIncrements();
+        $this->field("reference")->string();
         $this->field("customer")->integer()->foreign("customers", "id")->cascade();
-        $this->field("address")->integer();
+        $this->field("order")->integer()->foreign("orders", "id")->cascade();
         $this->field("amount")->float();
-        $this->field("delivery_period")->string();
-        $this->field("shipping_fee")->float();
         $this->field("payment_method")->string();
-        $this->field("payment_status")->integer();
         $this->field("status")->integer();
-        $this->field("cancelled_date")->timestamp();
-        $this->field("confirmed_date")->timestamp();
-        $this->field("shipped_date")->timestamp();
-        $this->field("completed_date")->timestamp();
         $this->field("created_date")->timestamp();
 
         $this->sign();
@@ -38,7 +32,7 @@ class OrderTable extends Migration {
      */
     public function drop() {
 
-        $this->dropIfExists("orders");
+        $this->dropIfExists("transactions");
     }
 
 }
