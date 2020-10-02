@@ -25,7 +25,7 @@ class QueryBuilder extends DataTypes
 		$this->params = "";
 
 		foreach ($data as $column => $value) {
-			$this->columns .= "$column, ";
+			$this->columns .= "`$column`, ";
 			$this->params .= ":$column, ";
 		}
 
@@ -47,7 +47,7 @@ class QueryBuilder extends DataTypes
 		$this->columns = "";
 		foreach ($data as $column => $value) 
 		{
-			$this->columns .= "$column = :$column, ";
+			$this->columns .= "`$column` = :$column, ";
 		}
 
 		$this->cleanQueryStrings();
@@ -64,7 +64,7 @@ class QueryBuilder extends DataTypes
 
 		foreach ($data as $column => $value) 
 		{
-			$this->columns .= "$column = :$column, ";
+			$this->columns .= "`$column` = :$column, ";
 		}
 
 		$this->cleanQueryStrings();
@@ -85,11 +85,11 @@ class QueryBuilder extends DataTypes
 			{
 				if($operation != null) 
 				{
-					$this->whereQuery = "$column $operation :$column AND ";
+					$this->whereQuery = "`$column` $operation :$column AND ";
 				}
 				else 
 				{
-					$this->whereQuery .= "$column = :$column AND ";
+					$this->whereQuery .= "`$column` = :$column AND ";
 				}
 			}
 
@@ -101,11 +101,11 @@ class QueryBuilder extends DataTypes
 
 		{
 			if($operation != null) {
-				$this->whereQuery = " WHERE $key $operation :$key";
+				$this->whereQuery = " WHERE `$key` $operation :$key";
 			}
 			else 
 			{
-				$this->whereQuery = " WHERE $key = :$key";
+				$this->whereQuery = " WHERE `$key` = :$key";
 			}
 			$this->whereData = array($key => $value);
 		}
@@ -119,7 +119,7 @@ class QueryBuilder extends DataTypes
 
 	public function orderQuery($key, $order, $limit)
 	{
-		$this->orderQuery = " ORDER BY $key $order";
+		$this->orderQuery = " ORDER BY `$key` $order";
 		if($limit != null) {
 			$this->orderQuery .= " LIMIT ".$limit;
 		}
