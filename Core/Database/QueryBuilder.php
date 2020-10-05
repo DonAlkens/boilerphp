@@ -85,7 +85,7 @@ class QueryBuilder extends DataTypes
 			{
 				if($operation != null) 
 				{
-					$this->whereQuery = "`$column` $operation :$column AND ";
+					$this->whereQuery .= "`$column` $operation :$column AND ";
 				}
 				else 
 				{
