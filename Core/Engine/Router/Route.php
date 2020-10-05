@@ -16,6 +16,9 @@ class Route extends RoutesConfig {
 
     static private $domains = array();
 
+    
+    static private $subdomain;
+
 
     static private $route_lookup_list;
 
@@ -41,8 +44,8 @@ class Route extends RoutesConfig {
             exit;
         }
 
-        static::$domain = $domain.".".static::$domain;
-        static::$domains[static::$domain] =  array( "get"   =>  array(), "post"  =>  array());
+        static::$subdomain = $domain.".".static::$domain;
+        static::$domains[static::$subdomain] =  array( "get"   =>  array(), "post"  =>  array());
         $callback();
     }
 
