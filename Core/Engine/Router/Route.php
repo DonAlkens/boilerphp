@@ -93,10 +93,10 @@ class Route extends RoutesConfig {
         # checking if url has already been registered
         if(static::$enable_subdomains) 
         {
-            if(!array_key_exists($key, static::$domains[static::$domain][$method])) 
+            if(!array_key_exists($key, static::$domains[static::$subdomain][$method])) 
             {
                 # register as new url path
-                static::$domains[static::$domain][$method][$key] = $properties;
+                static::$domains[static::$subdomain][$method][$key] = $properties;
                 return;
             } 
         }
