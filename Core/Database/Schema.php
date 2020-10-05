@@ -223,6 +223,8 @@ class Schema extends Connection
     public function delete($key, $value = null)
     {
 
+        if(is_null($value)) { $value = $key; $key = "id"; }
+
         if($this->dataFormatChecker($key, $value)) 
         {
 
