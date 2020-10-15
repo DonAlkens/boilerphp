@@ -9,6 +9,7 @@ use App\Admin\Door;
 use App\Cart;
 use App\Category;
 use App\Collection;
+use App\Customer;
 use App\FileSystem\Fs;
 use App\Product;
 use App\SubCategory;
@@ -26,14 +27,20 @@ class HomeController extends Controller {
     public function __construct()
     {
         //$this->hasAuthAccess("user", "login");
-
         $this->data();
+
+        if(Session::get("auth")) {
+            $customer = Session::get("auth");
+            $customer = (new Customer)->where('id', $customer)->get();
+            static::$data["customer"] = $customer;
+        }
+
     }
 
     public function data()
     {
         $get_collections = (new Collection)->all();
-        $sales = (new Product)->whereWithOperation("discount", ">" , "0.00")->all();
+        $sales = (new Product)->whereWithOperation(["discount" => "0.00", "approved" => '0', "hide" => '1'], "!=")->all();
         
         if(!is_array($sales) && $sales != null) { $sales = array($sales); }
 
@@ -201,17 +208,19 @@ class HomeController extends Controller {
         $product = (new Product);
 
         self::$data["heading"] = "Super Sales";
-        self::$data["count"] = (new Product)->whereWithOperation("discount", ">" , "0.00")->count();
-        self::$data["brands"] = (new Product)->whereWithOperation("discount", ">" , "0.00")->groupBy("brand")->all();
+        self::$data["count"] = (new Product)->whereWithOperation(["discount" => "0.00", "approved" => '0', "hide" => '1'], "!=")->count();
+        self::$data["brands"] = (new Product)->whereWithOperation(["discount" => "0.00", "approved" => '0', "hide" => '1'], "!=")->groupBy("brand")->all();
         self::$data["categories"] = array();
-        $cats = (new Product)->whereWithOperation("discount", ">" , "0.00")->groupBy("collection")->all();
-        foreach($cats as $category) {
-            array_push(self::$data["categories"], $category->collection());
+        $cats = (new Product)->whereWithOperation(["discount" => "0.00", "approved" => '0', "hide" => '1'], "!=")->groupBy("collection")->all();
+        if($cats) {
+            foreach($cats as $category) {
+                array_push(self::$data["categories"], $category->collection());
+            }
         }
 
         self::$data["url_path"] = "/collections/";
 
-        $products = (new Product)->whereWithOperation("discount", ">" , "0.00")->all();
+        $products = (new Product)->whereWithOperation(["discount" => "0.00", "approved" => '0', "hide" => '1'], "!=")->all();
         $from_variations = static::collate_from_variations($products);
         self::$data["colors"] = $from_variations["colors"];
         self::$data["sizes"] = $from_variations["sizes"];
@@ -334,18 +343,21 @@ class HomeController extends Controller {
 
                 if( Session::get("auth") ) {
 
-                    $product = (new Product)->where("id", $request->id)->select();
+                    $item = (new Cart)->where("id", $request->id)->get();
+                    if($item) {
 
-                    if((new Cart)->delete($request->id)) {
+                        $product = (new Product)->where("id", $item->product)->get();
 
-                        $removed = true;
+                        if((new Cart)->delete("id", $item->id)) {
+
+                            $removed = true;
+                        }
                     }
-
                 }
                 else if( Session::get("cart") ) {
 
                     $cart = Session::get("cart"); $index = ($request->id - 1);
-                    $product = (new Product)->where("id", $cart[$index]["product"])->select();
+                    $product = (new Product)->where("id", $cart[$index]["product"])->get();
 
                     if( array_splice($cart, $index, 1) ) {
 
@@ -391,7 +403,6 @@ class HomeController extends Controller {
 
             self::$data["rproduct"] = $product;
             self::$data["removed"] = true;
-
         }
 
         self::$data["items"] = $cart;

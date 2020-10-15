@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Action\Urls\Controllers;
+namespace App\Action\Urls\Controllers\Admin;
 
 
+use App\Action\Urls\Controllers\Controller;
 use App\Core\Urls\Request;
 use Auth;
 use App\Admin\Door;
@@ -17,7 +18,7 @@ use App\User;
  */ 
 
  
-class Admin_LoginController extends Controller {
+class LoginController extends Controller {
 
     public function __construct()
     {
@@ -40,7 +41,7 @@ class Admin_LoginController extends Controller {
 
             if($request->validation == true)
             {
-                $user = (new User)->where("email", $request->email)->get();
+                $user = (new User)->where(["email" => $request->email, "is_admin" => 1])->get();
 
                 if($user) 
                 {

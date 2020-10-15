@@ -26,6 +26,8 @@ class ProductTable extends Migration {
         $this->field("category")->integer();
         $this->field("sub_category")->integer();
         $this->field("sponsored")->boolean();
+        $this->field("approved")->boolean();
+        $this->field("hide")->boolean();
         $this->field("created_date")->timestamp();
         $this->field("created_by")->integer();
         $this->field("last_updated_date")->timestamp();

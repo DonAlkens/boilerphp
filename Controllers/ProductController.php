@@ -127,14 +127,16 @@ class ProductController extends Controller {
 
             $check = (new Cart)->where("id", $request->item)->get();
             if($check) {
+
                 if( (new Cart)->delete($check->id) ) {
                     $removed = true;
                 }
-
             }
 
         } 
         else {
+
+            exit;
 
             if( Session::get("cart") ) {
                 

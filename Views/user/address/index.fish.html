@@ -1,0 +1,61 @@
+@{{extends "shared/layout"}}
+
+{{$customer = ~customer~}}
+{{$order = ~order~}}
+
+<section class="uac-wrapper mb-5">
+    <div class="uac-inner">
+
+        @{{load "user/shared/_menubar"}}
+
+        <div class="container mt-4">
+            
+            <div class="page-title col-md-12 border-radius p-2 mb-3">
+                <div class="d-flex justify-content-between">
+                    <div class="title">
+                        <h5>Dashboard - <small>Delivery Address</small> </h5>
+                    </div>
+                    @if(~address_count~ < 2)
+                        <div class="bg-white p-1 border-radius">
+                            <a href="/uac/add-delivery-address" class="btn btn-sm btn-inverse-info">
+                                <i class="flaticon-add"></i> Add new address
+                            </a>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+           <div class="col-md-12 mt-3 p-5 bg-white border-radius">
+                
+                <div class="order-details bg-light border-radius p-4 mt-2">
+                    <div class="col-md-12">
+                        @if(~addresses~)
+                            <div class="row">
+                                @foreach(~addresses~ as $address)
+                                    <div class="col-md-6 mb-3">
+                                        <div class="bg-white p-3 border-radius">
+                                            <h4 class="mb-2"><b>@{{$address->firstname}} @{{$address->lastname}}</b></h4>
+                                            <p class="m-0">@{{$address->phone}}</p>
+                                            <p class="m-0">@{{$address->street}} @{{($address->additional_address) ? ", ".$address->additional_address : "" }}</p>
+                                            <p class="m-0">@{{$address->city}}, @{{$address->state}}</p>
+                                            <p class="m-0">@{{$address->zip}}</p>
+                                            <div class="mt-3 text-right">
+                                                <a href="/uac/delivery-address/e/@{{$address->id}}" class="btn btn-sm btn-inverse-info">
+                                                    <i class="flaticon2-edit"></i> Edit
+                                                </a>
+                                                <a href="/uac/delivery-address/r/@{{$address->id}}" class="text-danger">
+                                                    <i class="flaticon2-trash"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endfor
+                            </div>
+                        @endif
+                    </div>
+                </div>
+           </div>
+
+        </div>
+    </div>
+</section>

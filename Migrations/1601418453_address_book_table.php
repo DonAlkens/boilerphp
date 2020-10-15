@@ -14,7 +14,7 @@ class AddressBookTable extends Migration {
         $this->table("address_books");
 
         $this->field("id")->bigIncrements();
-        $this->field("customer")->integer()->foreign("customers", "id")->cascade();
+        $this->field("customer")->integer()->foreign("customers", "id");
         $this->field("firstname")->string();
         $this->field("lastname")->string();
         $this->field("street")->string();

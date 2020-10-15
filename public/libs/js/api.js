@@ -222,23 +222,57 @@
 
         actions.forEach(action => {
             action = action.toLowerCase().replace(" ", "");
-            if (action == "edit") {
+            if (action == "edit" || action == "unblock") {
                 buttons += '<a href="' + links[i] + id + '" api-edit="'+ modalName.toLowerCase() +'" api-item-id="'+ id +'"';
                 if(modal && modalName != "") {  buttons +=  modal(action, modalName) }
                 buttons += 'class="btn btn-gradient-success btn-sm">' + action + '</a>';
             }
+
+            else if (action == "unblock") {
+                buttons += '<a href="' + links[i] + id + '" api-unblock="'+ modalName.toLowerCase() +'" api-item-id="'+ id +'"';
+                if(modal && modalName != "") {  buttons +=  modal(action, modalName) }
+                buttons += 'class="btn btn-primary btn-sm">' + action + '</a>';
+            }
             
-            if (action == "view") {
+            else if (action == "view") {
                 buttons += '<a href="' + links[i] + id + '" api-view="'+ modalName.toLowerCase() +'" api-item-id="'+ id +'"';
                 if(modal && modalName != "") {  buttons +=  modal(action, modalName) }
                 buttons += 'class="btn btn-gradient-info btn-sm" >' + action + '</a>';
             }
+
+            else if (action == "show") {
+                buttons += '<a href="' + links[i] + id + '" api-show="'+ modalName.toLowerCase() +'" api-item-id="'+ id +'"';
+                if(modal && modalName != "") {  buttons +=  modal(action, modalName) }
+                buttons += 'class="btn btn-info btn-sm" >' + action + '</a>';
+            }
             
-            if (action == "delete") {
+            else if (action == "delete") {
                 buttons += '<a href="' + links[i] + id + '" api-delete="'+ modalName.toLowerCase() +'" api-item-id="'+ id +'"';
                 if(modal && modalName != "") {  buttons +=  modal(action, modalName) }
                 buttons += 'class="btn btn-gradient-danger btn-sm">' + action + '</a>';
             }
+
+            else if (action == "block") {
+                buttons += '<a href="' + links[i] + id + '" api-block="'+ modalName.toLowerCase() +'" api-item-id="'+ id +'"';
+                if(modal && modalName != "") {  buttons +=  modal(action, modalName) }
+                buttons += 'class="btn btn-danger btn-sm">' + action + '</a>';
+            }
+
+            else if (action == "hide") {
+                buttons += '<a href="' + links[i] + id + '" api-hide="'+ modalName.toLowerCase() +'" api-item-id="'+ id +'"';
+                if(modal && modalName != "") {  buttons +=  modal(action, modalName) }
+                buttons += 'class="btn btn-danger btn-sm">' + action + '</a>';
+            }
+
+            else if(action == "") {
+                buttons += '<p class="text-center">-</p>';
+            }
+            else  {
+                buttons += '<a href="' + links[i] + id + '" api-edit="'+ modalName.toLowerCase() +'" api-item-id="'+ id +'"';
+                if(modal && modalName != "") {  buttons +=  modal(action, modalName) }
+                buttons += 'class="btn btn-gradient-success btn-sm">' + action + '</a>';
+            }
+
             i++;
         });
 
@@ -258,8 +292,8 @@
         }
 
 
-        if (actions.indexOf(",") > -1) { actions = actions.split(","); } else { actions = array(actions); }
-        if (links.indexOf(",") > -1) { links = links.split(","); } else { links = array(links); }
+        if (actions.indexOf(",") > -1) { actions = actions.split(","); } else { actions = Array(actions); }
+        if (links.indexOf(",") > -1) { links = links.split(","); } else { links = Array(links); }
 
         $.ajax({
             url, method: "GET", data: {}, success: function (rows) {
@@ -334,7 +368,8 @@
                 if (data != null && JSON.parse(data)) {
                     data = JSON.parse(data);
                     data.forEach(item => {
-                        let card = '<div class="'+ column_size +'">';
+                        let card = '<div class=" p-1 '+ column_size +'">';
+                        card += '<div class=" p-2 bg-white border-radius">';
 
                         card += '<div class="product-img-outer">';
                         card += '<a href="/a/products/view/'+ item.id +'"><img class="product_image" src="'+ "/src/images/"+ item.image +'" alt="'+ item.name +'"></a>';
@@ -344,11 +379,9 @@
                         
                         // card += '<div class="d-flex justify-content-between">';
                         card += '<p class="product-price">'+ item.price +'</p>';
-                        card += '<p class="product-actual-price"> <b>Discount: </b>'+ Math.round(item.discount) +'%</p>';
-                        // card += '</div>';
+                        card += '<p class="product-description">'+ item.collection + '.</p>';
 
-                        card += '<p class="product-description"> <b> Category: </b>'+ item.collection + " / " + item.category +'.</p>';
-
+                        card += '</div>';
                         card += '</div>';
 
                         box.append(card);
@@ -664,6 +697,122 @@
 
     variation_selection();
 
-    setTimeout(function () { $(".table").DataTable() }, 1000);
+    setTimeout(function () { $("#table").DataTable() }, 1000);
 
+    $('[api-order-call]').click(function(){
+        var id = $(this).attr("api-order-call");
+        var mode = $(this).attr("api-mode");
+        url = "/api/a/" + mode + "-order";
+        $.ajax({
+            url, method: "POST", data: {id}, success: function(resp) {
+                console.log(resp);
+                if(resp != null && JSON.parse(resp)) {
+                    resp = JSON.parse(resp);
+                    if(resp.success) {
+                        $("body").append('<div class="toast-notification success"><h6 class="text-white"><b>Successfull!</b></h6><p>'+ resp.message + '</p></div>');
+                    }
+                    else if(resp.error) {
+                        $("body").append('<div class="toast-notification error"><h6 class="text-white"><b>Error Occured!</b></h6><p>'+ resp.error.message + '</p></div>');
+                    }
+
+                    $(".toast-notification").fadeOut(6000);
+                }
+            }
+        });
+    });
+
+    $('[api-approve-product]').click(function(){
+        target = $(this);
+        product = $(this).attr("api-approve-product");
+        $.ajax({
+            url: "/api/a/approve-product", method: "POST", data: {product}, success: function(resp) {
+                console.log(resp);
+                if(resp != null && JSON.parse(resp)) {
+                    resp = JSON.parse(resp);
+                    if(resp.success) {
+                        step.modal("success", resp.message);
+                        target.hide();
+                        target.siblings(".disapprove").show();
+                    }
+                    else if(resp.error) {
+                        step.modal("error", resp.error.message );
+
+                    }
+                }
+            }
+        });
+
+    }); 
+
+    $('[api-disapprove-product]').click(function(){
+        target = $(this);
+        product = $(this).attr("api-disapprove-product");
+        $.ajax({
+            url: "/api/a/disapprove-product", method: "POST", data: {product}, success: function(resp) {
+                console.log(resp);
+                if(resp != null && JSON.parse(resp)) {
+                    resp = JSON.parse(resp);
+                    if(resp.success) {
+                        step.modal("success", resp.message);
+                        target.hide();
+                        target.siblings(".approve").show();
+                    }
+                    else if(resp.error) {
+                        step.modal("error", resp.error.message );
+
+                    }
+                }
+            }
+        });
+
+    }); 
+
+    $('[api-hide-product]').click(function(){
+
+        target = $(this);
+        product = $(this).attr("api-hide-product");
+        $.ajax({
+            url: "/api/a/hide-product", method: "POST", data: {product}, success: function(resp) {
+                console.log(resp);
+                if(resp != null && JSON.parse(resp)) {
+                    resp = JSON.parse(resp);
+                    if(resp.success) {
+                        step.modal("success", resp.message);
+                        target.hide();
+                        target.siblings(".show-btn").show();
+                    }
+                    else if(resp.error) {
+                        step.modal("error", resp.error.message );
+                    }
+                }
+            }
+        });
+
+    });
+
+    $('[api-show-product]').click(function(){
+        
+        target = $(this);
+        product = $(this).attr("api-show-product");
+        $.ajax({
+            url: "/api/a/show-product", method: "POST", data: {product}, success: function(resp) {
+                console.log(resp);
+                if(resp != null && JSON.parse(resp)) {
+                    resp = JSON.parse(resp);
+                    if(resp.success) {
+                        step.modal("success", resp.message);
+                        target.hide();
+                        target.siblings(".hide-btn").show();
+                    }
+                    else if(resp.error) {
+                        step.modal("error", resp.error.message );
+                    }
+                }
+            }
+        });
+
+    });
+
+    $(".toast-notification").fadeOut(6000);
+    
 })();

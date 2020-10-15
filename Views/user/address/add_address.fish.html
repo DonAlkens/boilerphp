@@ -1,0 +1,52 @@
+@{{extends "shared/layout"}}
+
+{{$customer = ~customer~}}
+{{$order = ~order~}}
+
+<section class="uac-wrapper mb-5">
+    <div class="uac-inner">
+
+        @{{load "user/shared/_menubar"}}
+
+        <div class="container mt-4">
+            
+            <div class="page-title col-md-12 border-radius p-2 mb-3">
+                <div class="d-flex">
+                    <div class="title">
+                        <h5>Dashboard - <small>Delivery Address</small> </h5>
+                    </div>
+                </div>
+            </div>
+
+           <div class="col-md-12 mt-3 p-5 bg-white border-radius">
+                
+                <h5>Add New Delivery Address </h5>
+                <div class="bg-light border-radius p-4 mt-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="firstname">Firstname</label>
+                                    <input type="text" id="firstname" name="firstname" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="lastname">Lastname</label>
+                                    <input type="text" id="lastname" name="lastname" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" id="phone" name="phone" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+
+        </div>
+    </div>
+</section>

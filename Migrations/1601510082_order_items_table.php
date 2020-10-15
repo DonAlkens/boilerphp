@@ -14,11 +14,16 @@ class OrderItemsTable extends Migration {
         $this->table("order_items");
 
         $this->field("id")->bigIncrements();
-        $this->field("order")->integer()->foreign("orders", "id")->cascade();
-        $this->field("product")->integer()->foreign("products", "id")->cascade();
+        $this->field("vendor")->integer()->foreign("users", "id");
+        $this->field("order")->integer()->foreign("orders", "id");
+        $this->field("product")->integer()->foreign("products", "id");
         $this->field("quantity")->integer();
         $this->field("price")->float();
         $this->field("variant")->integer();
+        $this->field("shipped")->boolean();
+        $this->field("confirmed")->boolean();
+        $this->field("confirmed_by")->integer();
+        $this->field("confirmed_date")->timestamp();
         $this->field("created_date")->timestamp();
 
         $this->sign();

@@ -18,6 +18,21 @@ class User extends Model {
         return $this->hasOne(Role::class, ["id" => "role"]);
     }
 
+    public function address() 
+    {
+        return $this->hasOne(VendorAddress::class, ["user" => "id"]);
+    }
+
+    public function details() 
+    {
+        return $this->hasOne(VendorDetail::class, ["user" => "id"]);
+    }
+
+    public function wallet() 
+    {
+        return $this->hasOne("App\VendorWallet", ["vendor" => "id"]);
+    }
+
 }
 
 ?>

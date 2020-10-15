@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Action\Urls\Controllers;
+namespace App\Action\Urls\Controllers\Admin;
 
 
+use App\Action\Urls\Controllers\Controller;
 use App\Core\Urls\Request;
 
 /** 
@@ -10,7 +11,7 @@ use App\Core\Urls\Request;
  * used to get action's request data get/post
  */ 
 
-class Admin_DashboardController extends Controller {
+class DashboardController extends Controller {
 
     public function __construct()
     {

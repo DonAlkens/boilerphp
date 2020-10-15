@@ -1,0 +1,146 @@
+@{{extends "admin/shared/layout"}}
+{{$order = ~order~}}
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mt-3 mb-4">Order Details</h2>
+
+                    <div class="order-details bg-light border-radius p-4 mt-5">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h6><b>Order Id #@{{$order->id}}</b></h6>
+                                    <span> Date: @{{$order->created_date}}</span>
+    
+                                    <h6 class="mt-5"><b>Status</b></h6>
+                                    <p class="m-0"> 
+                                        @if($order->status == 1)
+                                        <span class="badge badge-primary p-2">Received</span> 
+                                        @elif($order->status == 2 || $order->status == 6)
+                                        <span class="badge badge-success p-2">@{{~status~[$order->status]["name"]}}</span>
+                                        @elif($order->status == 3 || $order->status == 4 || $order->status == 5 || $order->status == 7)
+                                        <span class="badge badge-info p-2">@{{~status~[$order->status]["name"]}}</span>
+                                        @elif($order->status == 8)
+                                        <span class="badge badge-danger p-2">@{{~status~[$order->status]["name"]}}</span>
+                                        @endif
+                                    </p>
+    
+                                </div>
+                                <div class="col-md-4">
+                                    <h6><b>Delivery Address</b></h6>
+                                    <h5 class="mb-0" >@{{$order->address()->firstname}} @{{$order->address()->lastname}}</h5>
+                                    <p class="m-0">
+                                        <small>
+                                            @{{$order->address()->street}},
+                                            @if($order->address()->additional_address != null)
+                                                 @{{$order->address()->additional_address}}
+                                            @endif
+                                        </small>
+                                    </p>
+                                    <p class="m-0">
+                                        <small>
+                                            @{{$order->address()->city}}, @{{$order->address()->state}}.
+                                        </small>
+                                    </p>
+                                    @if($order->address()->zip != null)
+                                    <p class="m-0"> 
+                                        <small> <b>Zip Code - </b>@{{$order->address()->zip}}</small>
+                                    </p>
+                                    @endif
+                                    <p> <small><b>Phone:</b> @{{$order->address()->phone}}</small> </p>
+    
+                                    <h6 class="mt-4"><b>Delivery Time</b></h6>
+                                    <p class="m-0">Wed 11 - Fri 13, March 2020 </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6><b>Total Amount</b></h6>
+                                    <p class="m-0">&#8358;@{{number_format(($order->amount + $order->shipping_fee))}}</p>
+    
+                                    <h6 class="mt-5"><b>Payment Method</b></h6>
+                                    <p class="m-0">@{{$order->payment_method}} - @{{$order->transaction()->payment_method}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-details bg-light border-radius p-4 mt-2">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h6><b>Order Item(s)</b></h6>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        @foreach($order->items() as $item)
+                                            <div class="col-md-6 mb-3">
+                                                <div class="d-flex bg-white border-radius p-3">
+                                                    <div class="item-image">
+                                                        <a href="/pd/@{{$item->product()->slug}}/@{{base64_encode($item->product()->id)}}">
+                                                            @if($item->variant != 0)
+                                                                {{$image = $item->get_item_props()["image"]}}
+                                                                @if($image != null) 
+                                                                <img src="/src/images/@{{$image}}" alt="" width="100px">
+                                                                @else
+                                                                <img src="/src/images/@{{$item->product()->images()->main}}" alt="" width="100px">
+                                                                @endif
+                                                            @else
+                                                                <img src="/src/images/@{{$item->product()->images()->main}}" alt="" width="100px">
+                                                            @endif
+                                                        </a>
+                                                        @if($item->confirmed)
+                                                            <span class="badge badge-success">Confirmed</span>
+                                                        @elif($item->shipped)
+                                                            <span class="badge badge-info">Shipped</span>
+                                                        @endif
+                                                    </div>
+                                                    <div class="product-details ml-2">
+                                                        <a href="/pd/@{{$item->product()->slug}}/@{{base64_encode($item->product()->id)}}">
+                                                            <h6 class="m-0">@{{$item->product()->brand}}</h6>
+                                                            <p>@{{$item->product()->name}}</p>
+                                                        </a>
+                                                        <div class="d-flex">
+                                                            <div class="price-details">
+                                                                <b>&#8358;@{{number_format($item->price)}}</b>
+                                                            </div>
+                                                            @if($item->variant != 0)
+                                                                {{$vars =  $item->get_item_props()["variant"]}}
+                                                                @foreach($vars as $var)
+                                                                <p class="mt-0 mb-1 ml-3"><small><b>@{{$var["type"]}}</b>: @{{$var["name"]}} </small></p>
+                                                                @endforeach
+                                                            @endif
+                                                            <p class="mt-0 mb-1 ml-3"><small><b>Qty:</b> @{{$item->quantity}}</small></p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        @endfor
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-actions p-0 text-right mt-3">
+                        <div class="order-action-btn">
+                            @if($order->status == 1)
+                            <button class="btn btn-sm btn-inverse-success" api-mode="confirm" api-order-call="@{{$order->id}}">Confirm Order</button>
+                            <button class="btn btn-sm btn-danger" api-mode="cancel" api-order-call="@{{$order->id}}">Cancel Order</button>
+                            @elif($order->status == 2)
+                            <button class="btn btn-sm btn-inverse-primary" api-mode="process" api-order-call="@{{$order->id}}">Processed</button>
+                            <button class="btn btn-sm btn-warning" api-mode="cancel" api-cancel-order="@{{$order->id}}">Cancel Order</button>
+                            @elif($order->status == 4)
+                            <button class="btn btn-sm btn-success" api-mode="ship" api-order-call="@{{$order->id}}">Shipped</button>
+                            @elif($order->status == 5)
+                            <button class="btn btn-sm btn-success" api-mode="complete" api-order-call="@{{$order->id}}">Completed</button>
+                            @elif($order->status == 6)
+                            <button class="btn btn-sm btn-inverse-primary" api-mode="return" api-order-call="@{{$order->id}}">Return Order</button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

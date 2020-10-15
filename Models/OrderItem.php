@@ -20,6 +20,11 @@ class OrderItem extends Model {
         return $this->hasOne(Product::class, ["id" => "product"]);
     }
 
+    public function order() {
+
+        return $this->hasOne(Order::class, ["id" => "order"]);
+    }
+
     public function variation() {
 
         return $this->hasOne(ProductVariationOptions::class, ["id" => "variant"]);

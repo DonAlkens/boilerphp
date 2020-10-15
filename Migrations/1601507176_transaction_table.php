@@ -15,8 +15,8 @@ class TransactionTable extends Migration {
 
         $this->field("id")->bigIncrements();
         $this->field("reference")->string();
-        $this->field("customer")->integer()->foreign("customers", "id")->cascade();
-        $this->field("order")->integer()->foreign("orders", "id")->cascade();
+        $this->field("customer")->integer()->foreign("customers", "id");
+        $this->field("order")->integer()->foreign("orders", "id");
         $this->field("amount")->float();
         $this->field("payment_method")->string();
         $this->field("status")->integer();

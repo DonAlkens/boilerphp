@@ -290,7 +290,44 @@
 
         if($(this).prop("checked") == true) {
             $(this).parent(".option-card").addClass("selected");
+
+            if($(this).attr("id") == "diffent_address") {
+
+                $("[step-toggle]").each(function(){
+                    message = $(this).attr("step-toggle");
+                    $(this).attr("step-field-required", "true");
+                    $(this).attr("step-validation-message", message);
+                });
+
+                $(".address-form").slideDown();
+            }
+            else 
+            {
+                $("[step-toggle]").each(function(){
+                    $(this).removeAttr("step-field-required");
+                    $(this).removeAttr("step-validation-message");
+                });
+
+                $(".address-form").slideUp();
+            }
         } 
+    });
+
+    $(".step-form").submit(function(event){
+        
+        if($("#agree").prop("checked") != true) {
+            event.preventDefault();
+            $("#bl-agg").after('<small class="text-danger">You must agree to the terms and conditions.</small>');
+        } else {
+            $("#bl-agg").children("small").remove();
+        }
+
+        if($("#password").val() != $("#confirm_password").val()) {
+            event.preventDefault();
+            $("#confirm_password").after('<span class="text-danger step-validation-message" step-validation-result="true">Password does not match</span>');
+        } else {
+            $("#confirm_password").siblings(".step-validation-message").remove();
+        }
     });
 
 })();

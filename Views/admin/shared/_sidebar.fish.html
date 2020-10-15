@@ -32,37 +32,87 @@
             </a>
             <div class="collapse" id="products">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="/a/products">Products</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/a/products/catalogue">Product Catalogue</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/products">Approved Products</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/products/pending">Pending Products</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/products/hidden">Hidden Products</a></li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/a/products/add">Add a Product</a>
+                        <a class="nav-link" href="/a/products/add">Add Products</a>
                     </li>
                 </ul>
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/a/orders">
+            <a class="nav-link" data-toggle="collapse" href="#orders" aria-expanded="false" aria-controls="orders">
                 <span class="menu-title">Orders</span>
+                <i class="menu-arrow"></i>
                 <i class="mdi mdi-format-list-bulleted menu-icon"></i>
             </a>
+            <div class="collapse" id="orders">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="/a/orders/create">Create Orders</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/orders/new">Recent Orders</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/orders/confirmed">Confirmed Orders</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/orders/processed">Processed Orders</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/orders/shipped">Shipped Orders</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/orders/completed">Completed Orders</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/orders/cancelled">Cancelled Orders</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/orders/returned">Returned Orders</a> </li>
+                </ul>
+            </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/a/orders">
+            <a class="nav-link" data-toggle="collapse" href="#order-items" aria-expanded="false" aria-controls="order-items">
+                <span class="menu-title">Order Items</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+            </a>
+            <div class="collapse" id="order-items">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="/a/order/items/pending">Pending Items</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/order/items/shipped">Shipped Items</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/order/items/confirmed">Comfirmed Items</a> </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#payments" aria-expanded="false" aria-controls="payments">
                 <span class="menu-title">Payments</span>
+                <i class="menu-arrow"></i>
                 <i class="mdi mdi-bell-ring menu-icon"></i>
             </a>
+            <div class="collapse" id="payments">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="/a/payments/transactions">Transaction Logs</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/payments/withdrawals/new">New Withdrawals</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/payments/withdrawals/processed">Processed Withdrawals</a> </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#vendors" aria-expanded="false" aria-controls="vendors">
+                <span class="menu-title">Vendors</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-contacts menu-icon"></i>
+            </a>
+            <div class="collapse" id="vendors">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="/a/vendors/approved">Approved Vendors</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/vendors/pending">Pending Vendors</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/a/vendors/blocked">Blocked Vendors</a></li>
+                </ul>
+            </div>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/a/customers">
                 <span class="menu-title">Customers</span>
-                <i class="mdi mdi-forum menu-icon"></i>
+                <i class="mdi mdi-contacts menu-icon"></i>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#collections" aria-expanded="false" aria-controls="collections">
                 <span class="menu-title">Collections</span>
                 <i class="menu-arrow"></i>
-                <i class="mdi mdi-contacts menu-icon"></i>
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
             </a>
             <div class="collapse" id="collections">
                 <ul class="nav flex-column sub-menu">

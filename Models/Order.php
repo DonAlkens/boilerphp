@@ -30,7 +30,7 @@ class Order extends Model {
 
     public function transaction() {
 
-        return $this->hasMultiple(Transaction::class, ["order" => "id"]);
+        return $this->hasOne(Transaction::class, ["order" => "id"]);
     }
 
 }

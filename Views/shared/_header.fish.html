@@ -74,28 +74,48 @@
 			</div>
 			<div class="col-md-3 top-side">
 				<ul class="d-flex justify-content-between">
-					<li class="text-center text-white">
-						@if(auth())
-							<a href="/uac/dashboard">
+					<li class="text-center text-white uac-top-menu">
+						@if(~auth~)
+							{{$customer = ~customer~}}
+							<a href="#">
 								<i class="pe-7s-user"></i> 
-								<span style="font-weight: 600;">Hi! @{{auth()->firstname}}</span> 
+								<span style="font-weight: 600;">Hi! @{{$customer->firstname}}</span> 
 							</a>
+							<div class="uac-top-menu-list">
+								<ul class="uac-top-inner text-left">
+									<a href="/uac/dashboard">
+										<li class="active"> <i class="flaticon-laptop"></i> <span>Dashboard</span></li>
+									</a>
+									<a href="/uac/orders">
+										<li> <i class="flaticon-open-box"></i> <span>Orders</span></li>
+									</a>
+									<a href="/uac/logout">
+										<li class="">
+											<i class="flaticon-logout" style="font-size: 15px;"></i> <span>Sign out</span> 
+										</li>
+									</a>
+								</ul>
+							</div>
 						@else
 							<a href="/sign-in"><i class="pe-7s-user"></i> <span>Account</span> </a>
+							<div class="uac-top-menu-list">
+								<ul class="uac-top-inner text-left">
+									<a href="/sign-in">
+										<li class=""><span>Sign in</span></li>
+									</a>
+									<a href="/sign-up" class="border-top">
+										<li class="btn btn-inverse-primary text-center"> <span>Create Account</span></li>
+									</a>
+								</ul>
+							</div>
 						@endif
 					</li>
 					<li class="text-center text-white cart-btn">
 						<a href="/cart"><i class="pe-7s-cart"></i> <span>Cart</span> </a>
 					</li>
-					@if(auth())
-					<li class="text-center text-white">
-						<a href="/uac/logout"><i class="flaticon-logout" style="font-size: 15px;"></i> <span>Logout</span> </a>
-					</li>
-					@else
 					<li class="text-center text-white">
 						<a href="/help"><i class="flaticon-questions-circular-button"></i> <span>Help</span> </a>
 					</li>
-					@endif
 				</ul>
 			</div>
 		</div>

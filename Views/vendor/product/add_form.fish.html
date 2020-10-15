@@ -1,0 +1,346 @@
+@{{extends "vendor/shared/layout"}}
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body m-no-p">
+                    <div class="card-title">
+                        <h4 class="mt-3 mb-4">Add Products</h4>
+                    </div>
+
+                    <div class="add-form">
+                        <form action="/api/a/add-products" class="ajaxForm step-form" add-product="true" method="post" enctype="multipart/form-data">
+                            <div class="step-box">
+                                <ul class="step-list step-list-horizontal mb-3">
+                                    <li class="step-badge active" step-validate="1" step-badge="1">
+                                        <div class="d-flex">
+                                            <div class="mt-3 step-count">
+                                                <a class="step-counter">1</a>
+                                            </div>
+                                            <div class="mt-1 ml-2 step-title">
+                                                <b>Product Information</b>
+                                                <span>Basic details</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="step-badge" step-validate="2" step-badge="2">
+                                        <div class="d-flex">
+                                            <div class="mt-3 step-count">
+                                                <a class="step-counter">2</a>
+                                            </div>
+                                            <div class="mt-1 ml-2 step-title">
+                                                <b>Images</b>
+                                                <span>Add images</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="step-badge" step-validate="3" step-badge="3">
+                                        <div class="d-flex">
+                                            <div class="mt-3 step-count">
+                                                <a class="step-counter">3</a>
+                                            </div>
+                                            <div class="mt-1 ml-2 step-title">
+                                                <b>Variations</b>
+                                                <span>variant options..</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="step-badge" step-validate="4" step-badge="4">
+                                        <div class="d-flex">
+                                            <div class="mt-3 step-count">
+                                                <a class="step-counter">4</a>
+                                            </div>
+                                            <div class="mt-1 ml-2 step-title">
+                                                <b>Setting</b>
+                                                <span>Configurations</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+    
+                                <div class="step-content show active" step-id="1">
+                                    <div class="form-light-box mb-3">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="Collection"><b>Collection</b></label>
+                                                    <select api-options="/api/a/get-collections" api-change="/api/a/get-categories" api-result-target="#Category"
+                                                    step-field-required="true" step-validation-message="select a product category"
+                                                    class="form-control" name="collection" id="Collection">
+                                                        <option value="">**select product collection**</option>
+                                                    </select>
+                                                    <span class="text-danger">{{validation("collection")}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="Category"><b>Category</b></label>
+                                                    <select class="form-control" api-change="/api/a/get-subcategories" api-result-target="#SubCategory"
+                                                        name="category" id="Category" disabled>
+                                                    </select>
+                                                    <span class="text-danger">{{validation("category")}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="SubCategory"><b>Sub Category</b></label>
+                                                    <select class="form-control" name="sub_category" id="SubCategory" disabled>
+                                                    </select>
+                                                    <span class="text-danger">{{validation("sub_category")}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="form-light-box mb-3">
+                                        <div class="form-group">
+                                            <label for="Name"><b>Product Name <span>*</span></b></label>
+                                            <input type="text" class="form-control" step-field-required="true" 
+                                            step-validation-message="product name is required*"
+                                            name="name" id="Name" placeholder="Enter Product Name">
+                                            <span class="text-danger">{{validation("name")}}</span>
+                                        </div>
+
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="Color"><b>Color <span>*</span></b></label>
+                                                    <input type="text" class="form-control" step-field-required="true" 
+                                                    step-validation-message="product color is required*"
+                                                    name="color" id="Color" placeholder="Enter Product Color">
+                                                    <span class="text-danger">{{validation("color")}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="Brand"><b>Brand <span>*</span></b></label>
+                                                    <input type="text" class="form-control" step-field-required="true"
+                                                    step-validation-message="product brand is required*" name="brand" id="Brand">
+                                                    <span class="text-danger">{{validation("brand")}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="form-light-box mb-3">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="price"><b>Price <span>*</span></b></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">NGN</span>
+                                                        </div>
+                                                        <!-- <div class="input-group-prepend">
+                                                            <span class="input-group-text">0.00</span>
+                                                        </div> -->
+                                                        <input type="text" class="form-control" step-field-required="true"
+                                                        step-validation-message="price is required*"
+                                                        name="price" id="Price" placeholder="0">
+                                                        <span class="text-danger">{{validation("price")}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="Discount"><b>Sales/Discount (%) </b></label>
+                                                    <div class="input-group">
+                                                        <input type="number" max="100" min="0" class="form-control" name="discount" id="Discount" value="0">
+                                                        <span class="text-danger">{{validation("discount")}}</span>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="DiscountPrice"><b>Sales/Discount (Price) </b></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">NGN</span>
+                                                        </div>
+                                                        <!-- <div class="input-group-prepend">
+                                                            <span class="input-group-text">0.00</span>
+                                                        </div> -->
+                                                        <input class="form-control" step-field-required="true" value="0"
+                                                        step-validation-message="Discount price is required <small>(use 0 if not discount is applied)</small>*"
+                                                        name="discount_price" placeholder="0" id="DiscountPrice"/>
+                                                        <span class="text-danger">{{validation("discount_price")}}</span>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="Quantity"><b>Quantity <span>*</span></b></label>
+                                                    <input type="number" min="0" class="form-control" step-field-required="true"
+                                                    step-validation-message="product quantity is required*"
+                                                    name="quantity" value="1" id="Quantity"/>
+                                                    <span class="text-danger">{{validation("quantity")}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-light-box mb-3">
+                                        <div class="form-group">
+                                            <label for="Name"><b>Product Description <span>*</span></b></label>
+                                            <textarea class="form-control" name="description" id="Description"></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+    
+                                <div class="step-content hide" step-id="2">
+                                    <div class="form-light-box mb-3">
+                                        <div class="form-group">
+                                            <label for="Brand"><b>Product Image <span>*</span></b></label>
+                                            <div class="text-center">
+                                                <div class="image-box">
+                                                    
+                                                    <div class="thumbnail" id="mainImage"></div>
+                                                    <div class="change-action">
+                                                        <label for="Image" class="btn btn-sm btn-inverse-success">
+                                                            <i class="mdi mdi-image"></i> Select an image
+                                                            <input type="file" step-field-required="true"  step-validation-message="select an image for this product*" 
+                                                            class="hide" name="image" id="Image">
+                                                        </label>
+                                                    </div>
+    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="form-light-box mb-3">
+                                        <div class="form-group">
+                                            <label for=""><b>Gallery</b> <small>(you can add other samples images for product here)</small></label>
+                                            <div class="image-box hide" id="GalleryBox"></div>
+                                        </div>
+                                        <div class="form-group text-right">
+                                            <label for="Gallery" class="btn btn-inverse-success btn-sm">
+                                                <i class="mdi mdi-plus-circle-outline"></i> Add images
+                                                <input type="file" class="hide" name="gallery" id="Gallery" multiple>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="step-content hide" step-id="3">
+                                    <div class="form-light-box mb-3">
+                                        <label class="mb-2"><b>Variation Options</b></label>
+                                        <div class="row" id="skeletonForm">
+                                            <div class="col-md-12" id="skeleton">
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-3 p-1">
+                                                            <div class="form-group">
+                                                                <select api-options="/api/a/get-variations" class="form-control variations" name="variations[]">
+                                                                    <option value="">**select a variation**</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-8 p-1">
+                                                            <div class="form-group">
+                                                                <textarea name="variation_options[]" class="form-control var_name" api-variation-creator="" placeholder="options" onblur="handleblur2(this);"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1 rmVar hide p-1" onclick="remover2(this);">
+                                                            <button type="button" class="btn btn-danger btn-sm"> <i class="mdi mdi-delete-forever"></i> </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+                                        </div>
+                                        <div class="col-md-12 mt-2">
+                                            <div class="row">
+                                                <div class="text-left">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-sm btn-inverse-info" id="addSkeletonBtn2">
+                                                            + add more
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-light-box hide mb-3" api-variation-list="">
+                                        
+                                    </div>
+                                </div>
+    
+                                <div class="step-content hide" step-id="4">
+                                    <div class="form-light-box mb-3">
+                                        <label class="mb-2"><b>Products Settings</b></label>
+                                        
+                                        <div class="row mb-2">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <div class="custom-control custom-switch">
+                                                        <input name="featured" type="checkbox" class="custom-control-input" id="featured" checked>
+                                                        <label class="custom-control-label ln-16" for="featured">Set as featured product</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <div class="custom-control custom-switch">
+                                                        <input name="out_of_stock" type="checkbox" class="custom-control-input" id="oufOfStock">
+                                                        <label class="custom-control-label ln-16" for="oufOfStock">Out Of Stock</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="row mb-2">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="customSwitches" checked>
+                                                        <label class="custom-control-label ln-16" for="customSwitches">Track Product Inventory</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="customSwitches">
+                                                        <label class="custom-control-label ln-16" for="customSwitches">Out Of Stock</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                    </div>
+
+                                    <div class="form-light-box mb-3">
+                                        <label class="mb-2"><b>Search Keywords*</b></label>
+                                        <div class="form-group">
+                                            <textarea name="search_keywords" step-field-required="true"  step-validation-message="please enter product search keywords. examples: white shirts, long sleeve, fitted, casual..."
+                                             cols="30" rows="6" class="form-control" placeholder="ex. blue trousers, shirts, jeans.."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="step-actions mt-3">
+                                    <div class="d-flex justify-content-between flex-row-reverse">
+                                        <button type="submit" class="step-submit btn btn-primary btn-fw">Submit</button>
+                                        <button type="button" class="step-next btn btn-primary btn-fw">Next</button>
+                                        <button type="button"  class="step-previous btn btn-light btn-fw">Previous</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

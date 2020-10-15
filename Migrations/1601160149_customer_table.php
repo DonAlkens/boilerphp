@@ -19,6 +19,8 @@ class CustomerTable extends Migration {
         $this->field("email")->string()->unique();
         $this->field("password")->string();
         $this->field("sign_up_method")->integer();
+        $this->field("verified")->boolean();
+        $this->field("blocked")->boolean();
         $this->field("created_date")->timestamp();
         $this->field("updated_date")->timestamp();
         $this->field("updated_by")->integer();

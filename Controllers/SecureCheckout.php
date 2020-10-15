@@ -11,6 +11,7 @@ use App\OrderItem;
 use App\ProductVariationOptions;
 use App\Product;
 use App\Transaction;
+use Auth;
 use Session;
 
 /** 
@@ -123,7 +124,8 @@ class SecureCheckout extends Controller {
             }
 
             $o_item = [
-                "`order`" => $order->id,
+                "vendor" => $item->product()->creator()->id,
+                "order" => $order->id,
                 "product" => $item->product,
                 "quantity" => $item->quantity,
                 "price" => $price,
@@ -291,6 +293,7 @@ class SecureCheckout extends Controller {
 
                 $data = ["status" => 111];
                 $transaction->where("reference", $reference)->update($data);
+                (new Order)->where("id", $order)->update(["payment_status" => 111]);
 
                 Session::end("t_reference");
                 Session::end("order_tran_id");
@@ -302,6 +305,7 @@ class SecureCheckout extends Controller {
 
                 $data = ["status" => 901];
                 $transaction->where("reference", $reference)->update($data);
+                (new Order)->where("id", $order)->update(["payment_status" => 901]);
 
                 return view("checkout/card-payment-failed");
             }
@@ -323,6 +327,7 @@ class SecureCheckout extends Controller {
 
                 $data = ["status" => 111];
                 $transaction->where("reference", $reference)->update($data);
+                (new Order)->where("id", $order)->update(["payment_status" => 111]);
 
                 Session::end("t_reference");
                 Session::end("order_tran_id");
@@ -334,6 +339,7 @@ class SecureCheckout extends Controller {
 
                 $data = ["status" => 901];
                 $transaction->where("reference", $reference)->update($data);
+                (new Order)->where("id", $order)->update(["payment_status" => 901]);
 
                 return view("checkout/card-payment-failed");
             }

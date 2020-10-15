@@ -54,33 +54,33 @@
                             <div class="order-stats">
                                 <div class="d-flex justify-content-between mb-2">
                                     <div class="stat-message text-center">
-                                        <i class="flaticon-file-1"></i> New: <span class="">0</span>
+                                        <i class="flaticon-file-1"></i> New: <span class="">@{{~new_orders~}}</span>
                                     </div>
                                     <div class="stat-message text-center">
-                                       <i class="flaticon-list-3"></i>  Confirmed: <span class="">0</span>
+                                       <i class="flaticon-list-3"></i>  Confirmed: <span class="">@{{~confirmed_orders~}}</span>
                                     </div>
                                 </div>
 
                                 <div class="d-flex justify-content-between stats">
                                     <div class="stat-message text-center">
-                                        <i class="flaticon2-notepad"></i> Completed: <span class="">0</span>
+                                        <i class="flaticon2-notepad"></i> Completed: <span class="">@{{~completed_orders~}}</span>
                                     </div>
                                     <div class="stat-message text-center">
-                                        <i class="flaticon-close"></i> Cancelled: <span class="">0</span>
+                                        <i class="flaticon-close"></i> Returned: <span class="">@{{~returned_orders~}}</span>
                                     </div>
                                 </div>
 
                                 
                                 <div class="actions mt-3">
                                     <div class="d-flex justify-content-end">
-                                        <a href="" class="btn btn-sm btn-light mr-2">
+                                        <a href="/uac/orders" class="btn btn-sm btn-light mr-2">
                                             <i class="flaticon-open-box"></i> All
                                         </a>
                                         <a href="" class="btn btn-sm btn-inverse-primary mr-2">
                                             <i class="flaticon-map-location"></i> Track order 
                                         </a>
                                         <a href="" class="btn btn-sm btn-inverse-info">
-                                            <i class="flaticon-map-location"></i> Return 
+                                            <i class="flaticon2-circular-arrow"></i> Return 
                                         </a>
                                     </div>
                                 </div>
@@ -119,40 +119,96 @@
 
             <div class="row mt-4">
                 <div class="col-md-6 mb-3">
-                    <div class="p-3 bg-white border-radius">
+                    <div class="uac-sm-card p-3 bg-white border-radius">
                         <div class="title">
-                            <h6>Default Shipping Address</h6>
-                        </div>
-                        <div class="mt-2 pb-2">
-                            <div class="">
-                                
-                                <div class="actions mt-3">
-                                    <div class="d-flex justify-content-end">
-                                        <a href="" class="btn btn-sm btn-light mr-2">
-                                            <i class="flaticon-map-location"></i> Set default Address 
-                                        </a>
-                                        <a href="" class="btn btn-sm btn-inverse-info">
-                                            <i class="flaticon-add"></i> Add new address
-                                        </a>
-                                    </div>
-                                </div>
+                            <div class="d-flex justify-content-between">
+                                <h6>Default Shipping Address</h6>
+
+                                @if(~address_count~ < 2)
+                                    <a href="/uac/add-delivery-address" class="btn btn-sm btn-inverse-info">
+                                        <i class="flaticon-add"></i> Add new address
+                                    </a>
+                                @endif
                             </div>
+                        </div>
+                        <div class="mt-4 pb-2">
+                            @if(~addresses~)
+                                <div class="border-top">
+                                    {{$addresses = ~addresses~}}
+                                    @foreach($addresses as $address)
+                                    <div class="border-bottom uac-ov-address-card pb-2">
+                                        <div class="uac-c-action">
+                                            <a href="/uac/delivery-address/e/@{{$address->id}}" class="btn btn-sm btn-inverse-info">
+                                                <i class="flaticon2-edit"></i> Edit
+                                            </a>
+                                            <a href="/uac/delivery-address/r/@{{$address->id}}" class="text-danger">
+                                                <i class="flaticon2-trash"></i>
+                                            </a>
+                                        </div>
+                                        <p class="m-0"> <small><b>@{{$address->firstname}} @{{$address->lastname}}</b></small></p>
+                                        <p class="m-0"> <small>@{{$address->phone}}</small></p>
+                                        <p class="m-0"> <small>@{{$address->street}} @{{($address->additional_address) ? ", ".$address->additional_address : "" }}</small></p>
+                                        <p class="m-0"> <small>@{{$address->city}}, @{{$address->state}}</small></p>
+                                        <p class="m-0"> <small>@{{$address->zip}}</small></p>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            @else 
+
+                                <p class="uac-em-note text-center mt-5 mb-5">
+                                    <span>No address found. Add a new address.</span>
+                                </p>
+
+                            @endif
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <div class="p-3 bg-white border-radius">
-                        <div class="title"><h6>Recently Saved Items</h6></div>
-                        <div class="mt-2 pb-2">
-                            <div class="">
-                    
-                                <div class="actions mt-3">
-                                    <div class="d-flex justify-content-center">
-                                        <a href="" class="btn btn-sm btn-light"> See all saved items</a>
-                                    </div>
-                                </div>
+                    <div class="uac-sm-card p-3 bg-white border-radius">
+                        <div class="title">
+                            <div class="d-flex justify-content-between">
+                                <h6>Recently Saved Items</h6>
+                                <a href="/uac/saved-items" class="btn btn-sm btn-light"> See all saved items</a>
                             </div>
+                        </div>
+                        <div class="mt-4 pb-2">
+                            @if(~saved_items~)
+                                <div class="border-top">
+                                    {{$saved_items = ~saved_items~}}
+                                    @foreach($saved-items as $item)
+                                    <div class="d-flex mb-2 border-bottom">
+                                        <div class="item-image">
+                                            <a href="/pd/@{{$item->product()->slug.'/'.base64_encode($item->product()->id)}}">
+                                                <img src="/src/images/@{{$item->product()->images()->main}}" alt="" width="100px">
+                                            </a>
+                                        </div>
+                                        <div class="product-details ml-2">
+                                            <a href="/pd/@{{$item->product()->slug.'/'.base64_encode($item->product()->id)}}">
+                                                <h6 class="mt-3 m-0">@{{$item->product()->name}}</h6>
+                                            </a>
+                                            <div class="d-flex pt-2" data-pd-price="true">
+                                                @if($item->product()->price_range() != null)
+                                                    {{$prices = $item->product()->price_range()}}
+                                                    <h5 class="mr-1"><b>&#8358;@{{number_format($prices["lowest"])}} - &#8358;@{{number_format($prices["highest"])}}</b></h5>
+                                                    @elif($item->product()->discount_price > 0)
+                                                    <h5 class="mr-1"><b>&#8358;@{{number_format($item->product()->discount_price)}}</b></h5>
+                                                    <h5 class="text-secondary"><del>&#8358;@{{number_format($item->product()->price)}}</del></h5>
+                                                    @else 
+                                                    <h5 class="mr-1"><b>&#8358;@{{number_format($item->product()->price)}}</b></h5>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <p class="text-center uac-em-note">
+                                    <span>No item(s) has been saved. 
+                                        <a href="" class="text-primary">Explore top collections</a>
+                                    </span>
+                                </p>
+                            @endif
                         </div>
                     </div>
                 </div>

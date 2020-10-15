@@ -1,0 +1,134 @@
+@{{extends "admin/shared/layout"}}
+{{$vendor = ~vendor~}}
+
+<div class="content-wrapper">
+    @if(~approved~)
+    <div class="alert alert-success">Vendor has been approved successfully.</div>
+    @endif
+    @if(~disapproved~)
+    <div class="alert alert-success">Vendor has been dis-approved successfully.</div>
+    @endif
+    @if(~blocked~)
+    <div class="alert alert-success">Vendor has been blocked successfully.</div>
+    @endif
+    @if(~unblocked~)
+    <div class="alert alert-success">Vendor has been unblocked successfully.</div>
+    @endif
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mt-3 mb-4">Vendor Information</h2>
+
+                    <div class="order-details bg-light border-radius p-4 mt-5">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="mb-3"><b>Vendor Id #@{{$vendor->id}}</b></h6>
+
+                                    <h5 class="mb-0">@{{$vendor->firstname}} @{{$vendor->lastname}}</h5>
+                                    <p class="mt-0 mb-0">@{{$vendor->email}}</p>
+                                    <p class="mt-0">@{{$vendor->details()->phone}}</p>
+                                    
+                                    <span> <b>Reg. Date:</b> <small>@{{$vendor->created_date}}</small></span>
+                                    
+
+                                    <div class="d-flex justify-content-between">
+                                        <div class="">
+                                            <h6 class="mt-5"><b>Account Status</b></h6>
+                                            <p class="m-0"> 
+                                                @if($vendor->verified)
+                                                <span class="badge badge-success">Verified</span> 
+                                                @else
+                                                <span class="badge badge-danger">Not Verified</span> 
+                                                @endif
+                                            </p>
+                                        </div>
+                                        <div class="">
+                                            <h6 class="mt-5"><b>Approval Status</b></h6>
+                                            <p class="m-0"> 
+                                                @if($vendor->approved)
+                                                <span class="badge badge-success">Approved</span> 
+                                                @else
+                                                <span class="badge badge-danger">Not Approved</span> 
+                                                @endif
+                                            </p>
+                                        </div>
+                                        <div class="">
+                                            <h6 class="mt-5"><b>Status</b></h6>
+                                            <p class="m-0"> 
+                                                @if($vendor->blocked)
+                                                <span class="badge badge-danger">Blocked</span> 
+                                                @else
+                                                <span class="badge badge-success">Active</span> 
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="border-bottom"><b>Store Address</b></h6>
+                                    <p class="m-0">
+                                        @{{$vendor->address()->street}},
+                                        @if($vendor->address()->additional_address != null)
+                                            , @{{$vendor->address()->additional_address}}
+                                        @endif
+                                    </p>
+                                    <p class="m-0">
+                                        @{{$vendor->address()->city}}, @{{$vendor->address()->state}}.
+                                    </p>
+                                    @if($vendor->address()->zip != null)
+                                    <p class="m-0"> 
+                                        <small><b>  Zip Code: </b>@{{$vendor->address()->zip}}</small>
+                                    </p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-details bg-light border-radius p-4 mt-2">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><b>Store Name: </b> @{{$vendor->details()->vendor_name}}</p>
+                                            <p>
+                                                <b>Website: </b> <a href="@{{$vendor->details()->website}}" target="_blank">
+                                                @{{$vendor->details()->website}}</a>
+                                            </p>
+                                            <p><b>Does vendor own a brand ? </b> @{{($vendor->details()->own_brand) ? "Yes" : "No"}}</p>
+                                            <p><b>Product Category:</b>  @{{($vendor->details()->category()->name)}}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><b>How I know About Wearslot: </b> <br> @{{$vendor->details()->means_of_knowing}}</p>
+                                            <p><b>Reffered By: </b> 
+                                                @{{($vendor->details()->refferal()) ? $vendor->details()->refferal()->email : 'Not Referred' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-actions p-0 text-right mt-3">
+                        <div class="order-action-btn">
+                            @if($vendor->approved)
+                            <a href="?de_activate=@{{$vendor->id}}" class="btn btn-sm btn-inverse-danger" >De-activate Vendor</a>
+                            @else
+                            <a href="?activate=@{{$vendor->id}}" class="btn btn-sm btn-success">Activate</a>
+                            @endif
+
+                            @if($vendor->blocked)
+                            <a href="?unblock=@{{$vendor->id}}" class="btn btn-sm btn-info" >Unblock Vendor</a>
+                            @else
+                            <a href="?block=@{{$vendor->id}}" class="btn btn-sm btn-danger">Block Vendor</a>
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

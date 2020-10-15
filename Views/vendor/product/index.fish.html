@@ -1,0 +1,56 @@
+@{{extends "vendor/shared/layout"}}
+
+<div class="content-wrapper">
+    
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex mb-5 justify-content-between">
+                        @if(~pending~)
+                        <h4 class="card-title">Pending Products</h4>
+                        <p class="m-0"><small>This products and waiting to be approved.</small></p>
+                        @else
+                        <h4 class="card-title">Products</h4>
+                        <div class="actions">
+                            <a href="/products/add" class="btn btn-sm btn-inverse-info"><i class="mdi mdi-plus"></i> Add</a>
+                        </div>
+                        @endif
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table id="table" class="table">
+                            <thead>
+                                <tr>
+                                    <th> #Id </th>
+                                    <!-- <th> Image</th> -->
+                                    <th> Name </th>
+                                    <th> Category </th>
+                                    <th> Price </th>
+                                    <!-- <th> Last update by </th>
+                                    <th> Last updated date </th> -->
+                                    <th> Actions </th>
+                                </tr>
+                            </thead>
+                            @if(~pending~)
+                            <tbody api-table="/api/a/get-pending-products-table/@{{auth()->id}}" api-actions="edit, view" 
+                            api-action-links="/products/edit/, /products/view/">
+                            </tbody>
+                            @elif(~hidden~)
+                            <tbody api-table="/api/a/get-hidden-products-table/@{{auth()->id}}" api-actions="edit, view" 
+                            api-action-links="/products/edit/, /products/view/">
+                            </tbody>
+                            @else
+                            <tbody api-table="/api/a/get-products-table/@{{auth()->id}}" api-actions="edit, view" 
+                            api-action-links="/products/edit/, /products/view/">
+                            </tbody>
+                            @endif
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<!-- content-wrapper ends -->

@@ -173,6 +173,24 @@ function submitButton(state) {
     }
 }
 
+function stepSubmit() {
+    $(".step-submit").click(function(event){
+        current = $('[step-id]').length;
+        
+        if(validateCurrentStep(current)) {
+            submitForm();
+        } 
+        else {
+            event.preventDefault();
+            stepError(current);
+        }
+    });
+}
+
+function submitForm() {
+    $(".step-form")[0].submit();
+}
+
 function setPreviousButton(index) {
     if (index == 0) {
         $(".step-previous").removeAttr("step-page").hide();
@@ -195,6 +213,7 @@ function init() {
     badgeClick();
     nextAction();
     previousAction();
+    stepSubmit();
 }
 
 function Step() {}

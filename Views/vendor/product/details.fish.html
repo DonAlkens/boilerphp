@@ -1,0 +1,145 @@
+@{{extends "vendor/shared/layout"}}
+
+{{$product = ~product~}}
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mt-3 mb-4">Product Details - #@{{$product->id}}</h2>
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 details">
+                                <div class="row">
+                                    <div class="col-md-2 slides-gallery">
+                                        <div class="images-slides dashboard owl-carousel">
+                                            @if($product->images()->gallery)
+                                                {{$images = explode(",", $product->images()->gallery)}}
+                                                @foreach($images as $image)
+                                                    <div class="img-slide-box">
+                                                        <img src="/src/images/@{{$image}}" data-im-tg="@{{$image}}" alt="" width="100%">
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10 main-image-frame">
+                                        <div class="text-center product-details-image">
+                                            <img src="/src/images/@{{$product->images()->main}}" alt="" data-im-main="true">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="product-details">
+                                    <p class="m-0 p-0">@{{strtoupper($product->brand)}}</p>
+                                    <h1 class="product-details-name">@{{$product->name}}</h1>
+                                    <div class="d-flex">
+                                        <p class="text-secondary"> <small>WS #@{{$product->id}}</small> </p>
+                                    </div>
+                                </div>
+                                <div class="price-box mt-1 d-flex">
+                                    <div class="d-flex pt-2" data-pd-price="true">
+                                        @if($product->discount_price > 0)
+                                        <h5 class="mr-1"><b>&#8358;@{{number_format($product->discount_price)}}</b></h5>
+                                        <h5 class="text-secondary"><del>&#8358;@{{number_format($product->price)}}</del></h5>
+                                        @else 
+                                        <h5 class="mr-1"><b>&#8358;@{{number_format($product->price)}}</b></h5>
+                                        @endif
+                                    </div>
+                                    <div class="availabily-message-box pt-2 ml-5"></div>
+                                </div>
+                                <!-- @if($product->variation_colors() != null)
+                                <div class="col-md-12 p-0 mt-1 pt-1 variation">
+                                    <p> <small><b>Colors:</b></small> </p>
+                                    <div class="d-flex color-variation-box mt-2">
+                                        {{$colors = $product->variation_colors()}}
+                                        {{$index = 0}}
+                                        @foreach($colors as $color)
+                                        <label for="@{{$color['color']}}" class="im-box p-2 border-50">
+                                            @if($color["image"] != null)
+                                                <img src="/src/images/@{{$color['image']}}" alt="" data-mg-fr="@{{$color['color']}}" width="50px" class="border-50">
+                                            @else
+                                                @{{$color["color"]}}
+                                            @endif
+                                        </label>
+                                        {{$index++}}
+                                        @endforeach
+                                    </div>
+                                </div>
+                                @endif -->
+                
+                                <!-- @if($product->variation_sizes() != null)
+                                <div class="col-md-12 p-0 mt-1 pt-1 variation">
+                                    <p class="msgCenter mb-2"></p>
+                                    <p> <small><b>Sizes:</b></small></p>
+                                    <div class="d-flex color-variation-box mt-3">
+                                        {{$sizes = $product->variation_sizes()}}
+                                        @foreach($sizes as $size)
+                                        <label for="@{{$size['size']}}" class="im-box p-1 pr-4 pl-4 border-50">
+                                            @{{$size["size"]}}
+                                        </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                @endif -->
+                                @if($product->options())
+                                <div class="col-md-12 p-0 mt-1 pt-1 variation">
+                                    <p class="mt-3 mb-0"> <b>Available Options:</b> </p>
+                                    {{$options = $product->options()}}
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th> <b>Variant</b> </th>
+                                                <th> <b>Quantity</b> </th>
+                                                <th> <b>Price</b> </th>
+                                                <th> <b>In Stock</b> </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($options as $option)
+                                                <tr>
+                                                    <td>@{{$option->variant}}</td>
+                                                    <td>@{{$option->quantity}}</td>
+                                                    <td>&#8358;@{{number_format($option->price)}}</td>
+                                                    <td>
+                                                        @if($option->in_stock)
+                                                            YES
+                                                        @else
+                                                            NO
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @endif
+                            </div>
+                            <div class="col-md-12 mt-5">
+                                <div class="description-box p-3 border-top m-no-p">
+                                    <span style="font-size: 13px;">@{{$product->description}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 mt-4 p-0 ">
+                                <div class="d-flex justify-content-end">
+                                    <div class="actions-box ml-3">
+                                       
+                                        <a href="/a/products/edit/@{{$product->id}}" class="btn btn-info btn-sm">Edit</a>
+                                        
+                                        <button api-hide-product="@{{$product->id}}" class="btn btn-danger hide-btn btn-sm @{{($product->hide == 0) ? null : 'hd'; }}">Hide</button>
+                                        <button api-show-product="@{{$product->id}}" class="btn btn-success show-btn btn-sm @{{($product->hide == 1) ? null : 'hd'; }}">Show</button>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

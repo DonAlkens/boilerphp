@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Action\Urls\Controllers;
+namespace App\Action\Urls\Controllers\Api;
 
 
+use App\Action\Urls\Controllers\Controller;
+use App\Admin\Door;
 use App\Core\Urls\Request;
 use Auth;
 use App\Product;
@@ -13,11 +15,23 @@ use App\Variation;
  * used to get action's request data get/post
  */ 
 
-class Api_Variation extends Controller {
+class VariationController extends Controller {
 
     public function __construct()
     {
         $this->hasAuthAccess("auth", "/signin");
+
+        (new Door)->openWith("manage variations", function(){
+
+            $response = array(
+                "status" => 200,
+                "success" => false,
+                "error" => array(
+                    "message" => "Access denied: You do not have permission to manage variations"
+                )
+            );
+            return Json($response);
+        });
     }
 
     public function add(Request $request) {
@@ -168,7 +182,10 @@ class Api_Variation extends Controller {
         if($variation) {
 
             $creator = $variation->creator()->firstname." ".$variation->creator()->lastname." (".$variation->creator()->email.")";
-            $updator = $variation->updator()->firstname." ".$variation->updator()->lastname." (".$variation->updator()->email.")";
+            $updator = "";
+            if($variation->last_updated_by != null) {
+                $updator = $variation->updator()->firstname." ".$variation->updator()->lastname." (".$variation->updator()->email.")";
+            }
 
             $details = array(
                 "id" => $variation->id,

@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Action\Urls\Controllers;
+namespace App\Action\Urls\Controllers\Api;
 
 
+use App\Action\Urls\Controllers\Controller;
+use App\Activity;
 use App\Core\Urls\Request;
 use Auth;
 use App\Admin\Door;
 use App\Category;
 use App\FileSystem\Fs;
+use App\OrderItem;
 use App\Product;
 use App\ProductImage;
 use App\ProductSettings;
@@ -19,7 +22,7 @@ use App\ProductVariationOptions;
  * used to get action's request data get/post
  */ 
 
-class Api_Product extends Controller {
+class ProductController extends Controller {
 
     public function __construct()
     {
@@ -331,8 +334,20 @@ class Api_Product extends Controller {
 
         foreach($products as $product) {
 
-            $product->price = str_replace(",", "", $product->price);
-            $product->price = "&#8358;".number_format((int)$product->price, 2);
+           
+
+            if($product->price_range())  {
+                $lowest = $product->price_range()["lowest"];
+                $highest = $product->price_range()["highest"];
+                $product->price = "<span>&#8358;".number_format((int)$lowest) ."- &#8358;".number_format((int)$highest)."</span>";
+
+            } else if($product->discount_price != "0.00") {
+                $product->price = "<span>&#8358;".number_format((int)$product->discount_price)." <del>&#8358;".number_format((int)$product->price)."</del>";
+            }
+            else {
+
+                $product->price = "&#8358;".number_format((int)$product->price);
+            }
 
             $data = array(
                 "id" => $product->id,
@@ -367,9 +382,14 @@ class Api_Product extends Controller {
         return Json($list);
     }
 
-    public function get_prouducts_table() {
+    public function get_products_table(Request $request) {
 
-        $products = (new Product)->orderBy("id", "asc")->all();
+        $products = (new Product)->where(["approved" => '1', "hide" => '0'])->orderBy("id", "asc")->all();
+
+        if(isset($request->param["vendor"])) {
+            $products = (new Product)->where(["approved" => '1', "hide" => '0', "created_by" => Auth::user()->id])->all();
+        }
+
         $list = array();
 
         foreach($products as $product) {
@@ -378,6 +398,86 @@ class Api_Product extends Controller {
             $category = $product->collection()->name;
             if($product->category()) {
                 $category .= "/".$product->category()->name;
+
+                if($product->sub_category()) {
+                    $category .= "/".$product->sub_category()->name;
+                }
+            }
+            $price = "&#8358;".$product->price;
+
+            $data = array(
+                $product->id,
+                $product->name,
+                $category,
+                $price
+                // $category->updator()->email, 
+                // $category->last_updated_date
+            );
+
+            array_push($list, $data);
+        }
+
+        return Json($list);
+
+    }
+
+    public function get_pending_products_table(Request $request) {
+
+        $products = (new Product)->where("approved", '0')->orderBy("id", "asc")->all();
+
+        if(isset($request->param["vendor"])) {
+            $products = (new Product)->where(["approved" => '0', "created_by" => Auth::user()->id])->orderBy("id", "ASC")->all();
+        }
+
+        $list = array();
+
+        foreach($products as $product) {
+
+            $product->name = '<img src="/src/images/'. $product->images()->main .'" alt="'. $product->name .'"> '.$product->name;
+            $category = $product->collection()->name;
+            if($product->category()) {
+                $category .= "/".$product->category()->name;
+
+                if($product->sub_category()) {
+                    $category .= "/".$product->sub_category()->name;
+                }
+            }
+            $price = "&#8358;".$product->price;
+
+            $data = array(
+                $product->id,
+                $product->name,
+                $category,
+                $price
+                // $category->updator()->email, 
+                // $category->last_updated_date
+            );
+
+            array_push($list, $data);
+        }
+
+        return Json($list);
+
+    }
+
+    public function get_hidden_products_table(Request $request) {
+
+        $products = (new Product)->where("hide", '1')->orderBy("id", "asc")->all();
+        if(isset($request->param["vendor"])) {
+            $products = (new Product)->where(["hide" => '1', "created_by" => Auth::user()->id])->orderBy("id", "ASC")->all();
+        }
+        $list = array();
+
+        foreach($products as $product) {
+
+            $product->name = '<img src="/src/images/'. $product->images()->main .'" alt="'. $product->name .'"> '.$product->name;
+            $category = $product->collection()->name;
+            if($product->category()) {
+                $category .= "/".$product->category()->name;
+
+                if($product->sub_category()) {
+                    $category .= "/".$product->sub_category()->name;
+                }
             }
             $price = "&#8358;".$product->price;
 
@@ -915,6 +1015,166 @@ class Api_Product extends Controller {
 
         return Json($response);
 
+    }
+
+    public function approve(Request $request) {
+
+        $product = (new Product)->where("id", $request->product)->get();
+        if($product) {
+
+            $data = [
+                "approved" => 1,
+                "last_updated_date" => $request->timestamp(),
+                "last_updated_by" => Auth::user()->id,
+            ];
+
+            if((new Product)->where("id", $product->id)->update($data)) {
+
+                (new Activity)->log(
+                    ["user" => Auth::user()->id, 
+                    "is_product" => $product->id, 
+                    "description" => Auth::user()->email. " approved this product."
+                ]);
+    
+                $response = [
+                    "status" => 200,
+                    "success" => true,
+                    "message" => "Product has been approved successfully."
+                ];
+    
+                return Json($response);
+
+            }
+
+            $response = [
+                "status" => 200,
+                "success" => false,
+                "error" => ["message" => "Error occured while trying to approve this product. Please try again"]
+            ];
+    
+            return Json($response);
+
+        }
+    }
+
+    public function disapprove(Request $request) {
+
+        $product = (new Product)->where("id", $request->product)->get();
+        if($product) {
+
+            $data = [
+                "approved" => 0,
+                "last_updated_date" => $request->timestamp(),
+                "last_updated_by" => Auth::user()->id,
+            ];
+
+            if((new Product)->where("id", $product->id)->update($data)) {
+
+                (new Activity)->log(
+                    ["user" => Auth::user()->id, 
+                    "is_product" => $product->id, 
+                    "description" => Auth::user()->email. " disapproved this product."
+                ]);
+    
+                $response = [
+                    "status" => 200,
+                    "success" => true,
+                    "message" => "Product has been disapproved successfully."
+                ];
+    
+                return Json($response);
+
+            }
+
+            $response = [
+                "status" => 200,
+                "success" => false,
+                "error" => ["message" => "Error occured while trying to disapprove this product. Please try again"]
+            ];
+    
+            return Json($response);
+
+        }
+    }
+
+    public function hide(Request $request) {
+
+        $product = (new Product)->where("id", $request->product)->get();
+        if($product) {
+
+            $data = [
+                "hide" => 1,
+                "last_updated_date" => $request->timestamp(),
+                "last_updated_by" => Auth::user()->id,
+            ];
+
+            if((new Product)->where("id", $product->id)->update($data)) {
+
+                (new Activity)->log(
+                    ["user" => Auth::user()->id, 
+                    "is_product" => $product->id, 
+                    "description" => Auth::user()->email. " hide this product."
+                ]);
+    
+                $response = [
+                    "status" => 200,
+                    "success" => true,
+                    "message" => "Product has been hidden successfully."
+                ];
+    
+                return Json($response);
+
+            }
+
+            $response = [
+                "status" => 200,
+                "success" => false,
+                "error" => ["message" => "Error occured while hiding this product. Please try again"]
+            ];
+    
+            return Json($response);
+
+        }
+    }
+
+    public function show(Request $request) {
+
+        $product = (new Product)->where("id", $request->product)->get();
+        if($product) {
+
+            $data = [
+                "hide" => 0,
+                "last_updated_date" => $request->timestamp(),
+                "last_updated_by" => Auth::user()->id,
+            ];
+
+            if((new Product)->where("id", $product->id)->update($data)) {
+
+                (new Activity)->log(
+                    ["user" => Auth::user()->id, 
+                    "is_product" => $product->id, 
+                    "description" => Auth::user()->email. " show this product."
+                ]);
+    
+                $response = [
+                    "status" => 200,
+                    "success" => true,
+                    "message" => "Product has been shown successfully."
+                ];
+    
+                return Json($response);
+
+            }
+
+            $response = [
+                "status" => 200,
+                "success" => false,
+                "error" => ["message" => "Error occured while shown this product. Please try again"]
+            ];
+    
+            return Json($response);
+
+        }
     }
 
 }

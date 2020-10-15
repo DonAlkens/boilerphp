@@ -1,0 +1,147 @@
+@{{extends "shared/layout"}}
+
+{{$customer = ~customer~}}
+{{$order = ~order~}}
+
+<section class="uac-wrapper mb-5">
+    <div class="uac-inner">
+
+        @{{load "user/shared/_menubar"}}
+
+        <div class="container mt-4">
+            
+            <div class="page-title col-md-12 border-radius p-2 mb-3">
+                <div class="d-flex">
+                    <div class="title">
+                        <h5>Order - <small>#@{{$order->id}}</small> </h5>
+                    </div>
+                </div>
+            </div>
+
+           <div class="col-md-12 mt-3 p-5 bg-white border-radius">
+                <div class="text-center">
+                    <h5>ORDER DETAILS</h5>
+                </div>
+                <div class="order-details bg-light border-radius p-4 mt-5">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h6><b>Order Id #@{{$order->id}}</b></h6>
+                                <span> Date: @{{$order->created_date}}</span>
+
+                                <h6 class="mt-5"><b>Status</b></h6>
+                                <p class="m-0"> 
+                                    @if($order->status == 1)
+                                    <span class="badge badge-primary p-2">Received</span> 
+                                    @elif($order->status == 2 || $order->status == 6)
+                                    <span class="badge badge-success p-2">@{{~status~[$order->status]["name"]}}</span>
+                                    @elif($order->status == 3 || $order->status == 4 || $order->status == 5 || $order->status == 7)
+                                    <span class="badge badge-info p-2">@{{~status~[$order->status]["name"]}}</span>
+                                    @elif($order->status == 8)
+                                    <span class="badge badge-danger p-2">@{{~status~[$order->status]["name"]}}</span>
+                                    @endif
+                                </p>
+
+                            </div>
+                            <div class="col-md-4">
+                                <h6><b>Delivery Address</b></h6>
+                                <h5 class="mb-0" >@{{$order->address()->firstname}} @{{$order->address()->lastname}}</h5>
+                                <p class="m-0">
+                                    <small>
+                                        @{{$order->address()->street}},
+                                        @if($order->address()->additional_address != null)
+                                             @{{$order->address()->additional_address}}
+                                        @endif
+                                    </small>
+                                </p>
+                                <p class="m-0">
+                                    <small>
+                                        @{{$order->address()->city}}, @{{$order->address()->state}}.
+                                    </small>
+                                </p>
+                                @if($order->address()->zip != null)
+                                <p class="m-0"> 
+                                    <small> <b>Zip Code - </b>@{{$order->address()->zip}}</small>
+                                </p>
+                                @endif
+                                <p> <small><b>Phone:</b> @{{$order->address()->phone}}</small> </p>
+
+                                <h6 class="mt-4"><b>Delivery Time</b></h6>
+                                <p class="m-0">Wed 11 - Fri 13, March 2020 </p>
+                            </div>
+                            <div class="col-md-4">
+                                <h6><b>Total Amount</b></h6>
+                                <p class="m-0">&#8358;@{{number_format(($order->amount + $order->shipping_fee))}}</p>
+
+                                <h6 class="mt-5"><b>Payment Method</b></h6>
+                                <p class="m-0">@{{$order->payment_method}} - @{{$order->transaction()->payment_method}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-details bg-light border-radius p-4 mt-2">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h6><b>Order Item(s)</b></h6>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    @foreach($order->items() as $item)
+                                        <div class="col-md-6">
+                                            <div class="d-flex bg-white border-radius p-3">
+                                                <div class="item-image">
+                                                    <a href="/pd/@{{$item->product()->slug}}/@{{base64_encode($item->product()->id)}}">
+                                                        @if($item->variant != 0)
+                                                            {{$image = $item->get_item_props()["image"]}}
+                                                            @if($image != null) 
+                                                            <img src="/src/images/@{{$image}}" alt="" width="100px">
+                                                            @else
+                                                            <img src="/src/images/@{{$item->product()->images()->main}}" alt="" width="100px">
+                                                            @endif
+                                                        @else
+                                                            <img src="/src/images/@{{$item->product()->images()->main}}" alt="" width="100px">
+                                                        @endif
+                                                    </a>
+                                                </div>
+                                                <div class="product-details ml-2">
+                                                    <a href="/pd/@{{$item->product()->slug}}/@{{base64_encode($item->product()->id)}}">
+                                                        <h6 class="m-0">@{{$item->product()->brand}}</h6>
+                                                        <p>@{{$item->product()->name}}</p>
+                                                    </a>
+                                                    <div class="d-flex">
+                                                        <div class="price-details">
+                                                            <b>&#8358;@{{number_format($item->price)}}</b>
+                                                            @if((int) $item->product()->discount > 0)
+                                                            <span class="ml-2">
+                                                                <del class="text-seconadry ">&#8358;@{{number_format($item->product()->discount_price)}}</del>
+                                                            </span>
+                                                            @endif
+                                                        </div>
+                                                        @if($item->variant != 0)
+                                                            {{$vars =  $item->get_item_props()["variant"]}}
+                                                            @foreach($vars as $var)
+                                                            <p class="mt-0 mb-1 ml-3"><small><b>@{{$var["type"]}}</b>: @{{$var["name"]}} </small></p>
+                                                            @endforeach
+                                                        @endif
+                                                        <p class="mt-0 mb-1 ml-3"><small><b>Qty:</b> @{{$item->quantity}}</small></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endfor
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="or-actions mt-2 text-center">
+                    @if($order->status == 6)
+                        <a href="" class="btn btn-inverse-primary">Return Order</a> 
+                    @endif
+                </div>
+           </div>
+
+        </div>
+    </div>
+</section>

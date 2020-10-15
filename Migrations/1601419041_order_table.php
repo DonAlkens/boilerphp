@@ -14,7 +14,7 @@ class OrderTable extends Migration {
         $this->table("orders");
 
         $this->field("id")->bigIncrements();
-        $this->field("customer")->integer()->foreign("customers", "id")->cascade();
+        $this->field("customer")->integer()->foreign("customers", "id");
         $this->field("address")->integer();
         $this->field("amount")->float();
         $this->field("delivery_period")->string();
@@ -26,6 +26,7 @@ class OrderTable extends Migration {
         $this->field("confirmed_date")->timestamp();
         $this->field("shipped_date")->timestamp();
         $this->field("completed_date")->timestamp();
+        $this->field("returned_date")->timestamp();
         $this->field("created_date")->timestamp();
 
         $this->sign();

@@ -32,33 +32,39 @@
 
                                 <h6 class="mt-5"><b>Status</b></h6>
                                 <p class="m-0"> 
-                                    <span class="badge badge-primary p-2 border-50">Received</span> 
+                                    <span class="badge badge-primary p-2">Received</span> 
                                 </p>
 
                             </div>
                             <div class="col-md-4">
                                 <h6><b>Delivery Address</b></h6>
-                                <p class="mt-2"> 
-                                    <b>@{{$order->address()->firstname}} @{{$order->address()->lastname}}</b>
+                                <h5 class="mb-0" >@{{$order->address()->firstname}} @{{$order->address()->lastname}}</h5>
+                                <p class="m-0">
+                                    <small>
+                                        @{{$order->address()->street}},
+                                        @if($order->address()->additional_address != null)
+                                             @{{$order->address()->additional_address}}
+                                        @endif
+                                    </small>
                                 </p>
                                 <p class="m-0">
-                                    @{{$order->address()->street}},
-                                    @if($order->address()->additional_address != null)
-                                        <br>@{{$order->address()->additional_address}}
-                                    @endif
+                                    <small>
+                                        @{{$order->address()->city}}, @{{$order->address()->state}}.
+                                    </small>
                                 </p>
-                                <p class="m-0">@{{$order->address()->city}}, @{{$order->address()->state}}.</p>
                                 @if($order->address()->zip != null)
-                                <p class="m-0">@{{$order->address()->zip}}</p>
+                                <p class="m-0"> 
+                                    <small> <b>Zip Code - </b>@{{$order->address()->zip}}</small>
+                                </p>
                                 @endif
-                                <p>@{{$order->address()->phone}}</p>
+                                <p> <small><b>Phone:</b> @{{$order->address()->phone}}</small> </p>
 
                                 <h6 class="mt-4"><b>Delivery Time</b></h6>
                                 <p class="m-0">Wed 11 - Fri 13, March 2020 </p>
                             </div>
                             <div class="col-md-4">
                                 <h6><b>Total Amount</b></h6>
-                                <p class="m-0">&#8358;@{{number_format($order->transaction()->amount)}}</p>
+                                <p class="m-0">&#8358;@{{number_format(($order->amount + $order->shipping_fee))}}</p>
 
                                 <h6 class="mt-5"><b>Payment Method</b></h6>
                                 <p class="m-0">@{{$order->payment_method}} - @{{$order->transaction()->payment_method}}</p>
@@ -75,8 +81,8 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     @foreach($order->items() as $item)
-                                        <div class="col-md-6">
-                                            <div class="d-flex">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="d-flex bg-white border-radius p-3">
                                                 <div class="item-image">
                                                     <a href="/pd/@{{$item->product()->slug}}/@{{base64_encode($item->product()->id)}}">
                                                         @if($item->variant != 0)
@@ -91,26 +97,28 @@
                                                         @endif
                                                     </a>
                                                 </div>
-                                                <div class="product-details">
+                                                <div class="product-details ml-2">
                                                     <a href="/pd/@{{$item->product()->slug}}/@{{base64_encode($item->product()->id)}}">
                                                         <h6 class="m-0">@{{$item->product()->brand}}</h6>
                                                         <p>@{{$item->product()->name}}</p>
                                                     </a>
-                                                    @if($item->variant != 0)
-                                                        {{$vars =  $item->get_item_props()["variant"]}}
-                                                        @foreach($vars as $var)
-                                                        <p class="text-secondary"><small>@{{$var["type"]}}: @{{$var["name"]}} </small></p>
-                                                        @endforeach
-                                                    @endif
-                                                    <p class="mb-1"><b>Qty:</b> @{{$item->quantity}}</p>
-                                                </div>
-                                                <div class="price-details">
-                                                    <b>&#8358;@{{number_format($item->price)}}</b>
-                                                    @if((int) $item->product()->discount > 0)
-                                                        -  <span class="text-seconadry ml-2">
-                                                            <del>&#8358;@{{number_format($item->product()->discount_price)}}</del>
-                                                        </span>
-                                                    @endif
+                                                    <div class="d-flex">
+                                                        <div class="price-details">
+                                                            <b>&#8358;@{{number_format($item->price)}}</b>
+                                                            @if((int) $item->product()->discount > 0)
+                                                            <span class="ml-2">
+                                                                <del class="text-seconadry ">&#8358;@{{number_format($item->product()->discount_price)}}</del>
+                                                            </span>
+                                                            @endif
+                                                        </div>
+                                                        @if($item->variant != 0)
+                                                            {{$vars =  $item->get_item_props()["variant"]}}
+                                                            @foreach($vars as $var)
+                                                            <p class="mt-0 mb-1 ml-3"><small><b>@{{$var["type"]}}</b>: @{{$var["name"]}} </small></p>
+                                                            @endforeach
+                                                        @endif
+                                                        <p class="mt-0 mb-1 ml-3"><small><b>Qty:</b> @{{$item->quantity}}</small></p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

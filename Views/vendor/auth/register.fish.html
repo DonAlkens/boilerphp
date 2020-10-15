@@ -1,0 +1,300 @@
+@{{extends "shared/auth/auth"}}
+
+<section class="checkout-section pt-5 pb-5 bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2 col-lg-2"></div>
+            <div class="col-md-7 col-lg-7 ml-5">
+                <div class="mb-4 text-center">
+                    <h3>Sign Up To Start Selling With Us Today.</h3>
+                </div>
+                @if(~failed~)
+                <div class="alert alert-danger text-center mb-2">Unable to create account. Please try again.</div>
+                @endif
+
+                <div class="checkout-form">
+                    <form action="" method="post" class="step-form" enctype="multipart/form-data">
+                        <div class="step-box">
+
+                            <div class="vendor-step-one">
+                                <div class="checkout-title active" step-validate="1" step-badge="1">
+                                    <div class="d-flex justify-content-between">
+                                        <p>
+                                            <span class="index">1</span>
+                                            <span class="indicator"><i class="flaticon2-check-mark"></i></span>
+                                            Personal Information
+                                        </p>
+                                        <span class="flaticon2-down"></span>
+                                    </div>
+                                </div>
+                                <div class="step-content show active" step-id="1">
+
+                                    <div class="address-form">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="firstname"><small>Firstname *</small></label>
+                                                    <input type="text" class="form-control" name="firstname" id="firstname"
+                                                    step-field-required="true" step-validation-message="Firstname is required*">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="lastname"><small>Lastname *</small></label>
+                                                    <input type="text" class="form-control" name="lastname" id="lastname"
+                                                    step-field-required="true" step-validation-message="Lastname is required*">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="email"><small>Email *</small></label>
+                                                    <input type="email" class="form-control" name="email" id="email"
+                                                    step-field-required="true" step-validation-message="Email is required*">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="phone"><small>Phone *</small></label>
+                                                    <input type="text" class="form-control" name="phone" id="phone"
+                                                    step-field-required="true" step-validation-message="Phone is required*">
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="vendor-step-two">
+                                <div class="checkout-title" step-validate="2" step-badge="2">
+                                    <div class="d-flex justify-content-between">
+                                        <p>
+                                            <span class="index">2</span>
+                                            <span class="indicator">
+                                                <i class="flaticon2-check-mark"></i>
+                                            </span>
+                                            Store Information
+                                        </p>
+                                        <span class="flaticon2-down"></span>
+                                    </div>
+                                </div>
+                                <div class="step-content hide" step-id="2">
+                                    <div class="store-details">
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="store_name"><small>Store Name *</small></label>
+                                                    <input type="text" class="form-control" name="store_name" id="store_name"
+                                                    step-field-required="true" step-validation-message="Store Name is required*">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="website"><small>Website</small></label>
+                                                    <input type="text" class="form-control" name="website" id="website">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="street"><small>Address *</small></label>
+                                                    <input type="text" class="form-control" name="street" id="street"
+                                                    step-field-required="true" step-validation-message="Address is required*">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="suite"><small>Suite, Apt, etc. (optional) </small></label>
+                                                    <input type="text" class="form-control" name="suite" id="suite">
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="city"><small>City *</small></label>
+                                                    <input type="text" class="form-control" name="city" id="city"
+                                                    step-field-required="true" step-validation-message="City is required*">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label for="state"><small>State *</small></label>
+                                                            <input type="text" class="form-control" name="state" id="state"
+                                                            step-field-required="true" step-validation-message="State is required*">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 pl-0">
+                                                        <div class="form-group">
+                                                            <label for="zip"><small>Zip</small></label>
+                                                            <input type="text" class="form-control" name="zip" id="zip">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                            <div class="vendor-step-three">
+                                <div class="checkout-title" step-validate="3" step-badge="3">
+                                    <div class="d-flex justify-content-between">
+                                        <p>
+                                            <span class="index">3</span>
+                                            <span class="indicator">
+                                                <i class="flaticon2-check-mark"></i>
+                                            </span>
+                                            Additional Information
+                                        </p>
+                                        <span class="flaticon2-down"></span>
+                                    </div>
+                                </div>
+
+                                <div class="step-content hide" step-id="3">
+                                    <div class="store-details">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="own_brand"><small>Do you own a brand? *</small></label>
+                                                    <select type="text" class="form-control" name="own_brand" id="own_brand"
+                                                    step-field-required="true" step-validation-message="Select an option*">
+                                                        <option value="">Select an option</option>
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="category"><small>What collections does your brand/store specify on? *</small></label>
+                                                    <select type="text" class="form-control" name="category" id="category"
+                                                    step-field-required="true" step-validation-message="Select an option*">
+                                                        <option value="">Select an option</option>
+                                                        @if(~collections~)
+                                                            {{$collections = ~collections~}}
+                                                            @foreach($collections as $collection)
+                                                                <option value="@{{$collection->id}}">@{{$collection->name}}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="means_of_known"><small>How did you hear about Wearslot? *</small></label>
+
+                                                    <select type="text" class="form-control" name="means_of_known" id="means_of_known"
+                                                    step-field-required="true" step-validation-message="Select an option*">
+                                                        <option value="" selected disabled>Select an option</option>
+                                                        <option>From Wearslot Website</option>
+                                                        <option>I was informed by a friend</option>
+                                                        <option>Facebook Ads</option>
+                                                        <option>Other Social Ads</option>
+                                                        <option>Newsletter</option>
+                                                        <option>Public Advertisments</option>
+                                                        <option>Other</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="referral"><small>Referred by (Are you referred by someone.)</small></label>
+                                                    <input type="text" class="form-control" name="referral" id="referral">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="vendor-step-four">
+                                <div class="checkout-title" step-validate="4" step-badge="4">
+                                    <div class="d-flex justify-content-between">
+                                        <p>
+                                            <span class="index">4</span>
+                                            <span class="indicator">
+                                                <i class="flaticon2-check-mark"></i>
+                                            </span>
+                                            Complete Registration
+                                        </p>
+                                        <span class="flaticon2-down"></span>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="step-content hide" step-id="4">
+                                    <div class="store-details">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="password"><small>Password *</small></label>
+                                                    <input type="password" class="form-control" name="password" id="password"
+                                                    step-field-required="true" step-validation-message="Password is required*">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="confirm_password"><small>Confirm Password *</small></label>
+                                                    <input type="password" class="form-control" name="confirm_password" id="confirm_password"
+                                                    step-field-required="true" step-validation-message="Kindly Confirm Password*">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <div class="d-flex" id="bl-agg">
+                                    <div class="form-group">
+                                        <label class="checkbox checkbox-light-info" for="agree">
+                                            <input type="checkbox" name="agree" class="" id="agree">
+                                            <span></span> 
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <small class="ml-2" for="agree-result">I have read and agree to the
+                                            <a href="/terms-and-conditions" class="text-primary">Terms and Conditions</a> and 
+                                            <a href="/privacy-policy" class="text-primary">Privacy Policy</a> of Wearslot.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-actions mt-3">
+                                <div class="d-flex justify-content-between flex-row-reverse">
+                                    <button type="submit" class="step-submit  btn btn-primary border-50">
+                                        <b>Submit</b>
+                                    </button>
+                                    <button type="button" class="step-next btn btn-primary border-50">
+                                        <b>Continue</b>
+                                    </button>
+                                    <button type="button"  class="step-previous btn btn-light border-50">
+                                        <b>Previous</b>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-2 col-lg-2"></div>
+        </div>
+    </div>
+</section>

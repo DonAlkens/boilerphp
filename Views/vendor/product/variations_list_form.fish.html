@@ -1,0 +1,83 @@
+@if(~variations~)
+
+    {{$variations = ~variations~}}
+    {{$price = ~price~}}
+
+    {{$index = 0}}
+    {{$group = ""}}
+
+    @foreach($variations as $variation)
+        {{$variation = json_decode($variation)}}
+
+        {{$check_group = explode("/", $variation->name)}}
+        {{$show_upload_images = true}}
+
+        @if($group == trim($check_group[0]))
+            {{$show_upload_images = false}}
+        @else
+            {{$group = trim($check_group[0])}}
+        @endif
+
+        @if($show_upload_images)
+        <div class="col-md-12 border-top pt-2">
+            <div class="form-group text-right">
+                <label for="Item@{{$index}}Images" class="btn btn-sm btn-inverse-success">
+                    + add images
+                    <input type="file" class="hide" id="Item@{{$index}}Images" 
+                    name="variant_@{{$index}}_images[]" multiple>
+                </label>
+            </div>
+        </div>
+        @endif
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4 p-1">
+                    <div class="form-group">
+                        <small>Variant</small><br>
+                        <span class="text-primary">
+                            {{$variant = trim($variation->name)}}
+                            <b>@{{$variant}}</b>
+                            <input type="hidden" value="@{{$variant}}" name="variants[]">
+                            <!-- @{{$variant}} -->
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3 p-1">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">NGN</span>
+                            </div>
+                            <input name="variant_price[]" 
+                            validate-field="true" validation-message="<small>Enter the price for this item*</small>"
+                            step-field-required="true" step-validation-message="<small>Enter the price for this item*</small>"
+                            value="@{{$price}}" class="form-control" placeholder="Price">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 p-1">
+                    <div class="form-group">
+                        <input type="number" name="variant_qty[]" validate-field="true" 
+                        validation-message="<small>Enter the quantity for this item*</small>"
+                        step-field-required="true" step-validation-message="<small>Enter the quantity for this item*</small>"
+                        value="" class="form-control" min="0" placeholder="quantity">
+                    </div>
+                </div>
+                <!-- <div class="col-md-2 p-1">
+                    
+                </div> -->
+                <div class="col-md-2 p-1">
+                    <div class="form-group">
+                        <div class="custom-control custom-switch">
+                            <input name="variant_stock[]" type="checkbox"  class="custom-control-input" id="Item@{{$index}}InStock" checked>
+                            <label class="custom-control-label ln-16" for="Item@{{$index}}InStock">In Stock</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{$index++}}
+    @endforeach
+@endif

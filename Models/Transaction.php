@@ -238,6 +238,10 @@ class Transaction extends Model {
             }
         }
     }
+
+    public function customer() {
+        return $this->hasOne(Customer::class, ["id" => "customer"]);
+    }
 }
 
 ?>

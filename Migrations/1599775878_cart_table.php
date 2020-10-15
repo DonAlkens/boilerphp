@@ -14,7 +14,7 @@ class CartTable extends Migration {
         $this->table("carts");
 
         $this->field("id")->bigIncrements();
-        $this->field("user")->integer()->foreign("users", "id")->cascade();
+        $this->field("user")->integer()->foreign("customers", "id")->cascade();
         $this->field("product")->integer()->foreign("products", "id")->cascade();
         $this->field("quantity")->integer();
         $this->field("variant")->integer();

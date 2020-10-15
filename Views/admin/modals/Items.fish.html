@@ -1,0 +1,52 @@
+<!-- Modal -->
+<div class="modal fade" id="confirmItemConfirm" tabindex="-1" role="dialog" aria-labelledby="ItemConfirm"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ItemConfirmLabel">Confirm Shipping</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        Are you sure you want to confirm this item.
+                        <input type="hidden" name="confirm" api-field-key="id" api-edit-role="itemconfirm">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-sm">Confirm</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="processedWithdrawals" tabindex="-1" role="dialog" aria-labelledby="ItemConfirm"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="processedWithdrawalsLabel">Confirm Withdrawal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        Please confirm withdrawal has been processed.
+                        <input type="hidden" name="processed" api-field-key="id" api-edit-role="withdrawals">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-sm">Confirm</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

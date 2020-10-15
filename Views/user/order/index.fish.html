@@ -1,0 +1,139 @@
+@{{extends "shared/layout"}}
+
+{{$customer = ~customer~}}
+{{$order = ~order~}}
+
+<section class="uac-wrapper mb-5">
+    <div class="uac-inner">
+
+        @{{load "user/shared/_menubar"}}
+
+        <div class="container mt-4">
+            
+            <div class="page-title col-md-12 border-radius p-2 mb-3">
+                <div class="d-flex">
+                    <div class="title">
+                        <h5>Dashboard - <small>Orders</small> </h5>
+                    </div>
+                </div>
+            </div>
+
+           <div class="col-md-12 mt-3 p-5 bg-white border-radius m-no-p">
+                <!-- <div class="order-menu">
+                    <ul class="nav nav-pills mb-2" id="pills-tab" role="tablist" style="border-bottom: 1px solid #F3F6F9;">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-all-tab" data-toggle="pill" href="#order-all"
+                                role="tab" aria-controls="pills-all" aria-selected="true">
+                                <i class="mdi mdi-tshirt-crew"></i> All Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-new-tab" data-toggle="pill" href="#orders-new"
+                                role="tab" aria-controls="pills-new" aria-selected="false"> 
+                                <i class="mdi mdi-image-multiple"></i> New Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-confirmed-tab" data-toggle="pill" href="#orders-confirmed"
+                                role="tab" aria-controls="pills-confirmed" aria-selected="false">
+                                <i class="mdi mdi-package-variant"></i> Confirmed Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-completed-tab" data-toggle="pill" href="#orders-completed"
+                                role="tab" aria-controls="pills-completed" aria-selected="false">
+                                <i class="mdi mdi-truck"></i> Completed Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-cancelled-tab" data-toggle="pill" href="#orders-cancelled"
+                                role="tab" aria-controls="pills-cancelled" aria-selected="false">
+                                <i class="mdi mdi-settings"></i> Cancelled Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-returned-tab" data-toggle="pill" href="#orders-returned"
+                                role="tab" aria-controls="pills-returned" aria-selected="false">
+                                <i class="mdi mdi-settings"></i> Returned Orders
+                            </a>
+                        </li>
+                    </ul>
+                </div> -->
+                <div class="order-title mb-3">
+                    <h4>Order History</h4>
+                </div>
+                <div class="order-details bg-light border-radius p-4 mt-2">
+                    
+                    <div class="tab-content" id="pills-tabContent">
+
+                        <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="pills-all-tab">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @if(~all_orders~ != "null")
+                                        {{$all_orders = ~all_orders~}}
+                                        <div class="row">
+                                            @foreach($all_orders as $order)
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="order-box-card bg-white border-radius p-3">
+                                                        <a href="/uac/order/details/@{{$order->id}}" class="order-a">
+                                                        <div class="order-i d-flex justify-content-between">
+                                                            <b>Order <small><b>#@{{$order->id}}</b></small></b>
+                                                            <b>&#8358;@{{number_format(($order->amount + $order->shipping_fee))}}</b>
+                                                        </div>
+                                                        {{$item = $order->items()[0]}}
+                                                        {{$count = (count($order->items()) - 1)}}
+                                                        <div class="d-flex mt-2 p-0 border-top">
+                                                            <div class="item-image">
+                                                                @if($item->variant != 0)
+                                                                    {{$image = $item->get_item_props()["image"]}}
+                                                                    @if($image != null) 
+                                                                    <img src="/src/images/@{{$image}}" alt="" width="100px">
+                                                                    @else
+                                                                    <img src="/src/images/@{{$item->product()->images()->main}}" alt="" width="100px">
+                                                                    @endif
+                                                                @else
+                                                                    <img src="/src/images/@{{$item->product()->images()->main}}" alt="" width="100px">
+                                                                @endif
+                                                            </div>
+                                                            <div class="product-details ml-2">
+                                                                <h6 class="mt-3 m-0">@{{$item->product()->name}}</h6>
+                                                                @if($count > 0) 
+                                                                    <p><small>+ @{{$count}} other items</small></p>
+                                                                @endif
+                                                                <p>
+                                                                    <small><b>Status: </b> </small>
+                                                                    <small>@{{~status~[$order->status]["message"]}}</small>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        </a>
+                                                        <div class="mt-1 border-top text-center">
+                                                            <a href="/uac/order/details/@{{$order->id}}">View details</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endfor
+                                        </div>
+                                        @else 
+                                            <div class="text-center">
+                                                <p>
+                                                    <i class="flaticon2-box-1 text-primary" style="font-size: 60px;"></i>
+                                                </p>
+                                                <p> <strong>Hi!, @{{~customer~>firstname}}</strong> You have not placed any order yet.</p>
+                                                <a href="/super-sales" class="btn btn-primary btn-sm">Get fantastic deals now</a>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+           </div>
+
+        </div>
+    </div>
+</section>

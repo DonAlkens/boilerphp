@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Action\Urls\Controllers;
+namespace App\Action\Urls\Controllers\Api;
 
 
+use App\Action\Urls\Controllers\Controller;
+use App\Admin\Door;
 use App\Core\Urls\Request;
 use Auth;
 use App\Category;
@@ -15,11 +17,23 @@ use App\SubCategory;
  * used to get action's request data get/post
  */ 
 
-class Api_Collection extends Controller {
+class CollectionController extends Controller {
 
     public function __construct()
     {
-        $this->hasAuthAccess("auth", "/signin");
+        // $this->hasAuthAccess("auth", "/signin");
+
+        // (new Door)->openWith("manage collections", function(){
+
+        //     $response = array(
+        //         "status" => 200,
+        //         "success" => false,
+        //         "error" => array(
+        //             "message" => "Access denied: You do not have permission to manage collections"
+        //         )
+        //     );
+        //     return Json($response);
+        // });
     }
 
     public function add(Request $request) {
@@ -149,7 +163,11 @@ class Api_Collection extends Controller {
         if($collection) {
 
             $creator = $collection->creator()->firstname." ".$collection->creator()->lastname." (".$collection->creator()->email.")";
-            $updator = $collection->updator()->firstname." ".$collection->updator()->lastname." (".$collection->updator()->email.")";
+            
+            $updator = "";
+            if($collection->last_updated_by != null) {
+                $updator = $collection->updator()->firstname." ".$collection->updator()->lastname." (".$collection->updator()->email.")";
+            }
 
             $details = array(
                 "id" => $collection->id,
@@ -344,7 +362,11 @@ class Api_Collection extends Controller {
         if($category) {
 
             $creator = $category->creator()->firstname." ".$category->creator()->lastname." (".$category->creator()->email.")";
-            $updator = $category->updator()->firstname." ".$category->updator()->lastname." (".$category->updator()->email.")";
+            
+            $updator = "";
+            if($category->last_updated_by != null) {
+                $updator = $category->updator()->firstname." ".$category->updator()->lastname." (".$category->updator()->email.")";
+            }
 
             $details = array(
                 "id" => $category->id,

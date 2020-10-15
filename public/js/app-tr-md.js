@@ -437,7 +437,6 @@
 
     });
 
-
     $(".apP_range").click(function(event){
         event.preventDefault();
 

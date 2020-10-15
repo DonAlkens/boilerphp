@@ -18,6 +18,7 @@
                 </div>
 			</div>
 			<div class="col-md-1"></div>
+			@if(!~hide_cart~)
 			<div class="col-md-2 top-side">
 				<ul class="d-flex justify-content-between mt-1">
 					<li class="text-center text-white cart-btn mr-3">
@@ -28,6 +29,27 @@
 					</li>
 				</ul>
 			</div>
+			@endif
+
+			@if(~v_login~)
+			<div class="col-md-2 top-side">
+				<ul class="d-flex justify-content-end mt-1">
+					<li class="text-center text-white mr-3">
+						<a href="/login"> <span>Login</span> </a>
+					</li>
+				</ul>
+			</div>
+			@endif
+
+			@if(~v_reg~)
+			<div class="col-md-2 top-side">
+				<ul class="d-flex justify-content-end mt-1">
+					<li class="text-center text-white mr-3">
+						<a href="/register"> <span>Register</span> </a>
+					</li>
+				</ul>
+			</div>
+			@endif
 		</div>
 	</div>
 </header>
