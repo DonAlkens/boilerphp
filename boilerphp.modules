@@ -1,0 +1,25 @@
+Exceptions
+Seeder
+Transaction
+Pagination
+Events
+Cache
+Logger
+Email
+Config
+Subdomains
+Workbench
+RouteServices
+DeviceDetector
+API
+
+
+By Folders::
+Migrations
+
+Schema -> toArray()
+
+
+*Notes*: 
+Check if Where query is available on get all function.
+Add file function & timestamp function into Request class

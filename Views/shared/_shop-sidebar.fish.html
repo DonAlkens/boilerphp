@@ -1,0 +1,146 @@
+<div class="sidebar p-0">
+    <div class="bg-white sidebar-inner">
+
+        <div class="close-filter text-right mb-3 mt-2">
+            <i class="icofont-close-line"></i> <span>Close</span> 
+        </div>
+
+        @if(~trends~)
+        <div class="sidebar-title">
+            <span>Trending Hashtags</span>
+        </div>
+        <div class="sidebar-list">
+            <ul class="p-0">
+                {{$trends = ~trends~}}
+                {{$url_path = ~url_path~}}
+                @foreach($trends as $trend)
+                <li>
+                    <a href="/@{{trim($url_path,'/')}}?hash_tag=@{{$trend->trend()->hash_tag}}">
+                        <span>@{{$trend->trend()->hash_tag}}</span>
+                    </a>
+                </li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        @if(~categories~)
+        <div class="sidebar-title">
+            <span>Category</span>
+        </div>
+        <div class="sidebar-list">
+            <ul class="p-0">
+                {{$url_path = ~url_path~}}
+                {{$categories = ~categories~}}
+                @foreach($categories as $category)
+                <li>
+                    <a href="@{{$url_path.$category->slug}}">
+                        <span>@{{$category->name}}</span>
+                    </a>
+                </li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        @if(~brands~)
+
+            {{$filter_brands = array()}}
+            @if(~filter_brands~) 
+                {{$filter_brands = ~filter_brands~}}
+            @endif
+
+            <div class="sidebar-title">
+                <span>Brands</span>
+            </div>
+            <div class="sidebar-list">
+                {{$brands = ~brands~}}
+                @foreach($brands as $brand)
+                <div class="form-group">
+                    <label class="checkbox checkbox-light-info" for="ck_@{{str_replace(' ', '-', strtolower($brand->brand))}}">
+                        <input type="checkbox" name="brand" class="form-check-input"
+                        @{{(in_array($brand->brand, $filter_brands)) ? "checked" : null }}
+                        id="ck_@{{str_replace(' ', '-', strtolower($brand->brand))}}" 
+                        value="@{{str_replace(' ', '-', $brand->brand)}}">
+                        <span></span> <small class="ml-2">@{{ucfirst($brand->brand)}}</small>
+                    </label>
+                </div>
+                @endforeach
+            </div>
+        @endif
+
+        <div class="sidebar-title">
+            <span>Price (&#8358;)</span>
+        </div>
+        <div class="sidebar-list price-range">
+            <div class="form-group">
+                <input type="range" class="form-control-range" id="formControlRange" 
+                value="@{{(int) ~price_range~['highest']}}"
+                min="@{{(int) ~price_range~['lowest']}}" max="@{{(int) ~price_range~['highest']}}">
+            </div>
+
+
+            <div class="d-flex">
+                <div class="form-group mr-4">
+                    <input type="text" name="rg_st" class="form-control p-2 pt-1" value="@{{(int) ~price_range~['lowest']}}">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="rg_nd" class="form-control p-2 pt-1" value="@{{(int) ~price_range~['highest']}}">
+                </div>
+            </div>
+            <div class="text-center mb-2">
+                <a href="#" class="text-primary apP_range"><b>Apply</b></a>
+            </div>
+        </div>
+
+        @if(~colors~ && (count(~colors~) > 0))
+
+            {{$filter_colors = array()}}
+            @if(~filter_colors~)
+                {{$filter_colors = ~filter_colors~}}
+            @endif
+
+            <div class="sidebar-title mt-3">
+                <span>Colors</span>
+            </div>
+            <div class="sidebar-list">
+                {{$colors = ~colors~}}
+                @foreach($colors as $color)
+                <div class="form-group">
+                    <label class="checkbox checkbox-light-info" for="ck_@{{$color}}">
+                        <input type="checkbox" name="color" class="form-check-input"
+                        @{{(in_array($color, $filter_colors)) ? "checked" : null }}
+                        id="ck_@{{$color}}" value="@{{$color}}">
+                        <span></span> <small class="ml-2">@{{$color}}</small>
+                    </label>
+                </div>
+                @endforeach
+            </div>
+        @endif
+
+        @if(~sizes~ && (count(~sizes~) > 0))
+
+            {{$filter_sizes = array()}}
+            @if(~filter_sizes~)
+                {{$filter_sizes = ~filter_sizes~}}
+            @endif
+
+            <div class="sidebar-title mt-3">
+                <span>Sizes</span>
+            </div>
+            <div class="sidebar-list">
+                {{$sizes = ~sizes~}}
+                @foreach($sizes as $size)
+                <div class="form-group">
+                    <label class="checkbox checkbox-light-info" for="ck_@{{$size}}">
+                        <input type="checkbox" name="size" class="form-check-input"
+                        @{{(in_array($size, $filter_sizes)) ? "checked" : null }}
+                        id="ck_@{{$size}}" value="@{{$size}}">
+                        <span></span> <small class="ml-2">@{{$size}}</small>
+                    </label>
+                </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+</div>

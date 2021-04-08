@@ -14,7 +14,7 @@ class Authentication
         if(Session::get("auth")) 
         {
             $id = Session::get("auth");
-            return (new User)->where("id", $id)->get();
+            return (new User)->find($id);
         }
 
         return null;
@@ -26,7 +26,6 @@ class Authentication
         Session::end("app_doors_locks");
         Session::end("request_validation_message");
 
-        session_destroy();
     }
 
     static public function login($user) 

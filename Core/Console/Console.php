@@ -3,7 +3,8 @@
 
 namespace Console;
 
-class Console extends Command {
+class Console extends Command
+{
 
     public function __construct($server, $argv = null)
     {
@@ -13,27 +14,22 @@ class Console extends Command {
     }
 
     public function run()
-    {   
-
-
+    {
         array_splice($this->arguments, 0, 1);
-        if($this->getCommandLength($this->arguments) > 0) {
+        if ($this->getCommandLength($this->arguments) > 0) {
             $this->parse($this->arguments);
-        } 
-
+        }
     }
 
-    public function parse($arguments) {
-
+    public function parse($arguments)
+    {
         $command = $arguments[0];
 
-        if(in_array($command, $this->commands)) {
+        if (in_array($command, $this->commands)) {
             // Remove command from arguments 
             array_splice($arguments, 0, 1);
             // Use function to execute commands
             $this->$command($arguments);
         }
-
-
     }
 }

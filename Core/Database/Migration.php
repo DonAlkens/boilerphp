@@ -10,9 +10,22 @@ class Migration extends Schema {
         $this->table = $name;
     }
 
-    public function field($name) 
+    public function column($name) 
     {
         $this->column = $name; return $this;
+    }
+
+    public function addColumn($name) {
+
+        // Using ColumnDiagram
+
+    }
+
+    public function timestamps() {
+
+        $this->column("created_date")->timestamp()->default("CURRENT_TIMESTAMP()");
+        $this->column("updated_date")->timestamp()->default("CURRENT_TIMESTAMP()");
+
     }
 
     public function sign() {
@@ -23,13 +36,56 @@ class Migration extends Schema {
         ); 
 
         $this->foreignKeyProccessor($this->table);
-
         return $this->run($diagram->TableQuery);
     }
 
     public function dropIfExists($table)
     {
 
+    }
+
+    public function registerMigration(array $data)
+    {
+
+        if($data) 
+        {
+            if($this->insertQuery($data)) 
+            {
+                $statement = $this->connection->prepare($this->queryString);
+
+                if($statement->execute($data))
+                {
+                    return true;
+                }
+
+                return null;
+            }
+
+        }
+
+        return false;
+    }
+
+    public function checkMigrationExists(array $data)
+    {
+
+        if($data) 
+        {
+            if($this->insertQuery($data)) 
+            {
+                $statement = $this->connection->prepare($this->queryString);
+
+                if($statement->execute($data))
+                {
+                    return true;
+                }
+
+                return null;
+            }
+
+        }
+
+        return false;
     }
     
 }

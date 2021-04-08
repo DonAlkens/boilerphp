@@ -7,9 +7,17 @@ class App {
     /**
     * Set session lifetime 
     *
+    * @var int
+    *
+    */
+    public $session_lifetime = 172800;
+
+    /**
+    * Set session across subdomains
+    *
     * @var string
     *
     */
-    public $session_lifetime = 3600;
+    public $cookie_subdomain = "";
 
 }

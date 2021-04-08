@@ -1,7 +1,5 @@
 <?php
 
-use App\Admin\Auth;
-
 class TemplateEngine {
 
     public static $content = [];
@@ -21,6 +19,19 @@ class TemplateEngine {
         return $fcontent;
     }
 
+    public function content($fileContent, $content) {
+        
+        self::$content = $content;
+        $fcontent = TemplateEngine::editFile($fileContent, $content);
+        
+        ob_start();
+        eval("?> ".$fcontent);
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        return $content;
+    }
+
     static public function auth($fcontent) {
         $fcontent = preg_replace("/auth\@user\(\)\-\>(.*)\}\}/", 'TemplateEngine::auth_props("$1")}}', $fcontent);
         $fcontent = preg_replace("/auth\@user\(\)\-\>(.*)\)/", 'TemplateEngine::auth_props("$1"))', $fcontent);
@@ -28,8 +39,8 @@ class TemplateEngine {
     }
 
     static public function auth_props($key) {
-        if(isset(Auth::user()->$key)){
-            return Auth::user()->$key;
+        if(isset(auth()->$key)){
+            return auth()->$key;
         } 
     }
 
@@ -60,7 +71,7 @@ class TemplateEngine {
         
         $fcontent = $fileContent;
         // $fcontent = TemplateEngine::htmlSymbolicCharacters($fcontent);
-        $fcontent = preg_replace("/@\{\{(.*)load (.*)\}\}/",'<?php echo TemplateEngine::loadFile("views/".($2).".".self::$ext, $content); ?>',$fcontent);
+        $fcontent = preg_replace("/@\{\{(.*)load (.*)\}\}/",'<?php echo TemplateEngine::loadFile("Views/".($2).".".self::$ext, $content); ?>',$fcontent);
         $fcontent = TemplateEngine::auth($fcontent);
         $fcontent = TemplateEngine::sessions($fcontent);
         $fcontent = TemplateEngine::keys($fcontent, $content);
@@ -81,28 +92,55 @@ class TemplateEngine {
 
     static function emptyParameter($fcontent){
         $fcontent = preg_replace("/(.*)if\((.*)\~(.*)\~(.*)\)/", '$1 if(false) ' ,$fcontent);
-        $fcontent = preg_replace("/(.*)for\((.*)\~(.*)\~(.*)\)/", '$1 function() ' ,$fcontent);
-        $fcontent = preg_replace("/(.*)foreach\((.*)\~(.*)\~(.*)\)/", '$1 function() ' ,$fcontent);
+        $fcontent = preg_replace("/(.*)for\((.*)\~(.*)\~(.*)\)/", '$1 for($i = 0; $i <= 0; $i++) ' ,$fcontent);
+        $fcontent = preg_replace("/(.*)foreach\((.*)\~(.*)\~(.*)\)/", '$1 foreach(array() as $no_value) ' ,$fcontent);
         $fcontent = preg_replace("/(.*)\~(.*)\~(.*)/", "$1"."false"."$3",$fcontent);
-        $fcontent = preg_replace("/(.*)break(.*)/", "$1"."null"."$2", $fcontent);
-        $fcontent = preg_replace("/(.*)continue(.*)/", "$1"."null"."$2", $fcontent);
         return $fcontent;
     }
 
     public function extendLayout($fcontent, $viewPath, $ext) {
 
-        if(preg_match("/@\{\{extends/", $fcontent)) {
-            $layout = substr($fcontent, strpos($fcontent,"@{extends "), strpos($fcontent, "}"));
+        if(preg_match("/@\{\{extends/", $fcontent)) 
+        {
+
+            $layout = substr($fcontent, strpos($fcontent,"@{{extends "), strpos($fcontent, "}}"));
             $layout = str_replace("@{{extends \"","",$layout);
             $cleaned = str_replace("\"","",trim($layout," "));
             $layoutPath = $viewPath."/".$cleaned."."."$ext";
 
             $layout = file_get_contents($layoutPath);
-            $fcontent = preg_replace("/@\{\{extends (.*)\}\}/","",$fcontent);
+
+
+            $fcontent = preg_replace("/@\{\{extends (.*)\}\}/", "", $fcontent);
+            
+            $scripts = "";
+            if(strpos($fcontent, "@startScripts")) {
+                $scripts = preg_replace("/(.*)@startScripts/s", "", $fcontent);
+                $scripts = preg_replace("/(.*)@endScripts/", "", $scripts);
+            }
+
+            $styles = "";
+            if(strpos($fcontent, "@startStyles")) {
+                $styles = preg_replace("/(.*)@startStyles/s", "", $fcontent);
+                $styles = preg_replace("/(.*)@endStyles/", "", $styles);
+            }
+
+            $fcontent = preg_replace("/@startScripts(.*)@endScripts/s", "", $fcontent);
+            $fcontent = preg_replace("/@startStyles(.*)@endStyles/s", "", $fcontent);
+
             $layout = preg_replace("/@\{\{(.*)content(.*)\}\}/", $fcontent, $layout);
+            $layout = preg_replace("/@\{\{(.*)renderScripts(.*)\}\}/", $scripts, $layout);
+            $layout = preg_replace("/@\{\{(.*)renderStyles(.*)\}\}/", $styles, $layout);
+
             return $layout;
         }
+
         return $fcontent;
+    }
+
+
+    public function renderScript() {
+
     }
 
     static public function FunctionStatement($fcontent){

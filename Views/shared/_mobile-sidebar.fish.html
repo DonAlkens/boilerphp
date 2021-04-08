@@ -1,0 +1,169 @@
+<div class="col-md-12 mobile mobile-sidebar-nav-wrapper">
+    <div class="mobile-sidebar-navbar">
+
+        <div class="mobile-sidebar-top-bar">
+            <div class="d-flex justify-content-between">
+                <a href="/">
+                    <img src="/public/image/logos/logo.svg" class="mobile" alt="" width="130px">
+                    <!-- <h4 class="text-white"><b>WEARSLOT</b></h4> -->
+                </a>
+                <a href="javascript:void();" class="">
+                    <i class="mdi mdi-close text-white mm-close"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="mobile-sidebar-menu-bar">
+
+            <ul class="mobile-top-list border-bottom">
+                <li>
+                    <a href="https://account.wearslot.com/sign-in?service=marketplace&continue=https://wearslot.com/uac/dashboard">
+                        <i class="flaticon-user"></i> 
+                        <small>My Account</small> 
+                    </a>
+                </li>
+                <li>
+                    <a href="/shop-gift-items">
+                        <i class="flaticon2-gift-1"></i> 
+                        <small>Gift Shop</small>
+                    </a>
+                </li>
+                <li>
+                    <a href="/track-orders">
+                        <i class="flaticon-open-box"></i> 
+                        <small>Track Orders</small>
+                    </a>
+                </li>
+                <li>
+                    <a href="/super-sales">
+                        <i class="flaticon2-pie-chart-4"></i> 
+                        <small>Sales & Offers</small>
+                    </a>
+                </li>
+                <!-- <li>
+                    <a href="/gift-cards">
+                        <span class="svg-icon svg-icon-dark svg-icon-md">
+                            <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <rect fill="#000000" opacity="0.3" x="2" y="5" width="20" height="14" rx="2"/>
+                                    <rect fill="#000000" x="2" y="8" width="20" height="3"/>
+                                    <rect fill="#000000" opacity="0.3" x="16" y="14" width="4" height="2" rx="1"/>
+                                </g>
+                            </svg>
+                        </span>
+                        Gift Cards 
+                    </a>
+                </li> -->
+                <li>
+                    <a href="https://sell.wearslot.com" class="text-primary">
+                        <span class="svg-icon svg-icon-info svg-icon-md">
+                            <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <polygon fill="#000000" opacity="0.3" points="12 20.0218549 8.47346039 21.7286168 6.86905972 18.1543453 3.07048824 17.1949849 4.13894342 13.4256452 1.84573388 10.2490577 5.08710286 8.04836581 5.3722735 4.14091196 9.2698837 4.53859595 12 1.72861679 14.7301163 4.53859595 18.6277265 4.14091196 18.9128971 8.04836581 22.1542661 10.2490577 19.8610566 13.4256452 20.9295118 17.1949849 17.1309403 18.1543453 15.5265396 21.7286168"/>
+                                    <polygon fill="#000000" points="14.0890818 8.60255815 8.36079737 14.7014391 9.70868621 16.049328 15.4369707 9.950447"/>
+                                    <path d="M10.8543431,9.1753866 C10.8543431,10.1252593 10.085524,10.8938719 9.13585777,10.8938719 C8.18793881,10.8938719 7.41737243,10.1252593 7.41737243,9.1753866 C7.41737243,8.22551387 8.18793881,7.45690126 9.13585777,7.45690126 C10.085524,7.45690126 10.8543431,8.22551387 10.8543431,9.1753866" fill="#000000" opacity="0.3"/>
+                                    <path d="M14.8641422,16.6221564 C13.9162233,16.6221564 13.1456569,15.8535438 13.1456569,14.9036711 C13.1456569,13.9520555 13.9162233,13.1851857 14.8641422,13.1851857 C15.8138085,13.1851857 16.5826276,13.9520555 16.5826276,14.9036711 C16.5826276,15.8535438 15.8138085,16.6221564 14.8641422,16.6221564 Z" fill="#000000" opacity="0.3"/>
+                                </g>
+                            </svg>
+                        </span>
+                        <small><b>Sell on Wearslot</b></small>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="panel-group p-0" id="accordion" role="tablist">
+                @if(~collections~)
+                    {{$index = 1}}
+                    <div class="d-flex justify-content-between mb-1 p-2 pl-3 ">
+                        <b class="text-primary">CATEGORIES</b>
+                        <a href="/all-collections" class="text-primary text-underline">
+                            <small><b>Shop all</b></small>
+                        </a>
+                    </div>
+                    {{$collections = ~collections~}}
+                    @foreach($collections as $collection)
+                    <div class="panel panel-default">
+                        <div class="panel-heading mb-0" role="tab" id="heading@{{$index}}">
+                            <h4 class="panel-title">
+                                {{$categories = $collection->categories()}}
+                                @if($categories)
+                                <a class="title has-drop collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#@{{$collection->slug}}" aria-expanded="true" aria-controls="@{{$collection->slug}}">
+                                    <i class="more-less glyphicon glyphicon-plus"></i>
+                                    @{{$collection->name}}
+                                </a>
+                                @else
+                                <a class="title" href="/cp/@{{$collection->slug}}">
+                                    @{{$collection->name}}
+                                </a>
+                                @endif
+                            </h4>
+                        </div>
+                        @if(is_array($categories))
+                        <div id="@{{$collection->slug}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <ul class="p-0 m-0 sub-items-list">
+                                    <a href="/new-arrivals/@{{$collection->slug}}" class="nav-sub-items">
+                                        <li>
+                                            <i class="pe-7s-angle-right"></i>
+                                            <small>New Arrivals</small>
+                                        </li>
+                                    </a>
+                                    @foreach($categories as $category)
+                                        <a href="/cp/@{{$collection->slug}}/@{{$category->slug}}" class="nav-sub-items">
+                                            <li>
+                                                <i class="pe-7s-angle-right"></i>
+                                                <small>@{{$category->name}}</small>
+                                            </li>
+                                        </a>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                    {{$index++}}
+                    @endforeach
+                @endif
+            </div>
+
+            <ul class="mobile-top-list border-top pt-3">
+                <li>
+                    <a href="" class="text-primary">
+                        <span class="svg-icon svg-icon-primary svg-icon-md">
+                            <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <path d="M5.5,4 L9.5,4 C10.3284271,4 11,4.67157288 11,5.5 L11,6.5 C11,7.32842712 10.3284271,8 9.5,8 L5.5,8 C4.67157288,8 4,7.32842712 4,6.5 L4,5.5 C4,4.67157288 4.67157288,4 5.5,4 Z M14.5,16 L18.5,16 C19.3284271,16 20,16.6715729 20,17.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,17.5 C13,16.6715729 13.6715729,16 14.5,16 Z" fill="#000000"/>
+                                    <path d="M5.5,10 L9.5,10 C10.3284271,10 11,10.6715729 11,11.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,11.5 C4,10.6715729 4.67157288,10 5.5,10 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,12.5 C20,13.3284271 19.3284271,14 18.5,14 L14.5,14 C13.6715729,14 13,13.3284271 13,12.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z" fill="#000000" opacity="0.3"/>
+                                </g>
+                            </svg>
+                        </span>
+                        <small><b>Wearslot Services</b></small>
+                    </a>
+                </li>
+                <li>
+                    <a href="/privacy-policy">
+                        <i class="flaticon-safe-shield-protection"></i>
+                        <small>Privacy Policy </small> 
+                    </a>
+                </li>
+                <li>
+                    <a href="/support-center">
+                        <i class="flaticon-info"></i>
+                        <small>Help Center</small> 
+                    </a>
+                </li>
+            </ul>
+
+            <div class="mt-2 text-center">
+                <a href="https://wearslot.com" class="text-primary">
+                    <small>Wearslot.com</small>
+                    <!-- <small>Wearslot Inc.</small> -->
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>

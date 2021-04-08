@@ -7,6 +7,8 @@ namespace App\Core\Database;
 class QueryBuilder extends DataTypes
 {
 
+	public $whereQuery = "";
+	
 
 	public function cleanQueryStrings()
 	{
@@ -53,7 +55,14 @@ class QueryBuilder extends DataTypes
 		$this->cleanQueryStrings();
 
 		$this->queryString = "UPDATE $this->table SET $this->columns ";
-		$this->whereData = array_merge($data, $this->whereData);
+		if(isset($this->whereData))
+		{
+			$this->whereData = array_merge($data, $this->whereData);
+		}
+		else 
+		{
+			$this->whereData = $data;
+		}
 		return $this->queryString;
 	}
 
@@ -74,6 +83,44 @@ class QueryBuilder extends DataTypes
 		return $this->queryString;
 	}
 
+	public function searchQuery($key, $value, $operation)
+	{
+
+		if (is_array($key)) 
+		{
+			if($this->whereQuery == "")
+			{
+				$this->whereQuery = " WHERE ";
+			}
+			else 
+			{
+				$this->whereQuery .= " AND ";
+			}
+
+			foreach ($key as $column => $val) 
+			{
+				$val = $operation[0].$val.$operation[1];
+				$this->whereQuery .= "`$column` LIKE '$val' OR ";
+			}
+
+			$this->whereQuery = trim($this->whereQuery, "OR ");
+		} 
+		
+		else if (!is_array($key) && $value != null) 
+		{
+			$value = $operation[0].$value.$operation[1];
+			if($this->whereQuery == "")
+			{
+				$this->whereQuery = " WHERE `$key` LIKE '$value'";
+			}
+			else 
+			{
+				$this->whereQuery .= " AND `$key` LIKE '$value'";
+			}
+		}
+
+	}
+
 	public function whereQuery($key, $value, $operation = null)
 	{
 
@@ -81,16 +128,26 @@ class QueryBuilder extends DataTypes
 		{
 			$this->whereQuery = " WHERE ";
 
+			$index = 0;
 			foreach ($key as $column => $val) 
 			{
 				if($operation != null) 
 				{
-					$this->whereQuery .= "`$column` $operation :$column AND ";
+					if(is_array($operation)){
+						$op = $operation[$index];
+						$this->whereQuery .= "`$column` $op :$column AND ";
+					}
+					else
+					{
+						$this->whereQuery .= "`$column` $operation :$column AND ";
+					}
 				}
 				else 
 				{
 					$this->whereQuery .= "`$column` = :$column AND ";
 				}
+
+				$index++;
 			}
 
 			$this->whereQuery = trim($this->whereQuery, "AND ");
@@ -98,9 +155,9 @@ class QueryBuilder extends DataTypes
 		} 
 		
 		else if (!is_array($key) && $value != null) 
-
 		{
-			if($operation != null) {
+			if($operation != null) 
+			{
 				$this->whereQuery = " WHERE `$key` $operation :$key";
 			}
 			else 
@@ -114,7 +171,7 @@ class QueryBuilder extends DataTypes
 
 	public function groupQuery($column)
 	{
-		$this->groupQuery = " GROUP BY $column";
+		$this->groupQuery = " GROUP BY `$column`";
 	}
 
 	public function orderQuery($key, $order, $limit)

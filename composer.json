@@ -10,5 +10,13 @@
     ],
     "minimum-stability": "dev",
     "require": {
+        "picqer/php-barcode-generator": "dev-master",
+        "endroid/qr-code": "^3.0@dev",
+        "mailgun/mailgun-php": "^3.0@dev",
+        "swiftmailer/swiftmailer": "^6.2@dev",
+        "guzzlehttp/guzzle": "^6.2@dev",
+        "facebook/graph-sdk": "5.0@dev",
+        "cboden/ratchet": "dev-master",
+        "flutterwavedev/flutterwave-v3": "dev-master"
     }
 }

@@ -1,92 +1,130 @@
-<?php 
+<?php
 
 namespace Console\Support;
 
 
 
-class Actions extends ActionHelpers {
+class Actions extends ActionHelpers
+{
 
     /**
      * Create Controllers using command line manager
      * @param $name, $type
      * Boolean response if controller is created
-    * */
+     * */
     public function controller($name, $flag = null)
     {
-        $this->path = "./Controllers/".$name.".php";
+        $this->path = "./Controllers/" . $name . ".php";
 
-        if($this->checkExistent($this->path)) {
-            echo "$name already exists"; 
+        if ($this->checkExistent($this->path)) {
+            echo "$name already exists";
             return false;
         }
 
-        if($this->configureController($name, $this->path)) {
+        if ($this->configureController($name, $this->path)) {
 
-            if(isset($this->run_flag) && $this->run_flag) {
+            if (isset($this->run_flag) && $this->run_flag) {
                 $this->flagHandler($name, $flag, "controller", $this->path);
             }
 
             return true;
         }
 
-        print("Unable to create model ".$name);
+        print("Unable to create model " . $name);
         return false;
     }
 
+    public function notification($name, $flag = null)
+    {
+        if (!is_null($flag)) {
+            if ($this->flagChecker("notification", $flag)) {
+                $this->run_flag = true;
+            } else {
+                return $this->run_flag = false;
+            }
+        }
+
+        $path = "./Notifications/" . $name . ".php";
+
+        if ($this->checkExistent($path)) {
+            echo "Notification $name already exists";
+            exit;
+        }
+
+        if ($this->configureNotification($name, $path)) {
+
+            if (isset($this->run_flag) && $this->run_flag) {
+                $this->flagHandler($name, $flag, "notification", $path);
+            }
+
+            return true;
+        }
+
+        print("Unable to create notification " . $name);
+        return false;
+    }
 
     public function model($name, $flag = null)
     {
-        if(!is_null($flag)) {
-            if($this->flagChecker("model", $flag)) { $this->run_flag = true;} 
-            else { return $this->run_flag = false; }
+        if (!is_null($flag)) {
+            if ($this->flagChecker("model", $flag)) {
+                $this->run_flag = true;
+            } else {
+                return $this->run_flag = false;
+            }
         }
 
-        $path = "./Models/".$name.".php";
+        $path = "./Models/" . $name . ".php";
 
-        if($this->checkExistent($path)) {
-            echo "Model $name already exists"; exit;
+        if ($this->checkExistent($path)) {
+            echo "Model $name already exists";
+            exit;
         }
 
-        if($this->configureModel($name, $path)) {
+        if ($this->configureModel($name, $path)) {
 
-            if(isset($this->run_flag) && $this->run_flag) {
+            if (isset($this->run_flag) && $this->run_flag) {
                 $this->flagHandler($name, $flag, "model", $path);
             }
 
             return true;
         }
-        
-        print("Unable to create model ".$name);
+
+        print("Unable to create model " . $name);
         return false;
     }
 
     public function migration($name, $flag = null)
     {
-        $file_name = strtolower($name)."_table.php";
-        $this->path = "./Migrations/".time()."_".$file_name;
 
-        if($this->checkMigrationExistent($file_name)) {
-            echo "Migration $name already exists"; exit;
-        }
+        $table = $this->tableFormating($name);
 
-        if($this->configureMigration($name, $this->path)) {
+        $file_name = $table . "_table.php";
+        $this->path = "./Migrations/" . time() . "_" . $file_name;
 
-            if(isset($this->run_flag) && $this->run_flag) {
+
+        $this->checkMigrationExistent($file_name);
+
+
+        if ($this->configureMigration($table, $this->path))
+        {
+
+            if (isset($this->run_flag) && $this->run_flag) {
                 $this->flagHandler($name, $flag, "migration", $this->path);
             }
 
             return true;
         }
 
-        print("Unable to create model ".$name);
+        print("Unable to create migration " . $name);
         return false;
     }
 
     public function migrate($flag = null)
     {
         $this->migrationFlagHandler($flag);
-        if($this->newMigrationsChecker()) {
-            if(!$this->checkTableExists("migrations")){
+        if ($this->newMigrationsChecker()) {
+            if (!$this->checkTableExists("migrations")) {
                 $this->createMigrationsTable();
             }
 
@@ -95,6 +133,23 @@ class Actions extends ActionHelpers {
             return true;
         }
 
-       echo "No new migrations";
+        echo "No new migrations";
+    }
+
+    public function thirdpartylibrary($state, $flag = null)
+    {
+        if ($state == true) {
+            if ($this->enableThirdPartyLibrary()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if ($state == false) {
+            if ($this->disableThirdPartyLibrary()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }

@@ -7,4 +7,9 @@ use App\Core\Urls\Route;
  * Route::get("/, "BaseController::home");
  * */
 
-Route::httpAction("/", "Auth\UserController::index");
+# Base
+Route::get("/", "BaseController::home");
+
+Route::get("/login", function($request) {
+    return content("This is Login Page");
+});

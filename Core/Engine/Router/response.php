@@ -74,3 +74,29 @@ function error404()
 {
     return view("errors/404");
 }
+
+
+function mailPage($view_file, $data = null) 
+{
+
+    $path = get_view_path($view_file);
+
+    $full_path = $path["fullpath"]; 
+    $view_path = $path["viewpath"];
+    $extension = $path["extension"];
+
+    if(file_exists($full_path)) 
+    {
+        $fcontent = file_get_contents($full_path);
+
+        $template = new TemplateEngine($extension);
+        $fcontent = $template->extendLayout($fcontent, $view_path, $extension);
+        $fcontent = $template->content($fcontent, $data);      
+        return $fcontent;
+    } 
+    else 
+    {
+        throw new Error($view_file." does not exists");
+    }
+
+}

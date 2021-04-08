@@ -2,6 +2,8 @@
 
 namespace App\Core\Database;
 
+use BaconQrCode\Common\Mode;
+
 class Relations extends Schema {
 
     public $useKey;
@@ -41,7 +43,14 @@ class Relations extends Schema {
                 $class = new $model;
                 $value_key = $this->value_key;
                 
-                $this->result = $class->where($this->foreign_key, $this->$value_key)->select();
+                // if($this->$value_key instanceof Model) 
+                // {
+                //     $this->value_key = $this->$value_key->id;
+                // } else {
+                //     $this->value_key = $this->$value_key;
+                // }
+
+                $this->result = $class->where($this->foreign_key, $this->$value_key)->attach();
 
                 return $this->result;
             }
@@ -106,7 +115,7 @@ class Relations extends Schema {
                 $class = new $model;
                 $value_key = $this->value_key;
                 
-                $this->result = $class->where($this->foreign_key, $this->$value_key)->all();
+                $this->result = $class->where($this->foreign_key, $this->$value_key)->attach(true);
 
                 return $this->result;
             }
@@ -116,18 +125,14 @@ class Relations extends Schema {
         // return OCI_RETURN_NULLS;
     }
 
-    public function attach($data) 
+    public function append($data) 
     {
-
         $this->table = $this->_table;
-
 
         $key = $this->useKey;
         $data[$this->class_id_field] = $this->$key;
 
-
         $this->insert($data);
-
 
         return $this;
     }

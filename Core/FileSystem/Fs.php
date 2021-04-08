@@ -3,6 +3,7 @@
 namespace App\FileSystem;
 
 use Error, ZipArchive;
+use App\Hashing\Hash;
 
 class Fs
 {
@@ -186,7 +187,10 @@ class Fs
 			
 			{
 
+				$hash_name =  Hash::create($file_name, true);
+				$file_name = $hash_name . ".$file_extension";
 				$uploadFile = $path . $file_name;
+
 				if (move_uploaded_file($file_tmp, $uploadFile)) 
 				{
 					self::$filename = $file_name;
@@ -230,7 +234,7 @@ class Fs
 		}
 
 
-		for($i = 0; $i < count($_FILES["$filefield"]["tmp_name"]); $i++) 
+		for($i = 0; $i < count($_FILES[$filefield]["tmp_name"]); $i++) 
 		{
 
 			$file_name = $_FILES[$filefield]["name"][$i];
@@ -255,6 +259,8 @@ class Fs
 				else 
 				
 				{
+					$hash_name =  Hash::create($file_name, true);
+					$file_name = $hash_name . ".$file_extension";
 					$uploadFile = $path . $file_name;
 				}
 				

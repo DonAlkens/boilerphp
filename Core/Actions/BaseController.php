@@ -10,16 +10,37 @@ use Auth;
 class BaseController {
 
 	
+	public function detectCrossDomain($redirect)
+	{
+		if(stripos($redirect, "account.") > 0)
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+
+	}
+
 
 	public function hasAuthAccess($name, $redirect)
 	{
-		if(isset($_SESSION[$name])){
-            
+
+		if(isset($_SESSION[$name]))
+		{
 			$logger = true;
 		} 
         else 
         {
-			return redirect($redirect);
+			if(strpos($redirect, "//"))
+			{
+				redirectToHost($redirect);
+			}
+			else 
+			{
+				redirect($redirect);
+			}
 		}
 	}
 

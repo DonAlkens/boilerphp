@@ -61,11 +61,23 @@ class Connection extends QueryBuilder
     public function connect()
     {
         $this->buildConnectionString();
-        $this->connection = new PDO($this->dataSource, $this->username, $this->password);
 
-        // Set all attributes
-        $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        try {
+
+            $this->connection = new PDO($this->dataSource, $this->username, $this->password);
+    
+            // Set all attributes
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            $this->connection->setAttribute(PDO::ATTR_PERSISTENT, true);
+            $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+            $this->connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+
+        } catch (\PDOException $pd) {
+            throw $pd; exit;
+            echo "Error Occured: ".$pd->message; exit;
+        }
+
     }
 
     public function buildConnectionString() 

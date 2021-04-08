@@ -1,0 +1,44 @@
+
+
+
+@if(~collections~)
+
+    
+{{$collections = ~collections~}}
+
+    {{$items = ''}}
+    @foreach($collections as $collection)
+        {{$items .= ".".$collection->slug.", "}}
+    @endforeach
+
+    {{$items = trim($items, ", ")}}
+
+    var collations = $("@{{$items}}");
+    collations.owlCarousel({
+        loop: true,
+        dots: true,
+        nav: true,
+        autoplay: true,
+        navText: ['<i class="pe-7s-angle-left"></i>','<i class="pe-7s-angle-right"></i>'],
+        autoplayTimeout: 4000,
+        autoplayHoverPause: true,
+        responsive: {
+            0: {
+                items: 2
+            },
+            768: {
+                items: 3
+            },
+            960: {
+                items: 4
+            },
+            1200: {
+                items: 5
+            },
+            1920: {
+                items: 6
+            }
+        }
+    }); 
+
+@endif

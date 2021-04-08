@@ -1,0 +1,349 @@
+<header class="header">
+	<div class="col-lg-12 col-md-12 col-sm-12 top-promotion">
+
+	</div>
+	<div class="col-md-12" id="header-middle">
+		<div class="row pt-3 pb-2 header-inner">
+			<div class="col-md-3">
+				<div class="d-flex justify-content-between">
+					<div class="d-flex">
+						<div class="navbar-btn mr-2 mobile pt-0">
+							<i class="icofont-navigation-menu pt-0"></i>
+						</div>
+						<div class="menu">
+							<div class="menu-btn mr-3">
+								<i class="icofont-navigation-menu"></i>
+							</div>
+							<div class="menu-bar">
+								<div class="menu-inner">
+									<div class="col-md-12">
+										<div class="row">
+											@if(~collections~)
+												{{$collections = ~collections~}}
+												@foreach($collections as $collection)
+													<div class="col-md-3 mb-3">
+														{{$categories = $collection->categories()}}
+														@if($categories == null) 
+														<a href="/cp/@{{$collection->slug}}"><h6>@{{$collection->name}}</h6></a>
+														@else
+														<a href="/cl/@{{$collection->slug}}"><h6>@{{$collection->name}}</h6></a>
+														@endif
+	
+														<ul class="p-0">
+															@if(is_array($categories))
+																@foreach($categories as $category)
+																	<a href="/cp/@{{$collection->slug}}/@{{$category->slug}}">
+																		<li><i class="pe-7s-angle-right"></i><span>@{{$category->name}}</span></li>
+																	</a>
+																@endforeach
+															@endif
+														</ul>
+													</div>
+												@endforeach
+											@endif
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+	
+						<div class="logo pt-1 pb-2">
+							<a href="/">
+								<img src="/public/image/logos/logo.svg" class="desktop" alt="" width="160px">
+								<img src="/public/image/logos/logo.svg" class="mobile" alt="" width="130px">
+								<!-- <h4 class="text-white"><b>WEARSLOT</b></h4> -->
+							</a>
+						</div>
+					</div>
+					<div class="mobile-search-button mSearchToggle">
+						<i class="pe-7s-search mSearchToggle2"></i>
+					</div>
+				</div>
+				<!--  -->
+			</div>
+			<div class="col-md-6 col-xs-12 col-sm-12 search mSearch">
+				<div class="row mSearch">
+					<div class="col-xs-2 col-sm-12 col-md-2 cat-opti mSearch">
+						<div class="row mSearch">
+							<select name="s_col" id="s_col" class="selectpicker form-control mSearch">
+								<option value="">All</option>
+								@if(~collections~)
+									{{$collections = ~collections~}}
+									@foreach($collections as $collection)
+										<option value="@{{$collection->slug}}">@{{$collection->name}}</option>
+										{{$categories = $collection->categories()}}
+										@if($categories != null)
+											@foreach($categories as $category)
+											<option value="@{{$category->slug}}_@{{$collection->slug}}">
+												@{{$collection->name}}, @{{$category->name}}
+											</option>
+											@endforeach
+										@endif
+									@endforeach
+								@endif
+							</select>
+						</div>
+					</div>
+					<div class="col-xs-9 col-sm-9 col-md-9 keyBox mSearch">
+						<div class="row mSearch">
+							<div class="input-group mSearch">
+								<input type="text" name="keywords" id="q" 
+								placeholder="keywords, name, brands, hashtags..." 
+								class="form-control mSearch" value="@{{~search_words~}}">
+								<div class="input-group-append mSearch">
+									<button class="btn btn-primary btn-sm mSearch" id="useSearch">
+										<i class="pe-7s-search mSearch"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 top-side">
+				<ul class="d-flex justify-content-between">
+					<li class="text-center text-white uac-top-menu">
+						@if(~auth~)
+							<a href="javasript:;" class="mt-2">
+								<button class="btn btn-sm btn-inverse-primary border-50" id="quick_user_toggle">
+									<strong>@{{auth()->symbol()}}</strong>
+								</button>
+								<span style="font-weight: 600;">@{{auth()->firstname}}</span>
+							</a>
+							<div class="uac-top-menu-list">
+								<div class="uac-top-inner">
+									<div class="uac-card-box text-center">
+										<p class="mb-3">
+											<a href="javascript:;" class="uac-card-badge">@{{auth()->symbol()}}</a>
+										</p>
+										<p class="uac-card-info">
+											<span>@{{strtoupper(auth()->name())}}</span>
+											<span style="font-size: 13px;" class="text-muted">@{{auth()->email}}</span>
+										</p>
+										<!-- <p class="mt-2">
+											<a href="https://account.@{{env('DOMAIN_NAME')}}/myaccount?ref=default&tr_=id.yth896ijgi696" 
+												class="btn btn-sm uac-card-btn btn-outline-dark border-50">
+												Manage Account
+											</a>
+										</p> -->
+									</div>
+	
+									<ul class="text-left border-top pt-3">
+										<a href="/uac/dashboard">
+											<li class="active"> 
+												<span class="svg-icon svg-icon-primary menu-icon">
+													<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+														<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+															<rect x="0" y="0" width="24" height="24"/>
+															<path d="M5,6 L19,6 C19.5522847,6 20,6.44771525 20,7 L20,17 L4,17 L4,7 C4,6.44771525 4.44771525,6 5,6 Z" fill="#000000"/>
+															<rect fill="#000000" opacity="0.3" x="1" y="18" width="22" height="1" rx="0.5"/>
+														</g>
+													</svg>
+												</span>
+												<span class="ml-2">Dashboard</span>
+											</li>
+										</a>
+										<a href="/uac/orders">
+											<li> 
+												<span class="svg-icon svg-icon-primary menu-icon">
+													<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+														<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+															<rect x="0" y="0" width="24" height="24"/>
+															<path d="M20.4061385,6.73606154 C20.7672665,6.89656288 21,7.25468437 21,7.64987309 L21,16.4115967 C21,16.7747638 20.8031081,17.1093844 20.4856429,17.2857539 L12.4856429,21.7301984 C12.1836204,21.8979887 11.8163796,21.8979887 11.5143571,21.7301984 L3.51435707,17.2857539 C3.19689188,17.1093844 3,16.7747638 3,16.4115967 L3,7.64987309 C3,7.25468437 3.23273352,6.89656288 3.59386153,6.73606154 L11.5938615,3.18050598 C11.8524269,3.06558805 12.1475731,3.06558805 12.4061385,3.18050598 L20.4061385,6.73606154 Z" fill="#000000" opacity="0.3"/>
+															<polygon fill="#000000" points="14.9671522 4.22441676 7.5999999 8.31727912 7.5999999 12.9056825 9.5999999 13.9056825 9.5999999 9.49408582 17.25507 5.24126912"/>
+														</g>
+													</svg>
+												</span>
+												<span class="ml-2">Orders</span>
+											</li>
+										</a>
+										<a href="/uac/wishlist">
+											<li> 
+												<span class="svg-icon svg-icon-primary menu-icon">
+													<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+														<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+															<polygon points="0 0 24 0 24 24 0 24"/>
+															<path d="M16.5,4.5 C14.8905,4.5 13.00825,6.32463215 12,7.5 C10.99175,6.32463215 9.1095,4.5 7.5,4.5 C4.651,4.5 3,6.72217984 3,9.55040872 C3,12.6834696 6,16 12,19.5 C18,16 21,12.75 21,9.75 C21,6.92177112 19.349,4.5 16.5,4.5 Z" fill="#000000" fill-rule="nonzero"/>
+														</g>
+													</svg>
+												</span>
+												<span class="ml-2">Wishlist</span>
+											</li>
+										</a>
+										<a href="https://account.@{{env('DOMAIN_NAME')}}/logout?service=marketplace&continue=https://@{{env('DOMAIN_NAME')}}/">
+											<li class="">
+												<span class="svg-icon svg-icon-primary menu-icon">
+													<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+														<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+															<rect x="0" y="0" width="24" height="24"/>
+															<path d="M7.62302337,5.30262097 C8.08508802,5.000107 8.70490146,5.12944838 9.00741543,5.59151303 C9.3099294,6.05357769 9.18058801,6.67339112 8.71852336,6.97590509 C7.03468892,8.07831239 6,9.95030239 6,12 C6,15.3137085 8.6862915,18 12,18 C15.3137085,18 18,15.3137085 18,12 C18,9.99549229 17.0108275,8.15969002 15.3875704,7.04698597 C14.9320347,6.73472706 14.8158858,6.11230651 15.1281448,5.65677076 C15.4404037,5.20123501 16.0628242,5.08508618 16.51836,5.39734508 C18.6800181,6.87911023 20,9.32886071 20,12 C20,16.418278 16.418278,20 12,20 C7.581722,20 4,16.418278 4,12 C4,9.26852332 5.38056879,6.77075716 7.62302337,5.30262097 Z" fill="#000000" fill-rule="nonzero"/>
+															<rect fill="#000000" opacity="0.3" x="11" y="3" width="2" height="10" rx="1"/>
+														</g>
+													</svg>
+												</span>
+												<span class="ml-2">Sign out</span> 
+											</li>
+										</a>
+									</ul>
+								</div>
+							</div>
+						@else
+							<a href="#"><i class="mdi mdi-account"></i> <span>Account</span> </a>
+							<div class="uac-top-menu-list">
+								<ul class="uac-top-inner text-left">
+									<li class="">
+										<a href="https://account.@{{env('DOMAIN_NAME')}}/sign-in?service=marketplace&continue=https://@{{env('DOMAIN_NAME')}}/uac/dashboard">
+											<span>Sign in</span>
+										</a>
+									</li>
+									<li class="text-white">
+										<a href="https://account.@{{env('DOMAIN_NAME')}}/sign-up?service=marketplace&continue=https://@{{env('DOMAIN_NAME')}}/uac/dashboard" class="mt-1 btn btn-sm border-50 btn-inverse-primary">
+											<span>Create Account</span>
+										</a> 
+									</li>
+									<div class="mt-2 border-top"></div>
+									<a href="/uac/orders">
+										<li> 
+											<span class="svg-icon svg-icon-primary menu-icon">
+												<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+													<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+														<rect x="0" y="0" width="24" height="24"/>
+														<path d="M20.4061385,6.73606154 C20.7672665,6.89656288 21,7.25468437 21,7.64987309 L21,16.4115967 C21,16.7747638 20.8031081,17.1093844 20.4856429,17.2857539 L12.4856429,21.7301984 C12.1836204,21.8979887 11.8163796,21.8979887 11.5143571,21.7301984 L3.51435707,17.2857539 C3.19689188,17.1093844 3,16.7747638 3,16.4115967 L3,7.64987309 C3,7.25468437 3.23273352,6.89656288 3.59386153,6.73606154 L11.5938615,3.18050598 C11.8524269,3.06558805 12.1475731,3.06558805 12.4061385,3.18050598 L20.4061385,6.73606154 Z" fill="#000000" opacity="0.3"/>
+														<polygon fill="#000000" points="14.9671522 4.22441676 7.5999999 8.31727912 7.5999999 12.9056825 9.5999999 13.9056825 9.5999999 9.49408582 17.25507 5.24126912"/>
+													</g>
+												</svg>
+											</span>
+											<span class="ml-2">Orders</span>
+										</li>
+									</a> 
+									<a href="/uac/wishlist">
+										<li> 
+											<span class="svg-icon svg-icon-primary menu-icon">
+												<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+													<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+														<polygon points="0 0 24 0 24 24 0 24"/>
+														<path d="M16.5,4.5 C14.8905,4.5 13.00825,6.32463215 12,7.5 C10.99175,6.32463215 9.1095,4.5 7.5,4.5 C4.651,4.5 3,6.72217984 3,9.55040872 C3,12.6834696 6,16 12,19.5 C18,16 21,12.75 21,9.75 C21,6.92177112 19.349,4.5 16.5,4.5 Z" fill="#000000" fill-rule="nonzero"/>
+													</g>
+												</svg>
+											</span>
+											<span class="ml-2">Wishlist</span> 
+										</li>
+									</a> 
+									<a href="/uac/returns">
+										<li> 
+											<span class="svg-icon svg-icon-primary menu-icon">
+												<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+													<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+														<polygon points="0 0 24 0 24 24 0 24"/>
+														<path d="M8,7 C7.44771525,7 7,6.55228475 7,6 C7,5.44771525 7.44771525,5 8,5 L16,5 C18.209139,5 20,6.790861 20,9 C20,11.209139 18.209139,13 16,13 L8,13 C6.8954305,13 6,13.8954305 6,15 C6,16.1045695 6.8954305,17 8,17 L17,17 C17.5522847,17 18,17.4477153 18,18 C18,18.5522847 17.5522847,19 17,19 L8,19 C5.790861,19 4,17.209139 4,15 C4,12.790861 5.790861,11 8,11 L16,11 C17.1045695,11 18,10.1045695 18,9 C18,7.8954305 17.1045695,7 16,7 L8,7 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+														<path d="M9.79289322,3.79289322 C10.1834175,3.40236893 10.8165825,3.40236893 11.2071068,3.79289322 C11.5976311,4.18341751 11.5976311,4.81658249 11.2071068,5.20710678 L8.20710678,8.20710678 C7.81658249,8.59763107 7.18341751,8.59763107 6.79289322,8.20710678 L3.79289322,5.20710678 C3.40236893,4.81658249 3.40236893,4.18341751 3.79289322,3.79289322 C4.18341751,3.40236893 4.81658249,3.40236893 5.20710678,3.79289322 L7.5,6.08578644 L9.79289322,3.79289322 Z" fill="#000000" fill-rule="nonzero" transform="translate(7.500000, 6.000000) rotate(-270.000000) translate(-7.500000, -6.000000) "/>
+														<path d="M18.7928932,15.7928932 C19.1834175,15.4023689 19.8165825,15.4023689 20.2071068,15.7928932 C20.5976311,16.1834175 20.5976311,16.8165825 20.2071068,17.2071068 L17.2071068,20.2071068 C16.8165825,20.5976311 16.1834175,20.5976311 15.7928932,20.2071068 L12.7928932,17.2071068 C12.4023689,16.8165825 12.4023689,16.1834175 12.7928932,15.7928932 C13.1834175,15.4023689 13.8165825,15.4023689 14.2071068,15.7928932 L16.5,18.0857864 L18.7928932,15.7928932 Z" fill="#000000" fill-rule="nonzero" transform="translate(16.500000, 18.000000) scale(1, -1) rotate(270.000000) translate(-16.500000, -18.000000) "/>
+													</g>
+												</svg>
+											</span>
+											<span class="ml-2">Returns</span> 
+										</li>
+									</a> 
+								</ul>
+							</div>
+						@endif
+					</li>
+					<li class="text-center text-white cart-btn">
+						<a href="/cart"><i class="mdi mdi-cart-outline"></i> <span>Cart</span> </a>
+					</li>
+					<li class="text-center text-white">
+						<a href="/help"><i class="mdi mdi-help-circle-outline"></i> <span>Help</span> </a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-12 desktop header-nav-wrapper">
+			<div class="header-navbar">
+				<ul class="nav-list">
+					<li class="dropdown">
+						<a href="javascript:void();" class="desktop"> 
+							<i class="mdi mdi-format-list-bulleted"></i> Categories 
+							<i class="mdi mdi-chevron-down ic-fl"></i>
+						</a> 
+						<div class="dropdown-content">
+							<div class="col-md-12 dropdown-inner">
+								<div class="row">
+									<div class="col-md-8 p-0 main-cat-section">
+										<div class="container pt-2">
+											<div class="row">
+												@if(~collections~)
+													{{$collections = ~collections~}}
+													@foreach($collections as $collection)
+
+														<div class="col-md-3 mb-3 mb-no-m">
+															{{$categories = $collection->categories()}}
+															@if($categories == null) 
+																<a href="/cp/@{{$collection->slug}}"> <h6 class="mb-2 ct-title">@{{$collection->name}}</h6></a> 
+															@else 
+																<a href="/cl/@{{$collection->slug}}"> <h6 class="mb-2 ct-title">@{{$collection->name}}</h6></a>
+															@endif
+
+															@if(is_array($categories))
+																<!-- <i class="mdi mdi-plus mobile tg-subs"></i> -->
+																<ul class="p-0 sub-items-list">
+																	<a href="/new-arrivals/@{{$collection->slug}}" class="nav-sub-items">
+																		<li><i class="pe-7s-angle-right"></i><span>New Arrivals</span></li>
+																	</a>
+																	@foreach($categories as $category)
+																		<a href="/cp/@{{$collection->slug}}/@{{$category->slug}}" class="nav-sub-items">
+																			<li>
+																				<i class="pe-7s-angle-right"></i>
+																				<span>@{{$category->name}}</span>
+																			</li>
+																		</a>
+																	@endforeach
+																</ul>
+															@endif
+														</div>
+													@endforeach
+												@endif
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="row">
+											<div class="col-md-6 p-0">
+												@if(~featured_collection~)
+													<a href="/explore/i/featured-shops"> <h6 class="mb-2 ct-title">Featured Shops</h6></a>
+													{{ $shops = ~featured_collection~ }}
+													<ul class="p-0 sub-items-list">
+														@foreach($shops as $shop)
+															<a href="/explore/i/@{{$shop->slug}}" class="nav-sub-items">
+																<li>
+																	<i class="pe-7s-angle-right"></i>
+																	<span>@{{$shop->name}}</span>
+																</li>
+															</a>
+														@endforeach
+													</ul>
+												@endif
+											</div>
+											<div class="col-md-6">
+
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="m-border-top"><a href="/all-collections">Shop all</a></li>
+					<!-- <li><a href="/brands" class="text-danger">Brands</a></li> -->
+					<!-- <li><a href="/d/todays-deals">Daily Deals</a></li> -->
+					<li><a href="/super-sales">Sales & Offers</a></li>
+
+					<li><a href="/shop-gift-items">Gifts Items</a></li>
+					<li class="right"><a href="http://sell.@{{env('DOMAIN_NAME')}}" target="_blank">Sell</a></li>
+				</ul>
+				
+			</div>
+		</div>
+	</div>
+</header>
+
+@{{load "shared/_mobile-sidebar"}}

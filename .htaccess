@@ -1,6 +1,7 @@
 RewriteEngine On
 RewriteBase /
+DirectoryIndex /app.php
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.+)$ index.php [QSA,L]
+RewriteRule ^(.+)$ app.php [QSA,L]

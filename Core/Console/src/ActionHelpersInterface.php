@@ -5,6 +5,14 @@ namespace Console\Support\Interfaces;
 interface ActionHelpersInterface {
 
     /**
+     * Confirguring notification structure and initialize new notification 
+     * @param notification_name 
+     * @param notification_path
+     */
+
+    public function configureNotification($notification_name, $notification_path);
+
+    /**
      * Confirguring model structure and initialize new model 
      * @param model_name 
      * @param model_path

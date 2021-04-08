@@ -55,8 +55,6 @@ class DataTypes {
     public $nullable = "NOT NULL";
 
 
-
-
     public function trimmer($str) 
     {
         return trim($str, ",");
@@ -65,7 +63,19 @@ class DataTypes {
     public function bigIncrements() 
     {
         $this->primary_keys .= " `$this->column`,";
-        $this->query .= " `$this->column` INT(16) AUTO_INCREMENT,";
+        $this->query .= " `$this->column` BIGINT(20) AUTO_INCREMENT,";
+        return $this;
+    }
+
+    public function bigInt($length = 20) 
+    {
+        $this->query .= " `$this->column` BIGINT(". (string) $length ."),";
+        return $this;
+    }
+
+    public function bigInteger($length = 20) 
+    {
+        $this->query .= " `$this->column` BIGINT(". (string) $length ."),";
         return $this;
     }
 
@@ -82,9 +92,16 @@ class DataTypes {
         return $this;
     }
 
-    public function date() 
+    public function date()
     {
-        $this->query .= " `$this->column` DATE DEFAULT CURRENT_TIMESTAMP(),";
+        $this->query .= " `$this->column` DATE NOT NULL ,";
+    }
+
+    public function default($value)
+    {
+        $this->query = $this->trimmer($this->query);
+        $this->query .= " DEFAULT {$value},";
+        return $this;
     }
 
     public function float($length = 10, $decimal = 2) 
@@ -121,18 +138,17 @@ class DataTypes {
         return $this;
     }
 
-    public function id($type = "int", $length = 6) 
+    public function id()
     {
+        $this->primary_keys .= " `$this->column`,";
+        $this->query .= " `$this->column` BIGINT(20) AUTO_INCREMENT UNIQUE,";
+        return $this;
+    }
 
-        switch($type) {
-            case "int": 
-                $this->query .= " `$this->column` INT(". (string) $length .") UNIQUE,";
-            break;
-            case "string":
-                $this->query .= " `$this->column` VARCHAR(". (string) $length .") UNIQUE,";
-            break;
-        }
-
+    public function stringId($length = 100)
+    {
+        $this->primary_keys .= " `$this->column`,";
+        $this->query .= " `$this->column` VARCHAR(". (string) $length .") UNIQUE,";
         return $this;
     }
 
@@ -172,7 +188,7 @@ class DataTypes {
         return $this;
     }
 
-    public function null($bool = true) 
+    public function nullable($bool = true) 
     {
 
         $this->query = $this->trimmer($this->query);
@@ -187,7 +203,8 @@ class DataTypes {
 
     public function timestamp() 
     {
-        $this->query .= " `$this->column` DATETIME DEFAULT CURRENT_TIMESTAMP(),";
+        $this->query .= " `$this->column` DATETIME,";
+        return $this;
     }
 
     public function unique() 

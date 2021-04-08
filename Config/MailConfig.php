@@ -4,45 +4,61 @@ namespace App\Config;
 
 class MailConfig 
 {
+    /**
+    * Sender of the mail
+    * @var string
+    *
+    */
+    public $from = "info@boiler.com";
+
+
+    /**
+    * The name of the sender
+    * @var string
+    *
+    */
+    public $fromName = "boiler";
+
+
+    /**
+    * Receipient of the mail
+    * @var string
+    *
+    */
+    public $to;
+
+
+    /**
+    * The name of the 
+    * Receipient of the mail
+    * @var string
+    *
+    */
+    public $toName;
+
+
+    /**
+    * Reply to 
+    * @var string
+    *
+    */
+    public $replyTo = "no-reply@example.com";
+
+
+    /**
+    * Reply name
+    * @var string
+    *
+    */
+    public $replyName = "No-reply";
+
 
     /**
     * SMTP Host
     * @var string
     *
     */
-    static public $smtp = true;
-
-
-    /**
-    * SMTP Host
-    * @var string
-    *
-    */
-    static public $host = "";
-
-
-    /**
-    * SMTP Username
-    * @var string
-    *
-    */
-    static public $smtp_username = "";
-
-
-    /**
-    * SMTP Password
-    * @var string
-    *
-    */
-    static public $smtp_password = "";
-
-
-    /**
-    * SMTP Port no.
-    * @var int
-    *
-    */
-    static public $port = 487;
+    public $smtp = true;
 
 
     /**
@@ -50,6 +66,7 @@ class MailConfig
     * @var bool
     *
     */
-    static public $tls = true;
+    public $tls = true;
+
 
 }

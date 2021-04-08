@@ -1,0 +1,696 @@
+.svg-icon svg {
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+.svg-icon svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #B5B5C3;
+}
+
+.svg-icon svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-white svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #ffffff !important;
+}
+
+.svg-icon.svg-icon-white svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-primary svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #8950FC !important;
+}
+
+.svg-icon.svg-icon-primary svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-secondary svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #181C32 !important;
+}
+
+.svg-icon.svg-icon-secondary svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-success svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #1BC5BD !important;
+}
+
+.svg-icon.svg-icon-success svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-info svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #8950FC !important;
+}
+
+.svg-icon.svg-icon-info svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-warning svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #FFA800 !important;
+}
+
+.svg-icon.svg-icon-warning svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-danger svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #F64E60 !important;
+}
+
+.svg-icon.svg-icon-danger svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-light svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: light !important;
+}
+
+.svg-icon.svg-icon-light svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-dark svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #181C32 !important;
+}
+
+.svg-icon.svg-icon-dark svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-dark-75 svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #3F4254 !important;
+}
+
+.svg-icon.svg-icon-dark-75 svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-dark-65 svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #5E6278 !important;
+}
+
+.svg-icon.svg-icon-dark-65 svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-dark-50 svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #7E8299 !important;
+}
+
+.svg-icon.svg-icon-dark-50 svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-dark-25 svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #D1D3E0 !important;
+}
+
+.svg-icon.svg-icon-dark-25 svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-muted svg g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+    fill: #B5B5C3 !important;
+}
+
+.svg-icon.svg-icon-muted svg:hover g [fill] {
+    -webkit-transition: fill 0.3s ease;
+    transition: fill 0.3s ease;
+}
+
+.svg-icon.svg-icon-sm svg {
+    height: 1.25rem !important;
+    width: 1.25rem !important;
+}
+
+.svg-icon.svg-icon-md svg {
+    height: 1.5rem !important;
+    width: 1.5rem !important;
+}
+
+.svg-icon.svg-icon-lg svg {
+    height: 1.75rem !important;
+    width: 1.75rem !important;
+}
+
+.svg-icon.svg-icon-xl svg {
+    height: 2rem !important;
+    width: 2rem !important;
+}
+
+.svg-icon.svg-icon-xxl svg {
+    height: 2.25rem !important;
+    width: 2.25rem !important;
+}
+
+.svg-icon.svg-icon-1x svg {
+    height: 1rem !important;
+    width: 1rem !important;
+}
+
+.svg-icon.svg-icon-2x svg {
+    height: 2rem !important;
+    width: 2rem !important;
+}
+
+.svg-icon.svg-icon-3x svg {
+    height: 3rem !important;
+    width: 3rem !important;
+}
+
+.svg-icon.svg-icon-4x svg {
+    height: 4rem !important;
+    width: 4rem !important;
+}
+
+.svg-icon.svg-icon-5x svg {
+    height: 5rem !important;
+    width: 5rem !important;
+}
+
+.svg-icon.svg-icon-6x svg {
+    height: 6rem !important;
+    width: 6rem !important;
+}
+
+.svg-icon.svg-icon-7x svg {
+    height: 7rem !important;
+    width: 7rem !important;
+}
+
+.svg-icon.svg-icon-8x svg {
+    height: 8rem !important;
+    width: 8rem !important;
+}
+
+.svg-icon.svg-icon-9x svg {
+    height: 9rem !important;
+    width: 9rem !important;
+}
+
+.svg-icon.svg-icon-10x svg {
+    height: 10rem !important;
+    width: 10rem !important;
+}
+
+.svg-icon.svg-icon-full svg {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+@media (min-width: 576px) {
+    .svg-icon.svg-icon-sm-sm svg {
+        height: 1.25rem !important;
+        width: 1.25rem !important;
+    }
+    .svg-icon.svg-icon-sm-md svg {
+        height: 1.5rem !important;
+        width: 1.5rem !important;
+    }
+    .svg-icon.svg-icon-sm-lg svg {
+        height: 1.75rem !important;
+        width: 1.75rem !important;
+    }
+    .svg-icon.svg-icon-sm-xl svg {
+        height: 2rem !important;
+        width: 2rem !important;
+    }
+    .svg-icon.svg-icon-sm-xxl svg {
+        height: 2.25rem !important;
+        width: 2.25rem !important;
+    }
+    .svg-icon.svg-icon-sm-1x svg {
+        height: 1rem !important;
+        width: 1rem !important;
+    }
+    .svg-icon.svg-icon-sm-2x svg {
+        height: 2rem !important;
+        width: 2rem !important;
+    }
+    .svg-icon.svg-icon-sm-3x svg {
+        height: 3rem !important;
+        width: 3rem !important;
+    }
+    .svg-icon.svg-icon-sm-4x svg {
+        height: 4rem !important;
+        width: 4rem !important;
+    }
+    .svg-icon.svg-icon-sm-5x svg {
+        height: 5rem !important;
+        width: 5rem !important;
+    }
+    .svg-icon.svg-icon-sm-6x svg {
+        height: 6rem !important;
+        width: 6rem !important;
+    }
+    .svg-icon.svg-icon-sm-7x svg {
+        height: 7rem !important;
+        width: 7rem !important;
+    }
+    .svg-icon.svg-icon-sm-8x svg {
+        height: 8rem !important;
+        width: 8rem !important;
+    }
+    .svg-icon.svg-icon-sm-9x svg {
+        height: 9rem !important;
+        width: 9rem !important;
+    }
+    .svg-icon.svg-icon-sm-10x svg {
+        height: 10rem !important;
+        width: 10rem !important;
+    }
+    .svg-icon.svg-icon-sm-full svg {
+        height: 100% !important;
+        width: 100% !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .svg-icon.svg-icon-md-sm svg {
+        height: 1.25rem !important;
+        width: 1.25rem !important;
+    }
+    .svg-icon.svg-icon-md-md svg {
+        height: 1.5rem !important;
+        width: 1.5rem !important;
+    }
+    .svg-icon.svg-icon-md-lg svg {
+        height: 1.75rem !important;
+        width: 1.75rem !important;
+    }
+    .svg-icon.svg-icon-md-xl svg {
+        height: 2rem !important;
+        width: 2rem !important;
+    }
+    .svg-icon.svg-icon-md-xxl svg {
+        height: 2.25rem !important;
+        width: 2.25rem !important;
+    }
+    .svg-icon.svg-icon-md-1x svg {
+        height: 1rem !important;
+        width: 1rem !important;
+    }
+    .svg-icon.svg-icon-md-2x svg {
+        height: 2rem !important;
+        width: 2rem !important;
+    }
+    .svg-icon.svg-icon-md-3x svg {
+        height: 3rem !important;
+        width: 3rem !important;
+    }
+    .svg-icon.svg-icon-md-4x svg {
+        height: 4rem !important;
+        width: 4rem !important;
+    }
+    .svg-icon.svg-icon-md-5x svg {
+        height: 5rem !important;
+        width: 5rem !important;
+    }
+    .svg-icon.svg-icon-md-6x svg {
+        height: 6rem !important;
+        width: 6rem !important;
+    }
+    .svg-icon.svg-icon-md-7x svg {
+        height: 7rem !important;
+        width: 7rem !important;
+    }
+    .svg-icon.svg-icon-md-8x svg {
+        height: 8rem !important;
+        width: 8rem !important;
+    }
+    .svg-icon.svg-icon-md-9x svg {
+        height: 9rem !important;
+        width: 9rem !important;
+    }
+    .svg-icon.svg-icon-md-10x svg {
+        height: 10rem !important;
+        width: 10rem !important;
+    }
+    .svg-icon.svg-icon-md-full svg {
+        height: 100% !important;
+        width: 100% !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .svg-icon.svg-icon-lg-sm svg {
+        height: 1.25rem !important;
+        width: 1.25rem !important;
+    }
+    .svg-icon.svg-icon-lg-md svg {
+        height: 1.5rem !important;
+        width: 1.5rem !important;
+    }
+    .svg-icon.svg-icon-lg-lg svg {
+        height: 1.75rem !important;
+        width: 1.75rem !important;
+    }
+    .svg-icon.svg-icon-lg-xl svg {
+        height: 2rem !important;
+        width: 2rem !important;
+    }
+    .svg-icon.svg-icon-lg-xxl svg {
+        height: 2.25rem !important;
+        width: 2.25rem !important;
+    }
+    .svg-icon.svg-icon-lg-1x svg {
+        height: 1rem !important;
+        width: 1rem !important;
+    }
+    .svg-icon.svg-icon-lg-2x svg {
+        height: 2rem !important;
+        width: 2rem !important;
+    }
+    .svg-icon.svg-icon-lg-3x svg {
+        height: 3rem !important;
+        width: 3rem !important;
+    }
+    .svg-icon.svg-icon-lg-4x svg {
+        height: 4rem !important;
+        width: 4rem !important;
+    }
+    .svg-icon.svg-icon-lg-5x svg {
+        height: 5rem !important;
+        width: 5rem !important;
+    }
+    .svg-icon.svg-icon-lg-6x svg {
+        height: 6rem !important;
+        width: 6rem !important;
+    }
+    .svg-icon.svg-icon-lg-7x svg {
+        height: 7rem !important;
+        width: 7rem !important;
+    }
+    .svg-icon.svg-icon-lg-8x svg {
+        height: 8rem !important;
+        width: 8rem !important;
+    }
+    .svg-icon.svg-icon-lg-9x svg {
+        height: 9rem !important;
+        width: 9rem !important;
+    }
+    .svg-icon.svg-icon-lg-10x svg {
+        height: 10rem !important;
+        width: 10rem !important;
+    }
+    .svg-icon.svg-icon-lg-full svg {
+        height: 100% !important;
+        width: 100% !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .svg-icon.svg-icon-xl-sm svg {
+        height: 1.25rem !important;
+        width: 1.25rem !important;
+    }
+    .svg-icon.svg-icon-xl-md svg {
+        height: 1.5rem !important;
+        width: 1.5rem !important;
+    }
+    .svg-icon.svg-icon-xl-lg svg {
+        height: 1.75rem !important;
+        width: 1.75rem !important;
+    }
+    .svg-icon.svg-icon-xl-xl svg {
+        height: 2rem !important;
+        width: 2rem !important;
+    }
+    .svg-icon.svg-icon-xl-xxl svg {
+        height: 2.25rem !important;
+        width: 2.25rem !important;
+    }
+    .svg-icon.svg-icon-xl-1x svg {
+        height: 1rem !important;
+        width: 1rem !important;
+    }
+    .svg-icon.svg-icon-xl-2x svg {
+        height: 2rem !important;
+        width: 2rem !important;
+    }
+    .svg-icon.svg-icon-xl-3x svg {
+        height: 3rem !important;
+        width: 3rem !important;
+    }
+    .svg-icon.svg-icon-xl-4x svg {
+        height: 4rem !important;
+        width: 4rem !important;
+    }
+    .svg-icon.svg-icon-xl-5x svg {
+        height: 5rem !important;
+        width: 5rem !important;
+    }
+    .svg-icon.svg-icon-xl-6x svg {
+        height: 6rem !important;
+        width: 6rem !important;
+    }
+    .svg-icon.svg-icon-xl-7x svg {
+        height: 7rem !important;
+        width: 7rem !important;
+    }
+    .svg-icon.svg-icon-xl-8x svg {
+        height: 8rem !important;
+        width: 8rem !important;
+    }
+    .svg-icon.svg-icon-xl-9x svg {
+        height: 9rem !important;
+        width: 9rem !important;
+    }
+    .svg-icon.svg-icon-xl-10x svg {
+        height: 10rem !important;
+        width: 10rem !important;
+    }
+    .svg-icon.svg-icon-xl-full svg {
+        height: 100% !important;
+        width: 100% !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    .svg-icon.svg-icon-xxl-sm svg {
+        height: 1.25rem !important;
+        width: 1.25rem !important;
+    }
+    .svg-icon.svg-icon-xxl-md svg {
+        height: 1.5rem !important;
+        width: 1.5rem !important;
+    }
+    .svg-icon.svg-icon-xxl-lg svg {
+        height: 1.75rem !important;
+        width: 1.75rem !important;
+    }
+    .svg-icon.svg-icon-xxl-xl svg {
+        height: 2rem !important;
+        width: 2rem !important;
+    }
+    .svg-icon.svg-icon-xxl-xxl svg {
+        height: 2.25rem !important;
+        width: 2.25rem !important;
+    }
+    .svg-icon.svg-icon-xxl-1x svg {
+        height: 1rem !important;
+        width: 1rem !important;
+    }
+    .svg-icon.svg-icon-xxl-2x svg {
+        height: 2rem !important;
+        width: 2rem !important;
+    }
+    .svg-icon.svg-icon-xxl-3x svg {
+        height: 3rem !important;
+        width: 3rem !important;
+    }
+    .svg-icon.svg-icon-xxl-4x svg {
+        height: 4rem !important;
+        width: 4rem !important;
+    }
+    .svg-icon.svg-icon-xxl-5x svg {
+        height: 5rem !important;
+        width: 5rem !important;
+    }
+    .svg-icon.svg-icon-xxl-6x svg {
+        height: 6rem !important;
+        width: 6rem !important;
+    }
+    .svg-icon.svg-icon-xxl-7x svg {
+        height: 7rem !important;
+        width: 7rem !important;
+    }
+    .svg-icon.svg-icon-xxl-8x svg {
+        height: 8rem !important;
+        width: 8rem !important;
+    }
+    .svg-icon.svg-icon-xxl-9x svg {
+        height: 9rem !important;
+        width: 9rem !important;
+    }
+    .svg-icon.svg-icon-xxl-10x svg {
+        height: 10rem !important;
+        width: 10rem !important;
+    }
+    .svg-icon.svg-icon-xxl-full svg {
+        height: 100% !important;
+        width: 100% !important;
+    }
+}
+
+.svg.svg-fill-white {
+    fill: #ffffff !important;
+}
+
+.svg.svg-fill-light-white {
+    fill: #ffffff !important;
+}
+
+.svg.svg-fill-primary {
+    fill: #8950FC !important;
+}
+
+.svg.svg-fill-light-primary {
+    fill: #E1F0FF !important;
+}
+
+.svg.svg-fill-secondary {
+    fill: #181C32 !important;
+}
+
+.svg.svg-fill-light-secondary {
+    fill: #EBEDF3 !important;
+}
+
+.svg.svg-fill-success {
+    fill: #1BC5BD !important;
+}
+
+.svg.svg-fill-light-success {
+    fill: #C9F7F5 !important;
+}
+
+.svg.svg-fill-info {
+    fill: #8950FC !important;
+}
+
+.svg.svg-fill-light-info {
+    fill: #EEE5FF !important;
+}
+
+.svg.svg-fill-warning {
+    fill: #FFA800 !important;
+}
+
+.svg.svg-fill-light-warning {
+    fill: #FFF4DE !important;
+}
+
+.svg.svg-fill-danger {
+    fill: #F64E60 !important;
+}
+
+.svg.svg-fill-light-danger {
+    fill: #FFE2E5 !important;
+}
+
+.svg.svg-fill-light {
+    fill: light !important;
+}
+
+.svg.svg-fill-light-light {
+    fill: #F3F6F9 !important;
+}
+
+.svg.svg-fill-dark {
+    fill: #181C32 !important;
+}
+
+.svg.svg-fill-light-dark {
+    fill: #D1D3E0 !important;
+}
+
+.svg.svg-fill-dark-75 {
+    fill: #3F4254 !important;
+}
+
+.svg.svg-fill-light-dark-75 {
+    fill: !important;
+}
+
+.svg.svg-fill-dark-65 {
+    fill: #5E6278 !important;
+}
+
+.svg.svg-fill-light-dark-65 {
+    fill: !important;
+}
+
+.svg.svg-fill-dark-50 {
+    fill: #7E8299 !important;
+}
+
+.svg.svg-fill-light-dark-50 {
+    fill: !important;
+}
+
+.svg.svg-fill-dark-25 {
+    fill: #D1D3E0 !important;
+}
+
+.svg.svg-fill-light-dark-25 {
+    fill: !important;
+}
+
+.svg.svg-fill-muted {
+    fill: #B5B5C3 !important;
+}
+
+.svg.svg-fill-light-muted {
+    fill: !important;
+}

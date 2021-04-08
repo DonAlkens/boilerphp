@@ -127,6 +127,15 @@ class Validator
         {
             $this->lengthValidation($prop,  $field);
         }
+
+        else if($prop == "array") 
+        {
+            if($this->$field[0] == "" || $this->$field[0] == null)
+            {
+                $this->validationMessage($field, "Add at least one $field");
+            }
+        }
+
     }
 
     /**

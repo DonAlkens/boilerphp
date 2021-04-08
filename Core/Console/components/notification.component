@@ -1,0 +1,21 @@
+<?php 
+
+namespace App\Notification;
+
+use App\Messages\Mail\Mail;
+use App\Messages\Notification;
+
+
+class [Notification] extends Notification {
+
+    public function __construct()
+    {
+        
+    }
+    
+    public function build() 
+    {
+        
+    }
+
+}

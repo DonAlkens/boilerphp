@@ -19,6 +19,20 @@ class Request extends Validator
     */
     public $method;
 
+    /**
+    * request location
+    *
+    * @var string
+    */
+    public $location;
+
+    /**
+    * request url
+    *
+    * @var string
+    */
+    public $url;
+
 
     /**
     * set the method use in http request
@@ -30,8 +44,8 @@ class Request extends Validator
     {
 
         $this->method = strtoupper($method);
-
         $this->init($method);
+        $this->location();
         
     }
 
@@ -55,6 +69,32 @@ class Request extends Validator
         }
     }
 
+    public function all()
+    {
+        $data = [];
+        if($this->method == 'GET')
+        {
+            $data = $_GET;
+        }
+        else if($this->method == 'POST')
+        {
+            $data = $_POST;
+        }
+
+        return $data;
+    }
+
+    public function without($keys)
+    {
+        $all = $this->all();
+        foreach($keys as $key) 
+        {
+            unset($all[$key]);
+        }
+
+        return $all;
+    }
+
     public function get() 
     {
         $this->map($_GET);
@@ -69,8 +109,11 @@ class Request extends Validator
     {
         if(isset($_FILES[$index]))
         {
-
             $file = $_FILES[$index];
+            if($file["name"] == "")
+            {
+                $file = null;
+            }
 
         }
         else 
@@ -108,8 +151,33 @@ class Request extends Validator
 
     public function timestamp() 
     {
-        
         return date("Y-m-d H:i:s");
+    }
+
+    public function location() 
+    {
+        return $this->location = trim($_SERVER["REQUEST_URI"],"/");
+    }
+
+    public function url($name = null) 
+    {
+        $this->url = $this->location();
+
+        if($name != null) 
+        {
+            if($this->url == $name) 
+            {
+                return true;
+            }
+            else 
+            {
+                return false;
+            }
+        }
+        else 
+        {
+            return $this->url;
+        }
     }
 
 }

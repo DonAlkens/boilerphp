@@ -15,7 +15,7 @@ if(!function_exists("env"))
     {
         if(isset($_ENV))
         {
-            return $_ENV[$key];
+            return trim($_ENV[$key]);
         }
     }
 }
@@ -49,11 +49,11 @@ if(!function_exists("validation"))
      * @param string $key
      * @return App\Core\Urls\Validator|string
     */
-    function validation($key = "all")
+    function validation($key = "all", $message = null)
     {
         if($key == "all") 
         {
-            foreach($_SESSION["request_validation_message"] as $field => $message)
+            foreach(Session::get("request_validation_message") as $field => $message)
             {
                 echo "<span class=\"text-danger\">$message</span>\n";
             }
@@ -67,7 +67,14 @@ if(!function_exists("validation"))
             {
                 if(isset(Session::get("request_validation_message")[$key])) 
                 {
-                    echo Session::get("request_validation_message")[$key];
+                    if(!is_null($message))
+                    {
+                        echo $message;
+                    }
+                    else
+                    {
+                        echo Session::get("request_validation_message")[$key];
+                    }
                 }
 
                 unset(Session::get("request_validation_message")[$key]);

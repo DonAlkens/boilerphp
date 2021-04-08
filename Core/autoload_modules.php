@@ -17,7 +17,7 @@ class AppModules {
 
         "middlewares" => [
             "Engine::Middlewares::Session",
-            "Engine::Middlewares::Cookies",
+            "Engine::Middlewares::Cookie",
         ],
 
         "admin" => [
@@ -31,7 +31,8 @@ class AppModules {
             "Helpers::forms",
             "Helpers::routes",
             "Helpers::views",
-            "Helpers::auth"
+            "Helpers::auth",
+            "Helpers::app"
         ],
     
         "database" => [
@@ -44,6 +45,20 @@ class AppModules {
             "Database::Model", 
             "Database::Migration",
             "Database::Config",
+            "Database::Console::MigrationReflection"
+        ],
+
+        "messages" => [
+            "Messages::PHPMailer::src::PHPMailer",
+            "Messages::PHPMailer::src::SMTP",
+            "Messages::PHPMailer::src::Exception",
+            "Messages::Mail::MailBuilderInterface",
+            "Messages::Mail::MailBuilder",
+            "Messages::Mail::MailSender",
+            "Messages::Mail::Mail",
+            "Messages::Notification::NotifyBuilderInterface",
+            "Messages::Notification::Notify",
+            "Messages::Notification::Notification"
         ],
     
         "dependencies" => [
@@ -58,6 +73,10 @@ class AppModules {
 
         "hash" => [
             "Hash::Hash",
+        ],
+
+        "support" => [
+            "Support::Device::Browser"
         ]
 
     ];
@@ -72,9 +91,22 @@ class AppModules {
     ];
 
 
+    public $user_modules = [];
 
-    public function addModule(array $module) 
+
+    public function __construct()
     {
-        array_push($this->modules, $module);
+        $get_modules_file = fopen(".modules", "r");
+        if ($get_modules_file) {
+            while (!feof($get_modules_file)) {
+                $path = fgets($get_modules_file);
+                $this->addModule($path);
+            }
+        }
+    }
+
+    public function addModule($module) 
+    {
+        array_push($this->user_modules, $module);
     }
 }

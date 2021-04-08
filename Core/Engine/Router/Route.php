@@ -17,7 +17,10 @@ class Route extends RoutesConfig {
     static private $domains = array();
 
     
-    static private $subdomain;
+    static public $subdomain;
+
+
+    static public $active_domain;
 
 
     static private $route_lookup_list;
@@ -36,7 +39,7 @@ class Route extends RoutesConfig {
         static::$domains[static::$domain] = array( "get"   =>  array(), "post"  =>  array());
     }
 
-    static public function subdomain($domain, $callback)
+    static public function subdomain($domains, $callback)
     {
         if(!static::$enable_subdomains)
         {
@@ -44,9 +47,18 @@ class Route extends RoutesConfig {
             exit;
         }
 
-        static::$subdomain = $domain.".".static::$domain;
-        static::$domains[static::$subdomain] =  array( "get"   =>  array(), "post"  =>  array());
-        $callback();
+        if(!is_array($domains)) {
+            $domains = [$domains];
+        }
+
+        foreach($domains as $domain) 
+        {
+            static::$active_domain = $domain;
+            static::$subdomain = static::$active_domain.".".static::$domain;
+            static::$domains[static::$subdomain] =  array( "get"   =>  array(), "post"  =>  array());
+            $callback();
+        }
+
     }
 
     static public function httpAction($path, $controller)
@@ -166,13 +178,20 @@ class Route extends RoutesConfig {
 
             $path = static::$route_lookup_list[$uri];
 
-            $split_action = explode("::", $path["action"]);
-
-            $controller = static::$controller_namespace.$split_action[0];
-            $action = static::$controller_namespace.$path["action"];
-
-            //Call Coutroller to Load All MiddleWare and Auth
-            new $controller;
+            if(gettype($path["action"]) == "string")
+            {
+                $split_action = explode("::", $path["action"]);
+    
+                $controller = static::$controller_namespace.$split_action[0];
+                $action = static::$controller_namespace.$path["action"];
+    
+                //Call Coutroller to Load All MiddleWare and Auth
+                new $controller;
+            }
+            else 
+            {
+                $action = $path["action"];
+            }
 
             call_user_func($action, new Request($method) );
             

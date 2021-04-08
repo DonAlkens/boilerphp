@@ -4,9 +4,20 @@ namespace App\Hashing;
 
 class Hash {
 
-    static public function create($string) 
+    static public function create($string, $clean = false) 
     {
-        return password_hash($string, PASSWORD_BCRYPT);
+        
+        if($clean == true)
+        {
+            $string = password_hash($string, PASSWORD_BCRYPT);
+            $hash = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+        }
+        else
+        {
+            $hash = password_hash($string, PASSWORD_BCRYPT);
+        }
+
+        return $hash;
     }
 
     static public function verify($string, $hash) 

@@ -12,8 +12,8 @@ class Command extends Actions {
     * Start Server using command line manager
     * ----------------------------------------
     */
-    public function start(...$parameters) {
-
+    public function start(...$parameters) 
+    {
         $port = isset($parameters[0][0]) ? $parameters[0][0] : 8000;
         $this->runServer($port);
     }
@@ -53,16 +53,81 @@ class Command extends Actions {
         $action = isset($parameters[0][0]) ? $parameters[0][0] : null;
         $flag = isset($parameters[0][1]) ? $parameters[0][1] : null; 
 
-        if($action != null) {
-            if($flag != null) {
-                if(array_key_exists($flag, $this->db_flags)) {
+        if($action != null) 
+        {
+            if($flag != null) 
+            {
+                if(array_key_exists($flag, $this->db_flags)) 
+                {
                     $this->$action($flag);
                 }
-            } else {
+            }
+            else
+            {
                 $this->$action();
             }
         }
 
+    }
+
+
+    /*
+    * --------------------------------------------------------------
+    * Performs activation activities 
+    * including third party libraries.
+    * -------------------------------------------------------------
+    */
+    public function activate(...$parameters)
+    {
+        $action = isset($parameters[0][0]) ? $parameters[0][0] : null;
+        $flag = isset($parameters[0][1]) ? $parameters[0][1] : null; 
+
+        if($action != null) 
+        {
+            $action = str_replace("-", "", $action);
+
+            if($flag != null)
+            {
+                if(array_key_exists($flag, $this->db_flags)) 
+                {
+                    $this->$action(true, $flag);
+                }
+            }
+            else
+            {
+                $this->$action(true);
+            }
+        }
+    }
+
+
+    /*
+    * --------------------------------------------------------------
+    * disable libraries and activities 
+    * remove unwanted configurations.
+    * -------------------------------------------------------------
+    */
+    public function disable(...$parameters)
+    {
+        $action = isset($parameters[0][0]) ? $parameters[0][0] : null;
+        $flag = isset($parameters[0][1]) ? $parameters[0][1] : null; 
+
+        if($action != null) 
+        {
+            $action = str_replace("-", "", $action);
+
+            if($flag != null)
+            {
+                if(array_key_exists($flag, $this->db_flags)) 
+                {
+                    $this->$action(false, $flag);
+                }
+            }
+            else
+            {
+                $this->$action(false);
+            }
+        }
     }
     
 }

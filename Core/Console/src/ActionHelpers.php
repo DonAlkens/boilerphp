@@ -2,16 +2,15 @@
 
 namespace Console\Support;
 
-use App\Core\Database\Schema;
 use App\FileSystem\Fs;
+use App\Core\Database\Console\Support\MigrationReflection;
 use Console\Support\Interfaces\ActionHelpersInterface;
-
 
 
 class ActionHelpers implements ActionHelpersInterface {
 
     public $commands = array(
-        "create", "start", "db"
+        "create", "start", "db", "activate", "disable"
     );
 
     public $flags = array(
@@ -23,6 +22,7 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public $db_flags = array(
         "--new" => "refresh",
+        "--backup" => "backup",
     );
 
     public $configurations = array(
@@ -96,11 +96,13 @@ class ActionHelpers implements ActionHelpersInterface {
 
         if($task == "migration") 
         {
-            $file_name = strtolower($name)."_table.php";
+            $name = $this->tableFormating($name);
+
+            $file_name = $name."_table.php";
 
             if($this->checkMigrationExistent($file_name)) 
             {
-                echo "Migration $name already exists";
+                echo "Migration already exists";
                 return;
             }
 
@@ -133,7 +135,8 @@ class ActionHelpers implements ActionHelpersInterface {
             {
                 if($this->migrationFileNameChecker($migration_file, $filename))
                 {
-                    return true;
+                    echo "Migration already exists";
+                    exit;
                 }
             }
         }
@@ -155,6 +158,30 @@ class ActionHelpers implements ActionHelpersInterface {
     }
 
     /**
+     * usage: configures notification structure and inital setup
+     * @param string notification_name
+     * @param string notification_path
+     * 
+     * @return void;
+     */
+
+    public function configureNotification($notification_name, $notification_path)
+    {
+        $component_path = "./Core/Console/components/notification.component";
+
+        if($this->readComponent($component_path)) 
+        {
+            $this->module = preg_replace("/\[Notification\]/",$notification_name, $this->component);
+            if($this->writeModule($notification_path)) 
+            {
+                echo "$notification_name successfully created!\n";
+                return true;
+            }
+            return false;
+        }
+    }
+
+    /**
      * usage: configures model structure and inital setup
      * @param string model_name
      * @param string model_path
@@ -171,7 +198,7 @@ class ActionHelpers implements ActionHelpersInterface {
             $this->module = preg_replace("/\[Model\]/",$model_name, $this->component);
             if($this->writeModule($model_path)) 
             {
-                echo "Model $model_name successfully created!\n";
+                echo "$model_name model successfully created!\n";
                 return true;
             }
             return false;
@@ -205,21 +232,47 @@ class ActionHelpers implements ActionHelpersInterface {
             $this->module = preg_replace("/\[ClassName\]/",$class_name."Table", $this->component);
             
             $table_name = $migration_name;
-            $lastChar = substr($migration_name, -1);
-            if(strtolower($lastChar) != "s") 
-            {
-                $table_name .= "s";
-            }
 
             $this->module = preg_replace("/\[TableName\]/", strtolower($table_name), $this->module);
 
             if($this->writeModule($migration_path)) 
             {
-                echo "Migration $migration_name successfully created!\n";
+                echo "$class_name migration successfully created!\n";
                 return true;
             }
             return false;
         }
+    }
+
+    /**
+     * usage: formats table name and file name
+     * @param string name
+     * @return string table_name
+     */
+    public function tableFormating($name)
+    {
+        $format_name = str_split($name);
+        $table_name = "";
+        foreach($format_name as $key => $val) 
+        {
+            if(ctype_upper($val)) 
+            {
+                $table_name .= "_".strtolower($val);
+                continue;
+            }
+
+            $table_name .= $val;
+        }
+
+        $table_name = trim($table_name, "_");
+
+        $lastchar = strtolower(substr($table_name, -1));
+        if($lastchar != "s")
+        {
+            $table_name .= "s";
+        }
+
+        return $table_name;
     }
 
     /**
@@ -328,13 +381,15 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function checkTableExists($table)
     {
-        $schema = new Schema;
-        $checking = $schema->query("SHOW TABLES");
+        $migrationReflection = new MigrationReflection;
+        $checking = $migrationReflection->query("SHOW TABLES");
+
         $tables = $checking->fetchAll();
-        if($tables) {
+        if($tables) 
+        {
             foreach($tables as $key => $value) 
             {
-                if($value["Tables_in_".$schema->getDbName()] == $table) 
+                if($value["Tables_in_".$migrationReflection->getDbName()] == $table) 
                 {
                     return true;
                 }
@@ -345,8 +400,8 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function dropAllExistingTable()
     {
-        $schema = new Schema;
-        $checking = $schema->query("SHOW TABLES");
+        $migrationReflection = new MigrationReflection;
+        $checking = $migrationReflection->query("SHOW TABLES");
         $tables = $checking->fetchAll();
         if($tables) 
         {
@@ -355,8 +410,8 @@ class ActionHelpers implements ActionHelpersInterface {
                 foreach($value as $defination => $name) 
                 {
                     // Drop
-                    $schema->query("SET FOREIGN_KEY_CHECKS = 1; DROP TABLE IF EXISTS $name;");
-                    $schema->query("SET FOREIGN_KEY_CHECKS = 0; DROP TABLE IF EXISTS $name;");
+                    $migrationReflection->query("SET FOREIGN_KEY_CHECKS = 1; DROP TABLE IF EXISTS $name;");
+                    $migrationReflection->query("SET FOREIGN_KEY_CHECKS = 0; DROP TABLE IF EXISTS $name;");
 
                 }
             }
@@ -412,9 +467,10 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function isWaiting($migration) 
     {
-        $schema = new Schema;
-        $schema->table = "migrations";
-        $checking = $schema->where("migration", $migration)->get();
+        
+        $migrationReflection = new MigrationReflection;
+        $checking = $migrationReflection->where(["migration" => $migration])->fetch(true);
+
 
         if($checking) 
         {
@@ -424,18 +480,9 @@ class ActionHelpers implements ActionHelpersInterface {
     }
 
     public function createMigrationsTable() 
-    {
-        
-        $schema = new Schema;
-        return $schema->run("CREATE TABLE IF NOT EXISTS migrations(
-            `id` INT(9) NOT NULL AUTO_INCREMENT,
-            `migration` VARCHAR(255) DEFAULT NULL,
-            `version` INT(9) DEFAULT NULL,
-            `created_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY(`id`)
-            )
-        ");
-
+    {   
+        $migrationReflection = new MigrationReflection;
+        return $migrationReflection->init();
     }
 
 
@@ -477,8 +524,8 @@ class ActionHelpers implements ActionHelpersInterface {
             {
                 foreach($alter as $query)
                 {
-                    $schema = new Schema;
-                    $schema->run($query);
+                    $migrationReflection = new MigrationReflection;
+                    $migrationReflection->run($query);
                 }
             }
         }
@@ -486,9 +533,8 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function registerMigration($file, $version) 
     {
-        $schema = new Schema;
-        $schema->table = "migrations";
-        $schema->insert(["migration" => $file, "version" => $version]);
+        $migrationReflection = new MigrationReflection;
+        $migrationReflection->registerMigration(["migration" => $file, "version" => $version]);
     }
 
     public function requireOnce($filepath)
@@ -530,6 +576,42 @@ class ActionHelpers implements ActionHelpersInterface {
             $flag_action = $this->db_flags[$flag];
             $configuration = $this->db_configurations[$flag_action];
             $this->$configuration();
+        }
+    }
+
+    public function enableThirdPartyLibrary()
+    {
+        $component_path = "./Core/Console/components/enable-third-party.component";
+        if($this->readComponent($component_path) !== "") 
+        {
+            $path = "./Core/app_loader.php";
+            $this->module = $this->component;
+            if($this->writeModule($path))
+            {
+                echo "Third party libray has been enabled!";
+                return true;
+            }
+
+            echo "Process Failed!";
+            return false;
+        }
+    }
+
+    public function disableThirdPartyLibrary()
+    {
+        $component_path = "./Core/Console/components/disable-third-party.component";
+        if($this->readComponent($component_path) !== "") 
+        {
+            $path = "./Core/app_loader.php";
+            $this->module = $this->component;
+            if($this->writeModule($path))
+            {
+                echo "Third party libray has been disabled!";
+                return true;
+            }
+
+            echo "Process Failed!";
+            return false;
         }
     }
 }
