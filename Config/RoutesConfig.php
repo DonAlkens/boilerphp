@@ -10,7 +10,7 @@ class RoutesConfig {
     * @var string
     *
     */
-    static public $domain = "mendiz.now";
+    static public $domain = "";
 
 
     /**
@@ -19,6 +19,6 @@ class RoutesConfig {
     * @var bool
     *
     */
-    static public $enable_subdomains = true;
+    static public $enable_subdomains = false;
 
 }
