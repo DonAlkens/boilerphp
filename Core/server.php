@@ -2,23 +2,25 @@
 
 namespace App\Core;
 
+use App\Core\Modules\AppModules;
 use Session;
 use App\Core\Urls\Route;
 
 class Server
 {
 
-    public function __construct($app_modules, $debug = true)
+    public function __construct(AppModules $app_modules, $debug = true)
     {
 
         $this->setEnv();
 
         $this->load_headers();
 
-        $this->app_configurations = $app_modules->configs;
-        $this->app_modules = $app_modules->modules;
-        $this->user_modules = $app_modules->user_modules;
-        $this->route_modules = $app_modules->router_modules;
+        $this->ModuleClass = $app_modules;
+
+        $this->load_configurations();
+
+        $this->load_app_modules();
     }
 
     public function load_headers()
@@ -32,7 +34,7 @@ class Server
 
     public function load_app_modules()
     {
-        foreach ($this->app_modules as $module) {
+        foreach ($this->ModuleClass->modules as $module) {
 
             foreach ($module as $class) {
                 $path_array = explode("::", $class);
@@ -47,7 +49,7 @@ class Server
 
     public function load_user_modules()
     {
-        foreach ($this->user_modules as $module) 
+        foreach ($this->ModuleClass->user_modules as $module) 
         {
             $path_array = explode("::", $module);
             $full_file_path = join("/", $path_array);
@@ -58,7 +60,7 @@ class Server
     public function load_configurations()
     {
 
-        foreach ($this->app_configurations as $configurations) {
+        foreach ($this->ModuleClass->configs as $configurations) {
             $path_array = explode("::", $configurations);
             $full_file_path = join("/", $path_array);
             require  __DIR__ . "/../" . $full_file_path . ".php";
@@ -67,8 +69,16 @@ class Server
 
     public function load_router_modules()
     {
+        foreach ($this->ModuleClass->router_modules as $module) {
+            $path_array = explode("::", $module);
+            $full_file_path = join("/", $path_array);
+            require  __DIR__ . "/" . $full_file_path . ".php";
+        }
+    }
 
-        foreach ($this->route_modules as $module) {
+    public function load_socket_modules() {
+
+        foreach ($this->ModuleClass->socket_modules as $module) {
             $path_array = explode("::", $module);
             $full_file_path = join("/", $path_array);
             require  __DIR__ . "/" . $full_file_path . ".php";
@@ -165,8 +175,9 @@ class Server
         $this->load_router_modules();
 
         /*
-        * checks if subdomains is enable and
-        * configures app for subdomain urls
+        * Checks if subdomains is enable and configures 
+        * app for subdomain urls
+        *
         */
         if (Route::$enable_subdomains) {
             Route::configure();

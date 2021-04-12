@@ -10,6 +10,6 @@ use App\Core\Urls\Route;
 # Base
 Route::get("/", "BaseController::home");
 
-Route::get("/login", function($request) {
-    return content("This is Login Page");
+Route::get("/client", function($request) {
+    return view("index");
 });

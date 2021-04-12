@@ -177,6 +177,38 @@ if(!function_exists("getTimeDiff"))
     }
 }
 
+if(!function_exists("format_date"))
+{
+    /** 
+     * Format date with a giving format type 
+     * 
+     * @param string $date
+     * @param string $format
+     * @return string $formated_date
+    */
+
+    function format_date($date, $format = "Y-m-d H:i:s")
+    {
+        $date = date_create($date);
+        return date_format($date, $format);
+    }
+}
+
+if(!function_exists("timestamp"))
+{
+    /** 
+     * Get the exact current datetime 
+     * 
+     * @param string $format
+     * @return string $current_datetime
+    */
+
+    function timestamp($format = "Y-m-d H:i:s")
+    {
+        return date($format);
+    }
+}
+
 if(!function_exists("flash"))
 {
     /** 

@@ -138,10 +138,19 @@ class DataTypes {
         return $this;
     }
 
-    public function id()
+    public function id($name = "id")
     {
+        $this->column = $name;
         $this->primary_keys .= " `$this->column`,";
-        $this->query .= " `$this->column` BIGINT(20) AUTO_INCREMENT UNIQUE,";
+        $this->query .= " `$this->column` BIGINT(20) AUTO_INCREMENT,";
+        return $this;
+    }
+
+    public function uniqeId($name = "id")
+    {
+        $this->column = $name;
+        $this->primary_keys .= " `$this->column`,";
+        $this->query .= " `$this->column` BIGINT(20) NOT NULL UNIQUE,";
         return $this;
     }
 

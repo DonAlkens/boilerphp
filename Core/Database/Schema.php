@@ -153,8 +153,10 @@ class Schema extends Connection
                     if(count($params) == 0)
                     {
                         $result = $class->{$method}();
-                        if(is_array($result)) { $result = $result[0]; }
-                        if($result instanceof Model) {
+                        $instance = $result;
+                        if(is_array($result)) { $instance = $result[0]; }
+                        if($instance instanceof Model) 
+                        {
                             $class->{$method} = $result;
                         }
                     }

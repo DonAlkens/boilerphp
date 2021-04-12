@@ -94,6 +94,35 @@ class Actions extends ActionHelpers
         return false;
     }
 
+    public function socket($name, $flag = null)
+    {
+        if (!is_null($flag)) {
+            if ($this->flagChecker("socket", $flag)) {
+                $this->run_flag = true;
+            } else {
+                return $this->run_flag = false;
+            }
+        }
+
+        $path = "./Sockets/{$name}.php";
+
+        if ($this->checkExistent($path)) {
+            echo "$name already exists"; exit;
+        }
+
+        if ($this->configureSocket($name, $path)) {
+
+            if (isset($this->run_flag) && $this->run_flag) {
+                $this->flagHandler($name, $flag, "socket", $path);
+            }
+
+            return true;
+        }
+
+        print("Unable to create socket " . $name);
+        return false;
+    }
+
     public function migration($name, $flag = null)
     {
 
@@ -151,5 +180,15 @@ class Actions extends ActionHelpers
                 return false;
             }
         }
+    }
+
+    public function websocket($state, $flag = null) {
+
+        if($state == true) {
+            $this->enableWebSocket($flag);
+        } else {
+            $this->disableWebSocket($flag);
+        }
+
     }
 }

@@ -13,7 +13,7 @@ class Relations extends Schema {
         parent::__construct();
     }
 
-    public function create($data) 
+    public function create($data)
     {
 
         $data[$this->useKey] = $this->extractValue($this->props, $this->useKey);
@@ -31,7 +31,7 @@ class Relations extends Schema {
         return $object->$foreign_key;
     }
 
-    public function hasOne($model, $key) 
+    public function hasOne($model, $key = null) 
     {
         
         if($this->setModelProperties($model)) 
@@ -42,22 +42,11 @@ class Relations extends Schema {
 
                 $class = new $model;
                 $value_key = $this->value_key;
-                
-                // if($this->$value_key instanceof Model) 
-                // {
-                //     $this->value_key = $this->$value_key->id;
-                // } else {
-                //     $this->value_key = $this->$value_key;
-                // }
 
-                $this->result = $class->where($this->foreign_key, $this->$value_key)->attach();
-
-                return $this->result;
+                return $class->where($this->foreign_key, $this->$value_key)->attach();
             }
 
         }
-
-        // return OCI_RETURN_NULLS;
         
     }
 
@@ -85,25 +74,35 @@ class Relations extends Schema {
     public function setKeys($key)
     {
 
-        $this->value_key = $key;
-        $this->foreign_key = $key;
-
-        if (is_array($key)) 
+        if(!is_null($key)) 
         {
+            $this->value_key = $key;
+            $this->foreign_key = $key;
 
-            foreach ($key as $_key => $_value) 
+            if (is_array($key)) 
             {
-                $this->foreign_key = $_key;
-                $this->value_key = $_value;
-            }
+                foreach ($key as $_key => $_value) 
+                {
+                    $this->foreign_key = $_key;
+                    $this->value_key = $_value;
+                }
 
+            }
+        }
+        else 
+        {
+            $modelClassNameSpace = get_class($this);
+            $modelClassName = explode("\\", $modelClassNameSpace);
+
+            $this->foreign_key = strtolower(end($modelClassName))."_id";
+            $this->value_key = "id";
         }
 
         return true;
 
     }
 
-    public function hasMultiple($model, $key)
+    public function hasMultiple($model, $key = null)
     {
 
         if($this->setModelProperties($model)) 
@@ -115,14 +114,11 @@ class Relations extends Schema {
                 $class = new $model;
                 $value_key = $this->value_key;
                 
-                $this->result = $class->where($this->foreign_key, $this->$value_key)->attach(true);
-
-                return $this->result;
+                return $class->where($this->foreign_key, $this->$value_key)->attach(true);
             }
 
         }
 
-        // return OCI_RETURN_NULLS;
     }
 
     public function append($data) 

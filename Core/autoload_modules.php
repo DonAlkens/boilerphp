@@ -90,6 +90,12 @@ class AppModules {
 
     ];
 
+    public $socket_modules = 
+    [
+        "Engine::Socket::WebSocketEventsInterface",
+        "Engine::Socket::WsServer",
+        "Engine::Socket::WebSocket"
+    ];
 
     public $user_modules = [];
 

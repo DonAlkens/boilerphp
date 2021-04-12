@@ -17,7 +17,8 @@ class ActionHelpers implements ActionHelpersInterface {
         "--m" => "model",
         "--a" => "all",
         "--c" => "controller",
-        "--d" => "migration"
+        "--d" => "migration",
+        "--s" => "socket"
     );
 
     public $db_flags = array(
@@ -29,7 +30,8 @@ class ActionHelpers implements ActionHelpersInterface {
         "model" => "configiureModel",
         "controller" => "configureController",
         "migration" => "configureMigration",
-        "notification" => "configureNotification"
+        "notification" => "configureNotification",
+        "socket" => "configureSocket"
     );
 
     public $db_configurations = array(
@@ -238,6 +240,30 @@ class ActionHelpers implements ActionHelpersInterface {
             if($this->writeModule($migration_path)) 
             {
                 echo "$class_name migration successfully created!\n";
+                return true;
+            }
+            return false;
+        }
+    }
+
+    /**
+     * usage: configures model structure and inital setup
+     * @param string model_name
+     * @param string model_path
+     * 
+     * @return void;
+     */
+
+    public function configureSocket($socket_name, $socket_path) 
+    {
+        $component_path = "./Core/Console/components/websocket/socket-skeleton.component";
+
+        if($this->readComponent($component_path)) 
+        {
+            $this->module = preg_replace("/\[SocketName\]/",$socket_name, $this->component);
+            if($this->writeModule($socket_path)) 
+            {
+                echo "$socket_name socket successfully created!\n";
                 return true;
             }
             return false;
@@ -613,5 +639,62 @@ class ActionHelpers implements ActionHelpersInterface {
             echo "Process Failed!";
             return false;
         }
+    }
+
+    public function enableWebSocket($flag = null) {
+
+        $component_path = "./Core/Console/components/websocket/socket-skeleton.component";
+        $manager_path = "./Core/Console/components/websocket/socket.component";
+
+        if(!$this->checkExistent("./socket")) {
+
+            if($this->readComponent($manager_path)) {
+
+                $this->module = $this->component;
+    
+                if($this->writeModule("./socket")) {
+                    
+                    # Create Default File
+                    if($this->readComponent($component_path)) {
+
+                        $socket_name = "Chat";
+
+                        if($flag == "--name") {
+                            $socket_name = ucfirst(end($argv)); 
+                        }
+
+                        $this->module = preg_replace("/\[SocketName\]/", $socket_name, $this->component);
+                        $path = "./Sockets/{$socket_name}.php";
+
+                        if(!$this->checkExistent($path)) 
+                        {
+                            if($this->writeModule($path)) {
+
+                            }
+                        }
+
+                    }
+
+                    echo "Socket has been activated successfully.";
+                }
+            }
+        }
+
+        echo "Socket has already been activated...";
+        return false;
+    }
+
+    public function disableWebSocket($flag = null) {
+
+        if($this->checkExistent("./socket")) {
+            if(Fs::delete("socket")){
+
+            }
+
+            echo "Socket as been deactivated!";
+            return true;
+        }
+
+        return false;
     }
 }
