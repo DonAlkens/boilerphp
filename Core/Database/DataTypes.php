@@ -67,12 +67,6 @@ class DataTypes {
         return $this;
     }
 
-    public function bigInt($length = 20) 
-    {
-        $this->query .= " `$this->column` BIGINT(". (string) $length ."),";
-        return $this;
-    }
-
     public function bigInteger($length = 20) 
     {
         $this->query .= " `$this->column` BIGINT(". (string) $length ."),";
@@ -110,13 +104,13 @@ class DataTypes {
         return $this;
     }
 
-    public function foreign($table, $tKey = null)
+    public function foreign($table, $reference = "id")
     {
         $this->primary_keys .= " `$this->column`,";
-        $tKey = is_null($tKey) ? $this->column : $tKey;
+        $reference = is_null($reference) ? $this->column : $reference;
 
         $const = $table."_".$this->table."_".$this->column."_fk";
-        $this->foreignKey .= " ADD CONSTRAINT `$const` FOREIGN KEY (`$this->column`) REFERENCES `$table` (`$tKey`) ,";
+        $this->foreignKey .= " ADD CONSTRAINT `$const` FOREIGN KEY (`$this->column`) REFERENCES `$table` (`$reference`) ,";
         
         return $this;
     }
@@ -158,12 +152,6 @@ class DataTypes {
     {
         $this->primary_keys .= " `$this->column`,";
         $this->query .= " `$this->column` VARCHAR(". (string) $length .") UNIQUE,";
-        return $this;
-    }
-
-    public function int($length = 9) 
-    {
-        $this->query .= " `$this->column` INT(". (string) $length ."),";
         return $this;
     }
 

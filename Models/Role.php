@@ -18,7 +18,7 @@ class Role extends Model {
     }
 
     public function updator() {
-        return $this->hasOne(User::class, ["id" => "last_updated_by"]);
+        return $this->hasOne(User::class, ["id" => "updated_by"]);
     }
 
     public function permissions() {

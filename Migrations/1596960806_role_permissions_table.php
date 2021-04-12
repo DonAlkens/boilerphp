@@ -12,12 +12,13 @@ class RolePermissionsTable extends Migration {
     public function create() {
 
         $this->table("role_permissions");
-        $this->column("id")->bigIncrements();
-        $this->column("role_id")->bigInt()->foreign("roles", "id")->cascade();
-        $this->column("permission_id")->bigInt()->foreign("permissions", "id")->cascade();
+
+        $this->id();
+        $this->column("role_id")->bigInteger()->foreign("roles", "id")->cascade();
+        $this->column("permission_id")->bigInteger()->foreign("permissions", "id")->cascade();
+        $this->column("created_by")->bigInteger()->foreign("users", "id");
+        $this->column("updated_by")->bigInteger()->foreign("users", "id");
         $this->timestamps();
-        $this->column("created_by")->integer();
-        $this->column("last_updated_by")->integer();
         
         $this->sign();
     }

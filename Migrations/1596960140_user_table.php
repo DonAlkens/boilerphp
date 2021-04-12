@@ -19,7 +19,7 @@ class UserTable extends Migration {
         $this->column("email")->string()->unique();
         $this->column("password")->string();
         $this->column("is_admin")->boolean();
-        $this->column("role_id")->integer();
+        $this->column("role_id")->bigInteger()->foreign("roles");
         $this->column("verified")->boolean();
         $this->column("blocked")->boolean();
         $this->column("picture")->text();

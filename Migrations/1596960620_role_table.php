@@ -12,11 +12,12 @@ class RoleTable extends Migration {
     public function create() {
 
         $this->table("roles");
-        $this->column("id")->id();
+
+        $this->id();
         $this->column("name")->string()->unique();
+        $this->column("created_by")->bigInteger()->foreign("users", "id");
+        $this->column("updated_by")->bigInteger()->foreign("users", "id");
         $this->timestamps();
-        $this->column("created_by")->integer();
-        $this->column("last_updated_by")->integer();
 
         $this->sign();
     }

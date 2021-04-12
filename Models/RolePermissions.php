@@ -13,8 +13,6 @@ class RolePermissions extends Model {
     protected $required = [];
 
 
-    public $table = "role_permissions";
-
     public function permission() {
 
         return $this->hasOne(Permission::class, ["id" => "permission_id"]);

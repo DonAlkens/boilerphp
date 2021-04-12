@@ -39,12 +39,11 @@ class AppModules {
             "Database::DataTypes",
             "Database::QueryBuilder",
             "Database::Connection",
-            "Database::Diagram",
             "Database::Schema",
             "Database::Relations",
-            "Database::Model", 
-            "Database::Migration",
-            "Database::Config",
+            "Database::Model",
+            "Database::Migration::Diagram",
+            "Database::Migration::Migration",
             "Database::Console::MigrationReflection"
         ],
 

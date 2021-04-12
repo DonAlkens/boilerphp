@@ -12,11 +12,11 @@ class PermissionTable extends Migration {
     public function create() {
 
         $this->table("permissions");
-        $this->column("id")->bigIncrements()->nullable();
+        $this->id();
         $this->column("name")->string()->unique();
+        $this->column("created_by")->bigInteger()->foreign("users", "id");
+        $this->column("updated_by")->bigInteger()->foreign("users", "id");
         $this->timestamps();
-        $this->column("created_by")->integer();
-        $this->column("last_updated_by")->integer();
         
         $this->sign();
     }
