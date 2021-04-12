@@ -49,11 +49,15 @@ class Server
 
     public function load_user_modules()
     {
-        foreach ($this->ModuleClass->user_modules as $module) 
-        {
-            $path_array = explode("::", $module);
-            $full_file_path = join("/", $path_array);
-            require $full_file_path . ".php";
+        if(count($this->ModuleClass->user_modules) > 0){
+            foreach ($this->ModuleClass->user_modules as $module) 
+            {
+                if($module != "") {
+                    $path_array = explode("::", $module);
+                    $full_file_path = join("/", $path_array);
+                    require $full_file_path . ".php";
+                }
+            }
         }
     }
 
