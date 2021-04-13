@@ -28,6 +28,9 @@ class Route extends RoutesConfig {
 
     static private $controller_namespace = 'App\Action\Urls\Controllers\\';
 
+    
+    static private $group_path = "";
+
 
     public function __construct()
     {
@@ -69,12 +72,23 @@ class Route extends RoutesConfig {
 
     static public function get($path, $controller)
     {
+        # check group path
+        if(static::$group_path != "")
+        {
+            $path = static::$group_path.$path;
+        }
+
         $map = array( "url" => $path, "method" => "get", "action" => $controller);
         static::mapRoute($map);
     }
 
     static public function post($path, $controller)
     {
+        if(static::$group_path != "")
+        {
+            $path = static::$group_path.$path;
+        }
+
         $map = array( "url" => $path, "method" => "post", "action" => $controller);
         static::mapRoute($map);
     }
