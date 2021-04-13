@@ -3,18 +3,17 @@ namespace App\Core\Modules;
 
 class AppModules {
 
-    public $configs = [
-
+    public $configs = 
+    [
         "Config::App",
         "Config::ErrorsConfig",
         "Config::RoutesConfig",
         "Config::ViewsConfig",
         "Config::MailConfig",
-        
     ];
 
-    public $modules =  [
-
+    public $modules =  
+    [
         "middlewares" => [
             "Engine::Middlewares::Session",
             "Engine::Middlewares::Cookie",
@@ -80,13 +79,12 @@ class AppModules {
 
     ];
 
-    public $router_modules =  [
-
+    public $router_modules =  
+    [
         "Engine::Router::Validator",
         "Engine::Router::Route",
         "Engine::Router::Request",
         "Engine::Router::Response",
-
     ];
 
     public $socket_modules = 
@@ -102,8 +100,10 @@ class AppModules {
     public function __construct()
     {
         $get_modules_file = fopen(".modules", "r");
-        if ($get_modules_file) {
-            while (!feof($get_modules_file)) {
+        if ($get_modules_file) 
+        {
+            while (!feof($get_modules_file)) 
+            {
                 $path = fgets($get_modules_file);
                 $this->addModule($path);
             }
@@ -112,6 +112,9 @@ class AppModules {
 
     public function addModule($module) 
     {
-        array_push($this->user_modules, $module);
+        if(!empty($module))
+        {
+            array_push($this->user_modules, $module);
+        }
     }
 }
