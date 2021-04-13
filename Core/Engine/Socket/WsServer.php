@@ -58,6 +58,7 @@ class WsServer implements WebSocketEventsInterface {
 
     public function send($connection, $message) {
 
+        $message = $this->seal($message);
         $messageLength = strlen($message);
         @socket_write($connection, $message, $messageLength);
         // $this->onSend($connection, $message);

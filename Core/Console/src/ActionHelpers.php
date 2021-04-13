@@ -675,12 +675,13 @@ class ActionHelpers implements ActionHelpersInterface {
 
                     }
 
-                    echo "Socket has been activated successfully.";
+                    echo "Socket has been activated successfully.\n";
+                    return true;
                 }
             }
         }
 
-        echo "Socket has already been activated...";
+        echo "Socket has already been activated...\n";
         return false;
     }
 
