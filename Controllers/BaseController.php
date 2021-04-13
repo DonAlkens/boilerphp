@@ -8,15 +8,15 @@ namespace App\Action\Urls\Controllers;
  */ 
 
 use App\Core\Urls\Request;
-use App\User;
+
+
 
 class BaseController extends Controller 
 {
 
     public function home() {
 
-        $user = (new User)->db("wearslot");
-        print_r($user);
+        return view("index");
     }
 
 }
