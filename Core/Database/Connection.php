@@ -50,12 +50,32 @@ class Connection extends QueryBuilder
     *
     */
     private $dbname;
+
+    /**
+    * database connection props index
+    *   
+    * @var integer
+    *
+    */
+    private $dbConnection;
     
     
     public function __construct()
     {
         $this->getConnectionVariable();
         $this->connect();
+    }
+
+    public function db($name = null)
+    {
+        if(!is_null($name)) {
+            $this->dbConnection = $name;
+        }
+
+        $this->getConnectionVariable();
+        $this->connect();
+
+        return $this;
     }
 
     public function connect()
@@ -85,10 +105,10 @@ class Connection extends QueryBuilder
         $this->dataSource = $this->driver.":host=".$this->host.";dbname=".$this->dbname;
     }
 
-    public function checkDatabaseVariables(array $variables, object $dbConnection)
+    public function checkDatabaseVariables(array $variables, object $dbConnectionVariables)
     {
         foreach($variables as $variable) {
-            if(!isset($dbConnection->$variable)){
+            if(!isset($dbConnectionVariables->$variable)){
                 throw new ErrorException($variable." not found in database connection.");
             }
         }
@@ -98,6 +118,11 @@ class Connection extends QueryBuilder
     {
         $app_config = json_decode(file_get_contents("appsettings.json"));
 
+        if($this->getDbSelection($app_config)) {
+            $app_config->databaseConnection = $this->selectedConnectionVariables;
+        } else {
+            $app_config->databaseConnection = $app_config->databaseConnections->default;
+        }
 
         $this->checkDatabaseVariables(
             ["host", "username", "password", "database"], 
@@ -109,6 +134,24 @@ class Connection extends QueryBuilder
         $this->username = $app_config->databaseConnection->username;
         $this->password = $app_config->databaseConnection->password;
         $this->dbname = $app_config->databaseConnection->database;
+    }
+
+    public function getDbSelection($app_config) {
+
+        if($this->dbConnection != null) 
+        {
+            # ch3ck if database connection name exists
+            $n = $this->dbConnection;
+            if(!isset($app_config->databaseConnections->$n)) {
+                # throw undefined connection name error;
+                exit;
+            }
+
+            $this->selectedConnectionVariables = $app_config->databaseConnections->$n;
+            return true;
+        }
+
+        return false;
     }
 
     public function useDriver($driver) 
