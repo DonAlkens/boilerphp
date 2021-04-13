@@ -64,6 +64,13 @@ class Route extends RoutesConfig {
 
     }
 
+    static public function group($name, $callback) 
+    {
+        self::$group_path = $name;
+        $callback();
+        self::$group_path = "";
+    }
+    
     static public function httpAction($path, $controller)
     {
         static::get($path, $controller);
