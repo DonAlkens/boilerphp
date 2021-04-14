@@ -124,7 +124,7 @@ class Fs
 	{
 
 		if (is_null($extensions)) {
-			$extensions = ["jpg", "png", "gif", "bmp", "jpeg", "JPG", "PNG", "BMP", "GIF", "JPEG"];
+			$extensions = ["jpg", "png", "gif", "bmp", "jpeg",  "webp", "JPG", "PNG", "BMP", "GIF", "JPEG",  "WEBP"];
 		}
 
 
@@ -212,7 +212,7 @@ class Fs
 
 		if (is_null($extensions)) 
 		{
-			$extensions = ["jpg", "png", "gif", "bmp", "jpeg", "JPG", "PNG", "BMP", "GIF", "JPEG"];
+			$extensions = ["jpg", "png", "gif", "bmp", "jpeg",  "webp", "JPG", "PNG", "BMP", "GIF", "JPEG",  "WEBP"];
 		}
 
 
