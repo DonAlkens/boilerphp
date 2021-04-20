@@ -5,7 +5,7 @@ namespace App\Core\Urls;
 
 use Error, Exception;
 use App\Config\RoutesConfig;
-
+use App\Role;
 
 class Route extends RoutesConfig {
 
@@ -30,6 +30,12 @@ class Route extends RoutesConfig {
 
     
     static private $group_path = "";
+
+
+    static private $uri_;
+
+
+    public $names_ = [];
 
 
     public function __construct()
@@ -64,6 +70,10 @@ class Route extends RoutesConfig {
 
     }
 
+    public function as($name) {
+        $this->names_[$name] = static::$uri_;
+    }
+
     static public function group($name, $callback) 
     {
         self::$group_path = $name;
@@ -73,6 +83,8 @@ class Route extends RoutesConfig {
     
     static public function httpAction($path, $controller)
     {
+        static::$uri_ = $path;
+
         static::get($path, $controller);
         static::post($path, $controller);
     }

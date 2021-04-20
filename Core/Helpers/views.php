@@ -1,7 +1,7 @@
 <?php
 
 use App\Config\ViewsConfig;
-
+use App\Core\Urls\Route;
 
 if(!function_exists("env")) 
 {
@@ -96,9 +96,14 @@ if(!function_exists("route"))
      * @return string
     */
 
-    function route($path, $paramters = null)
+    function route($name, $paramters = null)
     {
-        if($paramters != null) {
+        if(!strpos($name, "/")) {
+            
+            $path = "";
+        }
+
+        if(!is_null($paramters)) {
             foreach($paramters as $param) {
                 $path .= "/".$param;
             }

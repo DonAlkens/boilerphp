@@ -97,13 +97,16 @@ class QueryBuilder extends DataTypes
 				$this->whereQuery .= " AND ";
 			}
 
+			$search = " ( ";
 			foreach ($key as $column => $val) 
 			{
 				$val = $operation[0].$val.$operation[1];
-				$this->whereQuery .= "`$column` LIKE '$val' OR ";
+				$search .= "`$column` LIKE '$val' OR ";
 			}
 
-			$this->whereQuery = trim($this->whereQuery, "OR ");
+			$search =  trim($this->whereQuery, "OR ");
+			$search .= " ) ";
+			$this->whereQuery .= $search;
 		} 
 		
 		else if (!is_array($key) && $value != null) 

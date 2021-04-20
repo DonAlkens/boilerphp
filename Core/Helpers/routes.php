@@ -7,13 +7,24 @@ if(!function_exists("request"))
     /**
      * Instantiating request class for app 
      * view 
-     * @return App\Core\Urls\Request;
+     * @return App\Core\Urls\Request|bool;
      * */ 
 
-    function request() {
+    function request($url = null) {
 
         $method = $_SERVER["REQUEST_METHOD"];
-        return new Request($method);
+        $request = new Request($method);
+
+        if(!is_null($url)) {
+            if($request->location() == $url) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return $request;
+
     }
 }
 
@@ -21,10 +32,12 @@ if(!function_exists("url"))
 {
     /**
      * Gets the full url of the page
+     * 
+     * @param bool $decode
      * @return string;
      * */ 
 
-    function url()
+    function url($decode = true)
     {
         if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) 
             ||  isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
@@ -34,7 +47,14 @@ if(!function_exists("url"))
         {
             $protocol = 'http://';
         }
-        return $protocol.$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
+
+        $url = $protocol.$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
+        if($decode) 
+        {
+            $url = urldecode($url);
+        }
+        
+        return $url;
     }
 }
 
