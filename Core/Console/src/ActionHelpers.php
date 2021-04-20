@@ -528,15 +528,19 @@ class ActionHelpers implements ActionHelpersInterface {
         {
             $this->requireOnce($migration);
 
-            echo "Creating ".$this->mFileFormater($migration)["table"].": ".$this->mFileFormater($migration)["file"]."\n";
+            $_tableName = $this->mFileFormater($migration)["table"];
+            $_fileName = $this->mFileFormater($migration)["file"];
+
+            echo "Migrating {$_tableName}: {$_fileName}\n";
             
             $class = $this->migrationClass($migration);
-            $class->create();
+            $class->in();
+            
             array_push($alters, $class->alters);
 
-            $this->registerMigration($this->mFileFormater($migration)["file"], 1);
+            $this->registerMigration($_fileName, 1);
 
-            echo "Created ".$this->mFileFormater($migration)["table"].": ".$this->mFileFormater($migration)["file"]."\n";
+            echo "Migrated {$_tableName}: {$_fileName}\n";
         }
 
         $this->runMigrationAlters($alters);
