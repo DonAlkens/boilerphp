@@ -76,7 +76,7 @@ class Route extends RoutesConfig {
 
     static public function group($name, $callback) 
     {
-        self::$group_path = $name;
+        self::$group_path = "/".trim($name. "/");
         $callback();
         self::$group_path = "";
     }
@@ -91,6 +91,7 @@ class Route extends RoutesConfig {
 
     static public function get($path, $controller)
     {
+        $path = "/". trim($path. "/");
         # check group path
         if(static::$group_path != "")
         {

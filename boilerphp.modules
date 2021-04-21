@@ -18,7 +18,10 @@ By Folders::
 Migrations
 
 Schema -> toArray()
+Specify columns for ->all($columns = [*])
 
+Change load_static to loadStatic 
+Change helpers naming Convention to Camel case
 
 *Notes*: 
 Check if Where query is available on get all function.
