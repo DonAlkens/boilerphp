@@ -666,6 +666,8 @@ class ActionHelpers implements ActionHelpersInterface {
                         if($flag == "--name") {
                             $socket_name = ucfirst(end($argv)); 
                         }
+                        
+                        if(!is_dir("./Sockets")) { mkdir("./Sockets"); }
 
                         $this->module = preg_replace("/\[SocketName\]/", $socket_name, $this->component);
                         $path = "./Sockets/{$socket_name}.php";

@@ -190,6 +190,6 @@ class Actions extends ActionHelpers
         } else {
             $this->disableWebSocket($flag);
         }
-
     }
+    
 }
