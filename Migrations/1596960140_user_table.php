@@ -9,7 +9,7 @@ class UserTable extends Migration {
      * 
      * @return void
      */
-    public function create() {
+    public function in() {
 
         $this->table("users");
 
@@ -33,7 +33,7 @@ class UserTable extends Migration {
      * 
      * @return void
      */
-    public function drop() {
+    public function out() {
 
         $this->dropIfExists("users");
     }

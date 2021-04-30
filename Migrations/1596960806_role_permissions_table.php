@@ -9,7 +9,7 @@ class RolePermissionsTable extends Migration {
      * 
      * @return void
      */
-    public function create() {
+    public function in() {
 
         $this->table("role_permissions");
 
@@ -28,7 +28,7 @@ class RolePermissionsTable extends Migration {
      * 
      * @return void
      */
-    public function drop() {
+    public function out() {
 
         $this->dropIfExists("role_permissions");
     }

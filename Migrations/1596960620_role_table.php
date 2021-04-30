@@ -9,7 +9,7 @@ class RoleTable extends Migration {
      * 
      * @return void
      */
-    public function create() {
+    public function in() {
 
         $this->table("roles");
 
@@ -27,7 +27,7 @@ class RoleTable extends Migration {
      * 
      * @return void
      */
-    public function drop() {
+    public function out() {
 
         $this->dropIfExists("roles");
     }

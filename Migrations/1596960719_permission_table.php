@@ -9,7 +9,7 @@ class PermissionTable extends Migration {
      * 
      * @return void
      */
-    public function create() {
+    public function in() {
 
         $this->table("permissions");
         $this->id();
@@ -26,7 +26,7 @@ class PermissionTable extends Migration {
      * 
      * @return void
      */
-    public function drop() {
+    public function out() {
 
         $this->dropIfExists("permissions");
     }
