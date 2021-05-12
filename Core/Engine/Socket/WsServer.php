@@ -22,6 +22,15 @@ class WsServer implements WebSocketEventsInterface {
 
     public $bufferSize = 1024;
 
+
+    public $headers = [];
+
+
+    public $gets = [];
+
+    
+
+
     public function run() {
 
         if($this->createConnection())
@@ -92,18 +101,35 @@ class WsServer implements WebSocketEventsInterface {
 
     public function doHandShake($header, $connection) {
         
-        $headers = array();
         $lines = preg_split("/\r\n/", $header);
         foreach($lines as $line)
         {
             $line = chop($line);
             if(preg_match('/\A(\S+): (.*)\z/', $line, $matches))
             {
-                $headers[$matches[1]] = $matches[2];
+                $this->setHeader($matches[1], $matches[2]);
+            }
+            elseif(preg_match('/GET/', $line, $matches))
+            {
+                $line = str_replace("/?", "", $line);
+                $splits = explode(" ", $line);
+                $params = $splits[1];
+                if(strpos($params, "&")) {
+                    $splits = explode("&", $params);
+                    foreach($splits as $params) {
+                        $params = explode("=", $params);
+                        $this->setGetData($params[0], $params[1]);
+                    }
+                }
+                else {
+                    $params = explode("=", $params);
+                    $this->setGetData($params[0], $params[1]);
+                }
             }
         }
 
-        $secKey = $headers['Sec-WebSocket-Key'];
+        $secKey = $this->getHeader('Sec-WebSocket-Key');
+
         $secAccept = base64_encode(pack('H*', sha1($secKey . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')));
         $buffer  = "HTTP/1.1 101 Web Socket Protocol Handshake\r\n" .
         "Upgrade: websocket\r\n" .
@@ -111,6 +137,7 @@ class WsServer implements WebSocketEventsInterface {
         "WebSocket-Origin: $this->host\r\n" .
         "WebSocket-Location: ws://$this->host:$this->port/demo/shout.php\r\n".
         "Sec-WebSocket-Accept:$secAccept\r\n\r\n";
+        
         socket_write($connection, $buffer, strlen($buffer));
         
     }
@@ -212,6 +239,43 @@ class WsServer implements WebSocketEventsInterface {
 
     public function setBufferSize($bufferSize) {
         $this->bufferSize = $bufferSize;
+    }
+
+    public function setHeader($name, $value) {
+        $this->headers[$name] = $value;
+    }
+
+    public function getHeader($name) {
+        if(array_key_exists($name, $this->headers)) {
+            return $this->headers[$name];
+        }
+        return null;
+    } 
+
+    public function inHeader($name) {
+        if(array_key_exists($name, $this->headers)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function setGetData($name, $value) {
+        $this->gets[$name] = $value;
+    }
+
+    public function get($name = "") {
+        
+        if(!empty($name)) {
+            if(isset($this->gets[$name])) {
+                return $this->gets[$name];
+            }
+            else 
+            {
+                return null;
+            }
+        }
+
+        return $this->gets;
     }
 
     public function onOpen($connection) { /**code here.. */ }
