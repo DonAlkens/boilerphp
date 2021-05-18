@@ -33,6 +33,13 @@ class Request extends Validator
     */
     public $url;
 
+    /**
+    * request url
+    *
+    * @var object
+    */
+    public $json;
+
 
     /**
     * set the method use in http request
@@ -67,6 +74,12 @@ class Request extends Validator
         {
             $this->$key = $value;
         }
+    }
+
+    public function json() 
+    {
+        $data = json_decode(file_get_contents("php://input"), true);
+        return $this->json = $data;
     }
 
     public function all()
@@ -147,6 +160,8 @@ class Request extends Validator
         {
             $this->$key = $value;
         }
+
+        $this->json();
     }
 
     public function timestamp() 

@@ -429,11 +429,19 @@ class Schema extends Connection
 
     }
 
-    public function get() 
-    {
+    public function get() {
 
         return $this->select();
+    }
 
+    public function toArray() {
+        
+        $result = $this->fetch();
+        if($result) {
+            return (!is_array($result)) ? [$result] : $result;
+        } 
+
+        return $result;
     }
 
     public function resultFormatter($result, $multiple = false, $relations = false) 
@@ -504,11 +512,11 @@ class Schema extends Connection
                     
                 }
 
-                return null;
-
             } 
-
+            
         }
+        
+        return null;
 
     }
 
