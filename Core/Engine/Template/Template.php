@@ -47,6 +47,8 @@ class TemplateEngine {
 
     static public function basic($fcontent) {
         # framework initials
+        $fcontent = preg_replace("/@php/", '<?php',$fcontent);
+        $fcontent = preg_replace("/@endphp/", '?>',$fcontent);
         $fcontent = preg_replace("/@\{\{(.*)\}\}(.*)\@\{/", '<?php echo $1; ?>$2@{',$fcontent);
         $fcontent = preg_replace("/@\{\{(.*)\"(.*)\"(.*)\}\}(.*)\@\{/", '<?php echo $2; ?>$4@{',$fcontent);
         $fcontent = preg_replace("/@\{\{\"(.*)\"\}\}/", '<?php echo "$1"; ?>',$fcontent);
