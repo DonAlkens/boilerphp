@@ -1,6 +1,9 @@
-<?php 
+<?php
 
-use App\Core\Database\Migration;
+use App\Core\Database\Migration\Diagram;
+use App\Core\Database\Migration\Migration;
+use App\Core\Database\Migration\Table;
+
 
 class [ClassName] extends Migration {
 
@@ -11,12 +14,13 @@ class [ClassName] extends Migration {
      */
     public function in() {
 
-        $this->table("[TableName]");
+        Table::create("[TableName]", function(Diagram $diagram){
 
-        $this->id();
-        $this->timestamps();
+            $diagram->id();
+            $diagram->timestamps();
 
-        $this->sign();
+        });
+
     }
 
     /**
@@ -26,8 +30,10 @@ class [ClassName] extends Migration {
      */
     public function out() {
 
-        $this->dropIfExists("[TableName]");
+        Table::dropIfExists("[TableName]");
     }
 
 }
+
+
 

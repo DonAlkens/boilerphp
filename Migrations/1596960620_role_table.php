@@ -1,6 +1,8 @@
-<?php 
+<?php
 
-use App\Core\Database\Migration;
+use App\Core\Database\Migration\Diagram;
+use App\Core\Database\Migration\Migration;
+use App\Core\Database\Migration\Table;
 
 class RoleTable extends Migration {
 
@@ -11,15 +13,15 @@ class RoleTable extends Migration {
      */
     public function in() {
 
-        $this->table("roles");
+        Table::create("roles", function(Diagram $diagram) {
 
-        $this->id();
-        $this->column("name")->string()->unique();
-        $this->column("created_by")->bigInteger()->foreign("users", "id");
-        $this->column("updated_by")->bigInteger()->foreign("users", "id");
-        $this->timestamps();
+            $diagram->id();
+            $diagram->column("name")->string()->unique();
+            $diagram->column("created_by")->bigInteger()->foreign("users", "id");
+            $diagram->column("updated_by")->bigInteger()->foreign("users", "id");
+            $diagram->timestamps();
 
-        $this->sign();
+        });
     }
 
     /**
@@ -29,7 +31,7 @@ class RoleTable extends Migration {
      */
     public function out() {
 
-        $this->dropIfExists("roles");
+        Table::dropIfExists("roles");
     }
 
 }

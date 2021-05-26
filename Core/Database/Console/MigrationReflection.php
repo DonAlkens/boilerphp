@@ -2,7 +2,7 @@
 
 namespace App\Core\Database\Console\Support;
 
-use App\Core\Database\Migration;
+use App\Core\Database\Migration\Migration;
 
 class MigrationReflection extends Migration {
 

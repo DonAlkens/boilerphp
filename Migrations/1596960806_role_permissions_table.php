@@ -1,6 +1,8 @@
 <?php 
 
-use App\Core\Database\Migration;
+use App\Core\Database\Migration\Diagram;
+use App\Core\Database\Migration\Migration;
+use App\Core\Database\Migration\Table;
 
 class RolePermissionsTable extends Migration {
 
@@ -11,16 +13,16 @@ class RolePermissionsTable extends Migration {
      */
     public function in() {
 
-        $this->table("role_permissions");
+        Table::create("role_permissions", function(Diagram $diagram){
 
-        $this->id();
-        $this->column("role_id")->bigInteger()->foreign("roles", "id")->cascade();
-        $this->column("permission_id")->bigInteger()->foreign("permissions", "id")->cascade();
-        $this->column("created_by")->bigInteger()->foreign("users", "id");
-        $this->column("updated_by")->bigInteger()->foreign("users", "id");
-        $this->timestamps();
-        
-        $this->sign();
+            $diagram->id();
+            $diagram->column("role_id")->bigInteger()->foreign("roles", "id")->cascade();
+            $diagram->column("permission_id")->bigInteger()->foreign("permissions", "id")->cascade();
+            $diagram->column("created_by")->bigInteger()->foreign("users", "id");
+            $diagram->column("updated_by")->bigInteger()->foreign("users", "id");
+            $diagram->timestamps();
+
+        });
     }
 
     /**
@@ -30,7 +32,7 @@ class RolePermissionsTable extends Migration {
      */
     public function out() {
 
-        $this->dropIfExists("role_permissions");
+        Table::dropIfExists("role_permissions");
     }
 
 }

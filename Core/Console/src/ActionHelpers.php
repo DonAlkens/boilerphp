@@ -46,6 +46,20 @@ class ActionHelpers implements ActionHelpersInterface {
     );
 
     /**
+     * Starts Application Development Server
+     * 
+     * @param $port - default port number is 8000
+     * 
+     * @return void
+     */
+    public function runServer($port) 
+    {
+        $server_command = "php -S localhost:".$port;
+        print_r("Server listening on http://127.0.0.1:{$port}\n");
+        exec($server_command);
+    }
+
+    /**
      * checks flag and action
      * for difference
      * @return bool
@@ -428,22 +442,43 @@ class ActionHelpers implements ActionHelpersInterface {
     {
         $migrationReflection = new MigrationReflection;
         $checking = $migrationReflection->query("SHOW TABLES");
-        $tables = $checking->fetchAll();
-        if($tables) 
-        {
-            foreach($tables as $key => $value) 
-            {
-                foreach($value as $defination => $name) 
-                {
-                    // Drop
-                    $migrationReflection->query("SET FOREIGN_KEY_CHECKS = 1; DROP TABLE IF EXISTS $name;");
-                    $migrationReflection->query("SET FOREIGN_KEY_CHECKS = 0; DROP TABLE IF EXISTS $name;");
 
-                }
+        $tables = 0;
+
+        $all_migrations_file = glob("./Migrations/*.php");
+        
+        if($all_migrations_file) 
+        {  
+            foreach($all_migrations_file as $migration_file)
+            {
+                $this->requireOnce($migration_file);
+
+                $class = $this->migrationClass($migration_file);
+                $class->out();
+
+                $tables++;
             }
 
-            echo "Dropped ".(count($tables) - 1)." table(s)\n";
+            echo "Dropped ".$tables." table(s)\n";
         }
+
+
+        // $tables = $checking->fetchAll();
+        // if($tables) 
+        // {
+        //     foreach($tables as $key => $value) 
+        //     {
+        //         foreach($value as $defination => $name) 
+        //         {
+        //             // Drop
+        //             $migrationReflection->query("SET FOREIGN_KEY_CHECKS = 1; DROP TABLE IF EXISTS $name;");
+        //             $migrationReflection->query("SET FOREIGN_KEY_CHECKS = 0; DROP TABLE IF EXISTS $name;");
+
+        //         }
+        //     }
+
+        //     echo "Dropped ".(count($tables) - 1)." table(s)\n";
+        // }
     }
 
     public function newMigrationsChecker()
@@ -510,15 +545,6 @@ class ActionHelpers implements ActionHelpersInterface {
         $migrationReflection = new MigrationReflection;
         return $migrationReflection->init();
     }
-
-
-    public function runServer($port) 
-    {
-        $server_command = "php -S localhost:".$port;
-        print_r("Server listening on http://localhost:{$port}\n");
-        exec($server_command);
-    }
-
 
     public function runMigrations()
     {

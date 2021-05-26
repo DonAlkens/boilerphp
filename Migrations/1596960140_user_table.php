@@ -1,6 +1,10 @@
-<?php 
+<?php
 
-use App\Core\Database\Migration;
+use App\Core\Database\Migration\Diagram;
+use App\Core\Database\Migration\Migration;
+use App\Core\Database\Migration\Table;
+
+
 
 class UserTable extends Migration {
 
@@ -11,21 +15,18 @@ class UserTable extends Migration {
      */
     public function in() {
 
-        $this->table("users");
+        Table::connection("default")::create("users", function(Diagram $diagram){
 
-        $this->id();
-        $this->column("firstname")->string()->nullable();
-        $this->column("lastname")->string()->nullable();
-        $this->column("email")->string()->unique();
-        $this->column("password")->string();
-        $this->column("is_admin")->boolean();
-        $this->column("role_id")->bigInteger()->foreign("roles");
-        $this->column("verified")->boolean();
-        $this->column("blocked")->boolean();
-        $this->column("picture")->text();
-        $this->timestamps();
-        
-        $this->sign();
+            $diagram->id();
+            $diagram->column("firstname")->string();
+            $diagram->column("lastname")->string();
+            $diagram->column("email")->string();
+            $diagram->column("password")->string();
+            $diagram->column("verified")->boolean();
+            $diagram->timestamps();
+
+        });
+
     }
 
     /**
@@ -35,7 +36,7 @@ class UserTable extends Migration {
      */
     public function out() {
 
-        $this->dropIfExists("users");
+        Table::dropIfExists("users");
     }
 
 }

@@ -1,6 +1,8 @@
 <?php 
 
-use App\Core\Database\Migration;
+use App\Core\Database\Migration\Diagram;
+use App\Core\Database\Migration\Migration;
+use App\Core\Database\Migration\Table;
 
 class PermissionTable extends Migration {
 
@@ -11,14 +13,15 @@ class PermissionTable extends Migration {
      */
     public function in() {
 
-        $this->table("permissions");
-        $this->id();
-        $this->column("name")->string()->unique();
-        $this->column("created_by")->bigInteger()->foreign("users", "id");
-        $this->column("updated_by")->bigInteger()->foreign("users", "id");
-        $this->timestamps();
-        
-        $this->sign();
+        Table::create("permissions", function(Diagram $diagram) {
+
+            $diagram->id();
+            $diagram->column("name")->string()->unique();
+            $diagram->column("created_by")->bigInteger()->foreign("users", "id");
+            $diagram->column("updated_by")->bigInteger()->foreign("users", "id");
+            $diagram->timestamps();
+
+        });
     }
 
     /**
@@ -28,7 +31,7 @@ class PermissionTable extends Migration {
      */
     public function out() {
 
-        $this->dropIfExists("permissions");
+        Table::dropIfExists("permissions");
     }
 
 }

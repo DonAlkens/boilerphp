@@ -41,7 +41,9 @@ class AppModules {
             "Database::Schema",
             "Database::Relations",
             "Database::Model",
+            "Database::Migration::ColumnDefination",
             "Database::Migration::Diagram",
+            "Database::Migration::Table",
             "Database::Migration::Migration",
             "Database::Console::MigrationReflection"
         ],
