@@ -155,7 +155,7 @@ if(!function_exists("getTimeDiff"))
      * @return object 
     */
 
-    function getTimeDiff($datetime) {
+    function get_time_diff($datetime) {
 
         $data = array(
             "days" => 0,
@@ -298,5 +298,18 @@ if(!function_exists("concat"))
         }
 
         return trim($concatenation, $seprator);
+    }
+}
+
+
+if(!function_exists("is_mobile"))
+{
+    /**
+     * checks if device is a mobile device 
+     * 
+     * @return int|false
+     */
+    function is_mobile() {
+        return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
     }
 }

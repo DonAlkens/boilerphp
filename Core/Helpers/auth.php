@@ -25,7 +25,7 @@ if(!function_exists("access"))
      * gives access with permission
      * 
      * @param string $lock
-     * @return App\Admin\Door::hasLock
+     * @return bool
     */
 
     function access($lock)
