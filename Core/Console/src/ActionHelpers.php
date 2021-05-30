@@ -39,10 +39,11 @@ class ActionHelpers implements ActionHelpersInterface {
     );
 
     public $paths = array(
-        "model" => "./Models/",
-        "controller" => "./Controllers/",
-        "migration" => "./Migrations/",
-        "notification" => "./Notification/",
+        "model" => "./app/Models/",
+        "view" => "./app/Views/",
+        "controller" => "./app/Controllers/",
+        "migration" => "./database/Migrations/",
+        "notification" => "./app/Notifications/",
     );
 
     /**
@@ -108,7 +109,7 @@ class ActionHelpers implements ActionHelpersInterface {
             $name .= "Controller"; 
         }
 
-        $path = $this->paths[$task].$name.".php";
+        $path = $this->path($task).$name.".php";
 
         if($task == "migration") 
         {
@@ -122,7 +123,7 @@ class ActionHelpers implements ActionHelpersInterface {
                 return;
             }
 
-            $path = $this->paths[$task].time()."_".$file_name;
+            $path = $this->path($task).time()."_".$file_name;
         }
 
         $configuration = $this->configurations[$task];
@@ -140,11 +141,16 @@ class ActionHelpers implements ActionHelpersInterface {
         return false;
     }
 
+    public function path($name) 
+    {
+        return $this->paths[$name];
+    }
+
 
     public function checkMigrationExistent($filename) 
     {
 
-        $all_migrations_file = glob("./Migrations/*.php");
+        $all_migrations_file = glob("./database/Migrations/*.php");
         if($all_migrations_file) 
         {
             foreach($all_migrations_file as $migration_file)
@@ -331,7 +337,7 @@ class ActionHelpers implements ActionHelpersInterface {
             $_namespace = $split[0];
             $this->controller_name = $split[1];
 
-            $folder = "./Controllers/".$_namespace;
+            $folder = $this->path("controller").$_namespace;
             if(!Fs::is_active_directory($folder)) 
             {
                 Fs::create_directory($folder);
@@ -373,9 +379,9 @@ class ActionHelpers implements ActionHelpersInterface {
             $this->module = preg_replace("/\[Controller\]/", $controller_name, $this->component);
             $view_folder = str_replace("controller", "", strtolower($controller_name));
 
-            if(!$this->checkExistent("./Views/".$view_folder)) 
+            if(!$this->checkExistent($this->path("view").$view_folder)) 
             {
-                mkdir("./Views/".$view_folder);
+                mkdir($this->path("view").$view_folder);
             }
     
             $this->module = preg_replace("/\[View\]/", $view_folder, $this->module);
@@ -445,7 +451,7 @@ class ActionHelpers implements ActionHelpersInterface {
 
         $tables = 0;
 
-        $all_migrations_file = glob("./Migrations/*.php");
+        $all_migrations_file = glob("./database/Migrations/*.php");
         
         if($all_migrations_file) 
         {  
@@ -484,7 +490,7 @@ class ActionHelpers implements ActionHelpersInterface {
     public function newMigrationsChecker()
     {
         $this->new_migrations = array();
-        $all_migrations_file = glob("./Migrations/*.php");
+        $all_migrations_file = glob("./database/Migrations/*.php");
         
         if($all_migrations_file) 
         {

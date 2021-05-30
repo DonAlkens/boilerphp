@@ -5,11 +5,11 @@ class AppModules {
 
     public $configs = 
     [
-        "Config::App",
-        "Config::ErrorsConfig",
-        "Config::RoutesConfig",
-        "Config::ViewsConfig",
-        "Config::MailConfig",
+        "configs::App",
+        "configs::ErrorsConfig",
+        "configs::RoutesConfig",
+        "configs::ViewsConfig",
+        "configs::MailConfig",
     ];
 
     public $modules =  

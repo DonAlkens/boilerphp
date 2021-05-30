@@ -107,7 +107,7 @@ class Server
 
     public function init_route_handler()
     {
-        require __DIR__ . "/../route.php";
+        require __DIR__ . "/../routes/route.php";
 
         // Route::pattern();
         Route::listen();
@@ -115,14 +115,14 @@ class Server
 
     public function load_app_models()
     {
-        foreach (glob("Models/*.php") as $model) {
+        foreach (glob("app/Models/*.php") as $model) {
             require __DIR__ . "/../" . $model;
         }
     }
 
     public function load_app_notifications()
     {
-        foreach (glob("Notifications/*.php") as $notification) {
+        foreach (glob("app/Notifications/*.php") as $notification) {
             require __DIR__ . "/../" . $notification;
         }
     }
@@ -171,7 +171,7 @@ class Server
         /*
         * Load all app controllers
         */
-        $this->load_app_controllers("Controllers");
+        $this->load_app_controllers("app/Controllers");
 
         /*
         * Load router modules

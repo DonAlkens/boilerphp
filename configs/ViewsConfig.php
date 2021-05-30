@@ -8,7 +8,7 @@ class ViewsConfig {
     * path to view files
     * @value string
     */
-    static public $views_path = "Views";
+    static public $views_path = "app/Views";
 
 
     /**

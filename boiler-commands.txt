@@ -17,18 +17,3 @@ if socket has been enable you'll be able to use [php socket <SocketName>] to run
 
 LightWeight
 Unique & Different
-
-
-<?php require_once("../includes/new-user-header.php"); ?>
-
-<div class="az-content-body">
-    <div class="col-lg-12 mg-t-20">
-        <div class="card card-table-two">
-            <?php payment_options_links("Flutterwave", "flutterwave-process-ea-new", "flutterwave-usd", "usd"); ?>
-        </div>
-        <!-- card-dashboard-five -->
-    </div>
-
-</div><!-- az-content-body -->
-
-<?php require_once("../includes/new-user-footer.php"); ?>
