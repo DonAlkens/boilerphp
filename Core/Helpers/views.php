@@ -84,30 +84,3 @@ if(!function_exists("validation"))
         
     }
 }
-
-
-if(!function_exists("route")) 
-{
-    /** 
-     * returns a url string
-     * 
-     * @param string $path
-     * @param string $params
-     * @return string
-    */
-
-    function route($name, $paramters = null)
-    {
-        if(!strpos($name, "/")) {
-            
-            $path = "";
-        }
-
-        if(!is_null($paramters)) {
-            foreach($paramters as $param) {
-                $path .= "/".$param;
-            }
-        }
-        return $path;
-    }
-}

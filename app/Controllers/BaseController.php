@@ -8,13 +8,13 @@ namespace App\Action\Urls\Controllers;
  */ 
 
 use App\Core\Urls\Request;
-
+use App\Notification\TestNotification;
 
 
 class BaseController extends Controller 
 {
 
-    public function home() {
+    public function index() {
 
         return view("index");
     }

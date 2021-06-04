@@ -71,7 +71,7 @@ class Route extends RoutesConfig {
     }
 
     public function as($name) {
-        $this->names_[$name] = static::$uri_;
+        $this->set_route_name($name);
     }
 
     static public function group($name, $callback) 
@@ -91,26 +91,30 @@ class Route extends RoutesConfig {
 
     static public function get($path, $controller)
     {
-        $path = "/". trim($path. "/");
+        $map = static::create_map($path, "get", $controller);
+        static::mapRoute($map);
+
+        return static::route_modifier($map);
+    }
+
+    static public function post($path, $controller)
+    {
+        $map = static::create_map($path, "post", $controller);
+        static::mapRoute($map);
+    }
+
+
+    static public function create_map($path, $method, $controller) {
+
+        $path = trim($path. "/");
+
         # check group path
         if(static::$group_path != "")
         {
             $path = static::$group_path.$path;
         }
 
-        $map = array( "url" => $path, "method" => "get", "action" => $controller);
-        static::mapRoute($map);
-    }
-
-    static public function post($path, $controller)
-    {
-        if(static::$group_path != "")
-        {
-            $path = static::$group_path.$path;
-        }
-
-        $map = array( "url" => $path, "method" => "post", "action" => $controller);
-        static::mapRoute($map);
+        return array( "url" => $path, "method" => $method, "action" => $controller);
     }
 
     static public function mapRoute(Array $route) 
@@ -435,5 +439,64 @@ class Route extends RoutesConfig {
         }
 
         return $pattern;
+    }
+
+
+    /**
+     * Bundle all route files create by devs
+     * 
+     *  @param $routes - Specify routes to be loaded
+     *  Default null, and bundles all custom route files by default.
+     *  Array value required to specify routes to be loaded
+     * 
+     * */
+
+    public static function loadRoutes($routes = null) {
+
+        if(!is_null($routes)) {
+
+            foreach($routes as $route) {
+                $route_path = "./routes/". $route .".php"; 
+                if(file_exists($route_path)) {
+                    require_once $route_path;
+                }
+            }
+
+        } else
+        {
+            foreach (glob("routes/*.php") as $route) {
+                if(!preg_match('/route.php/', $route)) {
+                    require $route;
+                }
+            }
+        }
+
+
+    }
+
+
+    static public function route_modifier($map) {
+
+        $route = (new Route);
+        $route->map = $map;
+
+        return $route;
+    }
+
+    public function set_route_name($name) {
+
+        if(isset($_ENV['app_route_name_specifier'])) {
+            $names = $_ENV["app_route_name_specifier"];
+            if(array_key_exists($name, $names)) {
+
+            } else 
+            {
+                $_ENV['app_route_name_specifier'][$name]  = $this->map;
+            }
+        } else 
+        {
+            $_ENV['app_route_name_specifier'] = [$name => $this->map]; 
+        }
+
     }
 }

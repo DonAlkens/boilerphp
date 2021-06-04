@@ -8,4 +8,4 @@ use App\Core\Urls\Route;
  * 
  * */
 
-Route::get("/", "BaseController::home");
+Route::get("/", "BaseController::index")->as("home");

@@ -14,7 +14,7 @@ class Actions extends ActionHelpers
      * */
     public function controller($name, $flag = null)
     {
-        $this->path = "./Controllers/" . $name . ".php";
+        $this->path = $this->path("controller") . $name . ".php";
 
         if ($this->checkExistent($this->path)) {
             echo "$name already exists";
@@ -44,7 +44,7 @@ class Actions extends ActionHelpers
             }
         }
 
-        $path = "./Notifications/" . $name . ".php";
+        $path = $this->path("notification") . $name . ".php";
 
         if ($this->checkExistent($path)) {
             echo "Notification $name already exists";
@@ -74,7 +74,7 @@ class Actions extends ActionHelpers
             }
         }
 
-        $path = "./Models/" . $name . ".php";
+        $path = $this->path("model") . $name . ".php";
 
         if ($this->checkExistent($path)) {
             echo "Model $name already exists";
@@ -129,7 +129,7 @@ class Actions extends ActionHelpers
         $table = $this->tableFormating($name);
 
         $file_name = $table . "_table.php";
-        $this->path = "./Migrations/" . time() . "_" . $file_name;
+        $this->path = $this->path("migration") . time() . "_" . $file_name;
 
 
         $this->checkMigrationExistent($file_name);

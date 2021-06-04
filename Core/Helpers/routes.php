@@ -2,6 +2,7 @@
 
 use App\Core\Urls\Request;
 
+
 if(!function_exists("request"))
 {
     /**
@@ -76,5 +77,25 @@ if(!function_exists("domain"))
             $protocol = 'http://';
         }
         return $protocol.$_SERVER["HTTP_HOST"];
+    }
+}
+
+if(!function_exists("route")) 
+{
+    /** 
+     * returns a url string
+     * 
+     * @param string $path
+     * @param string $params
+     * @return string
+    */
+
+    function route($name, $paramters = null)
+    {
+       if(isset($_ENV["app_route_name_specifier"][$name])) {
+           $route = $_ENV["app_route_name_specifier"][$name];
+
+           
+       }
     }
 }
