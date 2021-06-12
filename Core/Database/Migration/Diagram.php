@@ -7,28 +7,27 @@ class Diagram extends ColumnDefination {
 
     public $columns = array();
 
-    public function __construct($table, $query = "", $primary_keys = "")
+    public function __construct($table)
     {
         $this->table = $table;
-        return $this->createTableQuery($table, $query, $primary_keys);
     }
     
-    public function createTableQuery($table, $query, $primary_keys) 
+    public function createTableQuery($columns, $primary_keys) 
     {
 
-        $this->TableQuery = "CREATE TABLE IF NOT EXISTS `$table` ($query";
-        if($primary_keys != "") 
-        {
+        $this->TableQuery = "CREATE TABLE IF NOT EXISTS `$this->table` ($columns";
+        if($primary_keys != "") {
             $this->TableQuery .= ", PRIMARY KEY ($primary_keys)";
         }
         
         $this->TableQuery .= " )";
         return $this->TableQuery;
     }
-   
-    public function dropTableQuery()
-    {
-        return $this->TableQuery = "SET FOREIGN_KEY_CHECKS = 1; DROP TABLE IF EXISTS `$this->table`; SET FOREIGN_KEY_CHECKS = 0; DROP TABLE IF EXISTS `$this->table`;";
-    }
 
+    public function modifyTableQuery($columns, $primary_keys) {
+
+        $this->TableQuery = "ALTER TABLE `$this->table` $columns";
+        if($primary_keys != "") { $this->TableQuery .= ", ADD PRIMARY KEY ($primary_keys)"; }
+        return $this->TableQuery;
+    } 
 }

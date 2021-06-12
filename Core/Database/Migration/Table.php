@@ -6,7 +6,7 @@ use App\Core\Database\Schema;
 
 class Table extends Schema {
 
-    protected static $dbkey = null;
+    protected static $dbkey = "default";
 
     public function __construct($key = null)
     {
@@ -23,33 +23,33 @@ class Table extends Schema {
         $diagram = new Diagram($name);
         $callback($diagram);
         $tableQuery = $diagram->createTableQuery(
-            $name, $diagram->trimmer($diagram->query), $diagram->trimmer($diagram->primary_keys)
+            $diagram->trimmer($diagram->query), $diagram->trimmer($diagram->primary_keys)
         );
-        
-        
-        if(static::$dbkey == null) {
-            static::$dbkey = "default";
-        }
-        
+
         $diagram->foreignKeyProccessor($name);
         (new Schema)->db(static::$dbkey)->run($tableQuery);
     }
 
-    public static function modify($name) {
+    public static function modify($name, $callback) {
 
-        return (new Table)->setTable($name);
+        $diagram = new Diagram($name);
+        $callback($diagram);
+
+        $query = $diagram->modifyTableQuery(
+            $diagram->trimmer($diagram->query), $diagram->trimmer($diagram->primary_keys)
+        );
+
+        $diagram->foreignKeyProccessor($name);
+        (new Schema)->db(static::$dbkey)->run($query);
     }
 
     public static function dropIfExists($table)
     {
-        $diagram = new Diagram($table);
-        $tableQuery = $diagram->dropTableQuery();
-
         if(static::$dbkey == null) {
             static::$dbkey = "default";
         }
 
-        (new Schema)->db(static::$dbkey)->run($tableQuery);
+        (new Schema)->db(static::$dbkey)->dropDatabaseTable($table);
     }
 
 }

@@ -21,4 +21,9 @@ class MigrationReflection extends Migration {
 
     }
 
+
+    public function clear() {
+        $this->run("TRUNCATE `migrations`");
+    }
+
 }

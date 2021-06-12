@@ -46,6 +46,8 @@ class ActionHelpers implements ActionHelpersInterface {
         "notification" => "./app/Notifications/",
     );
 
+    protected $specialTableChars = ["boy"];
+
     /**
      * Starts Application Development Server
      * 
@@ -169,7 +171,7 @@ class ActionHelpers implements ActionHelpersInterface {
     public function migrationFileNameChecker($migration_file, $name_format)
     {
         $ex = explode("/", $migration_file);
-        $exMfile = explode("_",$ex[2]);
+        $exMfile = explode("_", end($ex));
         $filename = $exMfile[1]."_".$exMfile[2];
 
         if($filename == $name_format) {
@@ -313,8 +315,14 @@ class ActionHelpers implements ActionHelpersInterface {
         $table_name = trim($table_name, "_");
 
         $lastchar = strtolower(substr($table_name, -1));
-        if($lastchar != "s")
-        {
+        
+        if($lastchar == "y" && !in_array($table_name, $this->specialTableChars)) {
+            $table_name = substr($table_name, 0, (strlen($table_name) - 1))."ies";
+        }
+        else if($lastchar == "x" && !in_array($table_name, $this->specialTableChars)) {
+            $table_name .= "es";
+        }
+        else if($lastchar != "s" && !in_array($table_name, $this->specialTableChars)) {
             $table_name .= "s";
         }
 
@@ -447,7 +455,7 @@ class ActionHelpers implements ActionHelpersInterface {
     public function dropAllExistingTable()
     {
         $migrationReflection = new MigrationReflection;
-        $checking = $migrationReflection->query("SHOW TABLES");
+        $migrationReflection->clear();
 
         $tables = 0;
 
@@ -522,7 +530,7 @@ class ActionHelpers implements ActionHelpersInterface {
     public function migrationWaitingMigrate($migration_file)
     {
         $ex = explode("/", $migration_file);
-        $migration = str_replace(".php", "", $ex[2]);
+        $migration = str_replace(".php", "", end($ex));
 
         if($this->isWaiting($migration))
         {
@@ -536,7 +544,7 @@ class ActionHelpers implements ActionHelpersInterface {
     {
         
         $migrationReflection = new MigrationReflection;
-        $checking = $migrationReflection->where(["migration" => $migration])->fetch(true);
+        $checking = $migrationReflection->find("migration", $migration);
 
 
         if($checking) 
@@ -613,7 +621,7 @@ class ActionHelpers implements ActionHelpersInterface {
     public function mFileFormater($migration) 
     {
         $split = explode("/", $migration);
-        $ex = str_replace(".php", "", $split[2]);
+        $ex = str_replace(".php", "", end($split));
 
         $exMfile = explode("_", $ex);
         array_shift($exMfile);

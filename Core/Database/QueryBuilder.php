@@ -244,4 +244,9 @@ class QueryBuilder extends DataTypes
 	{
 		return gettype($result);
 	}
+
+
+	public function dropDatabaseTableQuery($table) {
+		return "SET FOREIGN_KEY_CHECKS = 1; DROP TABLE IF EXISTS `$table`; SET FOREIGN_KEY_CHECKS = 0; DROP TABLE IF EXISTS `$table`;";
+	}
 }

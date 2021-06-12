@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__."/Core/app_loader.php";
+require __DIR__."/core/app_loader.php";
 
 /*
 * -----------------------------------------------------

@@ -5,8 +5,7 @@ use App\Core\Database\Migration\Migration;
 use App\Core\Database\Migration\Table;
 
 
-
-class UserTable extends Migration {
+class BoysTable extends Migration {
 
     /**
      * creates database table
@@ -15,14 +14,9 @@ class UserTable extends Migration {
      */
     public function in() {
 
-        Table::create("users", function(Diagram $diagram){
+        Table::create("boys", function(Diagram $diagram){
 
             $diagram->id();
-            $diagram->column("firstname")->string();
-            $diagram->column("lastname")->string();
-            $diagram->column("email")->string();
-            $diagram->column("password")->string();
-            $diagram->column("verified")->boolean();
             $diagram->timestamps();
 
         });
@@ -36,8 +30,10 @@ class UserTable extends Migration {
      */
     public function out() {
 
-        Table::dropIfExists("users");
+        Table::dropIfExists("boys");
     }
 
 }
+
+
 

@@ -1,5 +1,7 @@
 <?php
 
+use App\Config\ViewsConfig;
+
 class TemplateEngine {
 
     public static $content = [];
@@ -73,7 +75,7 @@ class TemplateEngine {
         
         $fcontent = $fileContent;
         // $fcontent = TemplateEngine::htmlSymbolicCharacters($fcontent);
-        $fcontent = preg_replace("/@\{\{(.*)load (.*)\}\}/",'<?php echo TemplateEngine::loadFile("Views/".($2).".".self::$ext, $content); ?>',$fcontent);
+        $fcontent = preg_replace("/@\{\{(.*)load (.*)\}\}/",'<?php echo TemplateEngine::loadFile("'.ViewsConfig::$views_path.'/".($2).".".self::$ext, $content); ?>',$fcontent);
         $fcontent = TemplateEngine::auth($fcontent);
         $fcontent = TemplateEngine::sessions($fcontent);
         $fcontent = TemplateEngine::keys($fcontent, $content);

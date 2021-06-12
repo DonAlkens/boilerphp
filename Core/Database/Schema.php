@@ -89,7 +89,16 @@ class Schema extends Connection
 
             $table = trim($format, "_");
             $lastchar = strtolower(substr($table, -1));
-            if($lastchar != "s") { $table .= "s"; }
+            
+            if($lastchar == "y" && !in_array($table, $this->specialTableChars)) {
+                $table = substr($table, 0, (strlen($table) - 1))."ies";
+            }
+            else if($lastchar == "x" && !in_array($table, $this->specialTableChars)) {
+                $table .= "es";
+            }
+            else if($lastchar != "s" && !in_array($table, $this->specialTableChars)) {
+                $table .= "s";
+            }
 
             $this->table = $table;
         }
@@ -141,9 +150,13 @@ class Schema extends Connection
         $class_name = get_class($class);
 
         $clReflection = new ReflectionClass($class_name);
+
         foreach($clReflection->getMethods() as $clMethod) {
+
             if($clMethod->class == $class_name) {
+
                 $method = $clMethod->name;
+
                 if($method != '__construct')
                 {
                     $mReflection = new ReflectionMethod($class_name, $method);
@@ -153,7 +166,13 @@ class Schema extends Connection
                     {
                         $result = $class->{$method}();
                         $instance = $result;
-                        if(is_array($result)) { $instance = $result[0]; }
+                        if(is_array($result)) 
+                        { 
+                            if(isset($result[0])) {
+                                $instance = $result[0];
+                            }
+                        }
+                        
                         if($instance instanceof Model) 
                         {
                             $class->{$method} = $result;
@@ -596,4 +615,12 @@ class Schema extends Connection
 
     }
 
+    public function dropDatabaseTable($table) {
+
+        $this->query($this->dropDatabaseTableQuery($table));
+        
+    }
+
+
+    protected $specialTableChars = ["boy"];
 }
