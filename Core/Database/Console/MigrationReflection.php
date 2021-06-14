@@ -21,8 +21,17 @@ class MigrationReflection extends Migration {
 
     }
 
+    public function checkMigration($migration) {
 
-    public function clear() {
+        $checker = $this->query("SELECT migration FROM migrations WHERE migration = '$migration'");
+        if($checker->rowCount() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function clearTables() {
         $this->run("TRUNCATE `migrations`");
     }
 

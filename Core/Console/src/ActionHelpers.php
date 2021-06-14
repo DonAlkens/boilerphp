@@ -4,6 +4,7 @@ namespace Console\Support;
 
 use App\FileSystem\Fs;
 use App\Core\Database\Console\Support\MigrationReflection;
+use App\Core\Database\Schema;
 use Console\Support\Interfaces\ActionHelpersInterface;
 
 
@@ -58,7 +59,7 @@ class ActionHelpers implements ActionHelpersInterface {
     public function runServer($port) 
     {
         $server_command = "php -S localhost:".$port;
-        print_r("Server listening on http://127.0.0.1:{$port}\n");
+        print_r("Server listening on http://localhost:{$port}\n");
         exec($server_command);
     }
 
@@ -445,17 +446,27 @@ class ActionHelpers implements ActionHelpersInterface {
             {
                 if($value["Tables_in_".$migrationReflection->getDbName()] == $table) 
                 {
-                    return true;
+                    $state = true;
+                    break;
+                }
+                else 
+                {
+                    $state = false;
                 }
             }
         }
-        return false;
+        else 
+        {
+            $state = false;
+        }
+
+        return $state;
     }
 
     public function dropAllExistingTable()
     {
         $migrationReflection = new MigrationReflection;
-        $migrationReflection->clear();
+        $migrationReflection->clearTables();
 
         $tables = 0;
 
@@ -502,21 +513,14 @@ class ActionHelpers implements ActionHelpersInterface {
         
         if($all_migrations_file) 
         {
-            if($this->checkTableExists("migrations")) 
+            foreach($all_migrations_file as $migration_file)
             {
-                foreach($all_migrations_file as $migration_file)
+                if($this->migrationWaitingMigrate($migration_file)) 
                 {
-                    if($this->migrationWaitingMigrate($migration_file)) 
-                    {
-                        array_push($this->new_migrations, $migration_file);
-                    }
+                    array_push($this->new_migrations, $migration_file);
                 }
             }
-            else 
-            {
-                $this->new_migrations = $all_migrations_file;
-            }
-        } 
+        }
 
         if(count($this->new_migrations) > 0)
         {
@@ -542,12 +546,7 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function isWaiting($migration) 
     {
-        
-        $migrationReflection = new MigrationReflection;
-        $checking = $migrationReflection->find("migration", $migration);
-
-
-        if($checking) 
+        if((new MigrationReflection)->checkMigration($migration))
         {
             return false;
         }
