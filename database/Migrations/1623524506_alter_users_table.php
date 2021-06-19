@@ -17,7 +17,7 @@ class AlterUsersTable extends Migration {
         Table::modify("users", function(Diagram $diagram){
             // $diagram->changeColumnName("firstname", "name")->bigInteger();
             // $diagram->addColumn("opener")->string()->after("lastname");
-            // $diagram->dropColumn("updated_date");
+            $diagram->dropColumn("updated_date");
         });
 
     }

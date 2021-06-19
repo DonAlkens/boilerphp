@@ -4,6 +4,7 @@ namespace Console\Support;
 
 use App\FileSystem\Fs;
 use App\Core\Database\Console\Support\MigrationReflection;
+use App\Core\Database\Migration\Table;
 use App\Core\Database\Schema;
 use Console\Support\Interfaces\ActionHelpersInterface;
 
@@ -561,8 +562,6 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function runMigrations()
     {
-        $alters = array();
-
         foreach($this->new_migrations as $migration) 
         {
             $this->requireOnce($migration);
@@ -575,27 +574,26 @@ class ActionHelpers implements ActionHelpersInterface {
             $class = $this->migrationClass($migration);
             $class->in();
             
-            array_push($alters, $class->alters);
-
             $this->registerMigration($_fileName, 1);
-
             echo "Migrated {$_tableName}: {$_fileName}\n";
         }
+        
+        echo "Running migration alter queries...\n";
+        $this->runMigrationAlters();
 
-        $this->runMigrationAlters($alters);
+        echo "Migration completed successfully\n";
     }
 
-    public function runMigrationAlters($alters)
+    public function runMigrationAlters()
     {
-        foreach($alters as $alter)
+        $alters = Table::getAlters();
+
+        if(count($alters) > 0) 
         {
-            if(count($alter) > 0)
+            foreach($alters as $query)
             {
-                foreach($alter as $query)
-                {
-                    $migrationReflection = new MigrationReflection;
-                    $migrationReflection->run($query);
-                }
+                $migrationReflection = new MigrationReflection;
+                $migrationReflection->run($query);
             }
         }
     }

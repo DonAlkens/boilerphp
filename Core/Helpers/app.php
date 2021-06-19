@@ -146,7 +146,7 @@ if(!function_exists("reverse_date"))
     }
 }
 
-if(!function_exists("getTimeDiff"))
+if(!function_exists("get_time_diff"))
 {
     /** 
      * get diffrence in time and date 
@@ -311,5 +311,36 @@ if(!function_exists("is_mobile"))
      */
     function is_mobile() {
         return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
+    }
+}
+
+if(!function_exists("env")) 
+{
+    /** 
+     * returns and enviroment variable if exists
+     * 
+     * @param string 
+     * @return mixed
+    */
+    function env($key)
+    {
+        if(isset($_ENV))
+        {
+            return trim($_ENV[$key]);
+        }
+    }
+}
+
+if(!function_exists("setEnv")) 
+{
+    /** 
+     * returns and enviroment variable if exists
+     * 
+     * @param string 
+     * @return string
+    */
+    function setEnv($key, $value)
+    {
+        $_ENV[$key] = $value;
     }
 }

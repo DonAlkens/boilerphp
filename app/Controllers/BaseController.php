@@ -8,12 +8,14 @@ namespace App\Action\Urls\Controllers;
  */ 
 
 use App\Core\Urls\Request;
-
+use App\User;
 
 class BaseController extends Controller 
 {
 
     public function index() {
+
+        $user = (new User)->all();
 
         return view("index");
     }

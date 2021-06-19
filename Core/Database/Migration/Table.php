@@ -26,21 +26,36 @@ class Table extends Schema {
             $diagram->trimmer($diagram->query), $diagram->trimmer($diagram->primary_keys)
         );
 
-        $diagram->foreignKeyProccessor($name);
+        $foreignKeysQuery = $diagram->foreignKeyProccessor($name);
+        Table::createAlters($foreignKeysQuery);
         (new Schema)->db(static::$dbkey)->run($tableQuery);
     }
 
     public static function modify($name, $callback) {
 
         $diagram = new Diagram($name);
-        $callback($diagram);
+        $diagram->setPkMode(false);
 
+        $callback($diagram);
         $query = $diagram->modifyTableQuery(
             $diagram->trimmer($diagram->query), $diagram->trimmer($diagram->primary_keys)
         );
 
-        $diagram->foreignKeyProccessor($name);
+        $foreignKeysQuery = $diagram->foreignKeyProccessor($name);
+        Table::createAlters($foreignKeysQuery);
+
         (new Schema)->db(static::$dbkey)->run($query);
+    }
+
+    private static function createAlters($foreignKeysQuery) 
+    {
+        if($foreignKeysQuery != "" && !is_null($foreignKeysQuery)) {
+            array_push(static::$alters, $foreignKeysQuery);
+        }
+    }
+
+    public static function getAlters() {
+        return static::$alters;
     }
 
     public static function dropIfExists($table)

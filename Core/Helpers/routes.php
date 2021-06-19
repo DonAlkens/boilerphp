@@ -35,7 +35,7 @@ if(!function_exists("url"))
      * Gets the full url of the page
      * 
      * @param bool $decode
-     * @return string;
+     * @return string
      * */ 
 
     function url($decode = true)

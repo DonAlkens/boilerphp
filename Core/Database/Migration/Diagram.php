@@ -30,4 +30,8 @@ class Diagram extends ColumnDefination {
         if($primary_keys != "") { $this->TableQuery .= ", ADD PRIMARY KEY ($primary_keys)"; }
         return $this->TableQuery;
     } 
+
+    public function setPkMode($mode) {
+        $this->pk_mode = $mode;
+    }
 }

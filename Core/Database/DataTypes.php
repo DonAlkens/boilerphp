@@ -23,7 +23,7 @@ class DataTypes {
     *
     */
 
-    public $alters = array();
+    public static $alters = array();
 
 
     /**
@@ -44,7 +44,13 @@ class DataTypes {
     */
     public $primary_keys;
 
-
+    /**
+    * primary key mode
+    *
+    * @var string
+    *
+    */
+    public $pk_mode = true;
 
     /**
     * default nullable contraint on datatypes
@@ -68,7 +74,10 @@ class DataTypes {
      */
     public function bigIncrements() 
     {
-        $this->primary_keys .= " $this->column,";
+        if($this->pk_mode) {
+            $this->primary_keys .= " $this->key,";
+        }
+
         $this->query .= " $this->column BIGINT(20) AUTO_INCREMENT,";
         return $this;
     }
@@ -157,11 +166,13 @@ class DataTypes {
      */
     public function foreign($table, $reference = "id")
     {
-        $this->primary_keys .= " $this->column,";
-        $reference = is_null($reference) ? $this->column : $reference;
+        if($this->pk_mode) {
+            $this->primary_keys .= " $this->key,";
+        }
+        $reference = is_null($reference) ? $this->key : $reference;
 
-        $const = $table."_".$this->table."_".$this->column."_fk";
-        $this->foreignKey .= " ADD CONSTRAINT `$const` FOREIGN KEY ($this->column) REFERENCES `$table` (`$reference`) ,";
+        $const = $table."_".$this->table."_".$this->key."_fk";
+        $this->foreignKey .= " ADD CONSTRAINT `$const` FOREIGN KEY ($this->key) REFERENCES `$table` (`$reference`) ,";
         
         return $this;
     }
@@ -173,7 +184,7 @@ class DataTypes {
         {
             $query = $this->trimmer($this->foreignKey);
             $alter_query = "ALTER TABLE $table ".$query;
-            array_push($this->alters, $alter_query);
+            return $alter_query;
         }
     }
 
@@ -186,8 +197,11 @@ class DataTypes {
      */
     public function increments() 
     {
-        $this->primary_keys .= " $this->column,";
-        $this->query .= " $this->column INT(9) AUTO_INCREMENT,";
+        if($this->pk_mode) {
+            $this->primary_keys .= " $this->key,";
+        }
+
+        $this->query .= " $this->column INT(16) AUTO_INCREMENT,";
         return $this;
     }
 
@@ -297,9 +311,14 @@ class DataTypes {
      * 
      * @return App\Core\Database\DataTypes
      */
-    public function primary()
+    public function primary($column = "")
     {
-        $this->primary_keys .= " $this->column,";
+        if($column != "") {
+            $this->primary_keys .= " $column,";
+        } else 
+        {
+            $this->primary_keys .= " $this->key,";
+        }
         return $this;
     }
 

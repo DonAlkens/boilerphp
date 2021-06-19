@@ -104,7 +104,7 @@ class QueryBuilder extends DataTypes
 				$search .= "`$column` LIKE '$val' OR ";
 			}
 
-			$search =  trim($this->whereQuery, "OR ");
+			$search =  trim($search, "OR ");
 			$search .= " ) ";
 			$this->whereQuery .= $search;
 		} 

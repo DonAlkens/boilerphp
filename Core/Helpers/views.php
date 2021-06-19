@@ -3,24 +3,6 @@
 use App\Config\ViewsConfig;
 use App\Core\Urls\Route;
 
-if(!function_exists("env")) 
-{
-    /** 
-     * returns and enviroment variable if exists
-     * 
-     * @param string 
-     * @return string
-    */
-    function env($key)
-    {
-        if(isset($_ENV))
-        {
-            return trim($_ENV[$key]);
-        }
-    }
-}
-
-
 
 if(!function_exists("load_static")) 
 {
