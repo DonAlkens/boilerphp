@@ -58,6 +58,7 @@ class Request extends Validator
 
     public function init($method)
     {
+        $this->setHeaders();
 
         switch($method)
         {
@@ -74,6 +75,14 @@ class Request extends Validator
         {
             $this->$key = $value;
         }
+    }
+
+    public function setHeaders() {
+
+        foreach(getallheaders() as $name => $value) {
+            $this->headers[$name] = $value;
+        }
+        
     }
 
     public function json() 

@@ -66,6 +66,7 @@ class Route extends RoutesConfig {
             static::$subdomain = static::$active_domain.".".static::$domain;
             static::$domains[static::$subdomain] =  array( "get"   =>  array(), "post"  =>  array());
             $callback();
+            static::$subdomain = null;
         }
 
     }
@@ -432,11 +433,11 @@ class Route extends RoutesConfig {
         }
 
         # checking on index thats has parameters 
-        if(empty($pattern)) 
-        {
-            $uri = "index/".$uri;
-            $pattern = Route::verifyPattern($uri, $method);
-        }
+        // if(empty($pattern)) 
+        // {
+        //     $uri = "index/".$uri;
+        //     $pattern = Route::verifyPattern($uri, $method);
+        // }
 
         return $pattern;
     }

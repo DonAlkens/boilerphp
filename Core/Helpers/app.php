@@ -1,5 +1,7 @@
 <?php
 
+use App\Hashing\Hash;
+
 if(!function_exists("dump"))
 {
     /** 
@@ -342,5 +344,20 @@ if(!function_exists("setEnv"))
     function setEnv($key, $value)
     {
         $_ENV[$key] = $value;
+    }
+}
+
+if(!function_exists("hashing"))
+{
+    /** 
+     * returns encrypted string value
+     * 
+     * @param $string 
+     * @param $clean boolean
+     * @return string
+    */
+    function hashing($string, $clean = false)
+    {
+        return Hash::create($string, $clean);
     }
 }

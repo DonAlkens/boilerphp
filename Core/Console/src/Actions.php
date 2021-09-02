@@ -153,10 +153,11 @@ class Actions extends ActionHelpers
     {
         $this->migrationFlagHandler($flag);
         
+        if (!$this->checkTableExists("migrations")) {
+            $this->createMigrationsTable();
+        }
+        
         if ($this->newMigrationsChecker()) {
-            if (!$this->checkTableExists("migrations")) {
-                $this->createMigrationsTable();
-            }
 
             $this->runMigrations();
 
