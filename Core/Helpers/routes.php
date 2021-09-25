@@ -93,9 +93,42 @@ if(!function_exists("route"))
     function route($name, $paramters = null)
     {
        if(isset($_ENV["app_route_name_specifier"][$name])) {
-           $route = $_ENV["app_route_name_specifier"][$name];
+           $route = $_ENV["app_route_name_specifier"][$name]["url"];
 
-           
+           if(preg_match("/\{/", $route)) {
+
+                $paths = explode("/", $route);
+                $url = "";
+                foreach($paths as $path) {
+                    if(strpos($path, ":")) {
+                        $clean = explode(":", $path);
+                        $key = str_replace("{", "", $clean[0]);
+                        
+                            if(!is_null($paramters)) {
+                                if(array_key_exists($key, $paramters)) {
+                                    $url .= "/".$paramters[$key];
+                                }
+                            } else 
+                            {
+                                $url .= "/null";
+                            }
+                    } else 
+                    {
+                        $url .= "/$path";
+                    }
+                }
+
+           } else
+           {
+                $url = $route;
+           }
+
+       } else 
+       {
+           $url = null;
        }
+
+       return $url;
+    
     }
 }

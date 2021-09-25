@@ -5,7 +5,7 @@ namespace App;
 use App\Core\Database\Model;
 
 
-class Category extends Model {
+class SubCategory extends Model {
 
     /**
     * defining all required fields 
@@ -13,9 +13,6 @@ class Category extends Model {
     protected $required = [];
 
 
-    public function subs() {
-        return $this->hasMultiple(SubCategory::class, ["category" => "id"]);
-    }
 
 }
 

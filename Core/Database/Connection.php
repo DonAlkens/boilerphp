@@ -63,7 +63,6 @@ class Connection extends QueryBuilder
     public function __construct()
     {
         $this->getConnectionVariable();
-        $this->connect();
     }
 
     public function db($name = null)
@@ -80,22 +79,24 @@ class Connection extends QueryBuilder
 
     public function connect()
     {
-        $this->buildConnectionString();
-
-        try {
-
-            $this->connection = new PDO($this->dataSource, $this->username, $this->password);
+        if(!isset($this->connection)) {
+            $this->buildConnectionString();
     
-            // Set all attributes
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-            $this->connection->setAttribute(PDO::ATTR_PERSISTENT, true);
-            $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
-            $this->connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-
-        } catch (\PDOException $pd) {
-            throw $pd; exit;
-            echo "Error Occured: ".$pd->message; exit;
+            try {
+    
+                $this->connection = new PDO($this->dataSource, $this->username, $this->password);
+        
+                // Set all attributes
+                $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                $this->connection->setAttribute(PDO::ATTR_PERSISTENT, true);
+                $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+                $this->connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+    
+            } catch (\PDOException $pd) {
+                throw $pd; exit;
+                echo "Error Occured: ".$pd->message; exit;
+            }
         }
 
     }

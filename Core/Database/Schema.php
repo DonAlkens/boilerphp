@@ -296,6 +296,26 @@ class Schema extends Connection
         return $sum;
     }
 
+    public function paginate($number, $current = null) {
+
+        if($current != null) 
+        {
+            $start_point = $current - 1;
+            $end_point = $current;
+        } else 
+        {
+            $start_point = 0;
+            $end_point = $number;
+        }
+
+        $limit = "";
+        
+
+        // $this->orderQuery($key, $order, $limit);
+        return $this;
+
+    }
+
     public function insert(array $data)
     {
 
@@ -304,6 +324,7 @@ class Schema extends Connection
 
             if($this->insertQuery($data)) 
             {
+                $this->connect();
 
                 $statement = $this->connection->prepare($this->queryString);
 
@@ -352,6 +373,8 @@ class Schema extends Connection
         {
             if($this->updateQuery($this->data)) 
             {
+                $this->connect();
+                
                 if(empty($this->whereQuery))
                 {
                     return $this->where("id", $this->id)->update($this->data);
@@ -403,6 +426,7 @@ class Schema extends Connection
 
             if($this->deleteQuery($this->data))
             {
+                $this->connect();
 
                 $statement = $this->connection->prepare($this->queryString);
 
@@ -512,6 +536,7 @@ class Schema extends Connection
 
         if($this->queryString()) 
         {
+            $this->connect();
 
             $statement = $this->connection->prepare($this->queryString);
 
@@ -542,6 +567,8 @@ class Schema extends Connection
     public function run($queryString)
     {
 
+        $this->connect();
+
         $statement = $this->connection->prepare($queryString);
 
         if($statement->execute())
@@ -556,8 +583,9 @@ class Schema extends Connection
     public function save()
     {
 
-        if ($this->connection != null && $this->queryString()) 
+        if ($this->queryString()) 
         {
+            $this->connect();
 
             $statement = $this->connection->prepare($this->queryString);
 
@@ -587,6 +615,7 @@ class Schema extends Connection
 
         if ($querystring !== "") 
         {
+            $this->connect();
 
             $statement = $this->connection->prepare($querystring);
             

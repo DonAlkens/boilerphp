@@ -117,9 +117,9 @@ class MailSender extends MailBuilder
 
     public function defaultMailer()
     {
-        $headers = "MIME-VERSION: $this->mime" . " \r\n";
-        $headers .= "Content-type: $this->contentType; charset=$this->charset "."\r\n";
-        $headers .= "From: $this->fromName $this->from \r\n";
+        $headers = "MIME-VERSION: 1.0" . " \r\n";
+        $headers .= "Content-type: text/html; charset=UTF-8 "."\r\n";
+        $headers .= "From: ". $this->fromName ." <". $this->from ."> \r\n";
         $headers .= 'Reply-To: ' .$this->replyTo. "\r\n";
 
         if(mail($this->to, $this->subject, $this->message, $headers)) {

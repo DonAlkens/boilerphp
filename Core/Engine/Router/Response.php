@@ -72,6 +72,7 @@ function unhandledPost()
 
 function error404()
 {
+    header("HTTP/1.1 404 Not Found");
     return view("errors/404");
 }
 
