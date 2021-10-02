@@ -13,6 +13,7 @@ class Migration extends Schema {
         {
             if($this->insertQuery($data)) 
             {
+                $this->connect();
                 $statement = $this->connection->prepare($this->queryString);
 
                 if($statement->execute($data))
@@ -35,6 +36,7 @@ class Migration extends Schema {
         {
             if($this->insertQuery($data)) 
             {
+                $this->connect();
                 $statement = $this->connection->prepare($this->queryString);
 
                 if($statement->execute($data))
