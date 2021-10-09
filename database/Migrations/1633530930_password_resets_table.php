@@ -5,7 +5,7 @@ use App\Core\Database\Migration\Migration;
 use App\Core\Database\Migration\Table;
 
 
-class CategoriesTable extends Migration {
+class PasswordResetsTable extends Migration {
 
     /**
      * creates database table
@@ -14,9 +14,13 @@ class CategoriesTable extends Migration {
      */
     public function in() {
 
-        Table::create("categories", function(Diagram $diagram){
+        Table::create("password_resets", function(Diagram $diagram){
 
             $diagram->id();
+            $diagram->column("user_id")->integer();
+            $diagram->column("code")->string();
+            $diagram->column("status")->boolean();
+            $diagram->column("expired")->boolean();
             $diagram->timestamps();
 
         });
@@ -30,7 +34,7 @@ class CategoriesTable extends Migration {
      */
     public function out() {
 
-        Table::dropIfExists("categories");
+        Table::dropIfExists("password_resets");
     }
 
 }
