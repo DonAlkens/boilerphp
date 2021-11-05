@@ -522,9 +522,9 @@ class Schema extends Connection
             $class->$key = $value;
         }
 
-        if($relations == false) {
-            $this->bootRelations($class);
-        }
+        // if($relations == false) {
+        //     $this->bootRelations($class);
+        // }
 
         return $class;
 

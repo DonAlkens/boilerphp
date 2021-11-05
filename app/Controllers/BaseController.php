@@ -17,7 +17,21 @@ class BaseController extends Controller
 
     public function index() {
 
-        return view("index");
+        $users = (new User)->all();
+        $category = (new Category)->all();
+        $subs = (new SubCategory)->all();
+
+        foreach($category as $cat) {
+           $sub = $cat->subs();
+           if($sub) {
+               foreach($sub as $s) {
+                   echo $s->name."<br>";
+               }
+           }
+            
+        }
+
+        // return view("index");
     }
 
 }
