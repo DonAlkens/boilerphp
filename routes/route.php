@@ -9,3 +9,5 @@ use App\Core\Urls\Route;
  * */
 
 Route::get("/", "BaseController::index")->as("home");
+
+Route::loadRoutes();
