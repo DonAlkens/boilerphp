@@ -5,6 +5,7 @@ namespace App\Core\Urls;
 
 use Error, Exception;
 use App\Config\RoutesConfig;
+use App\Role;
 
 class Route extends RoutesConfig {
 
@@ -36,6 +37,11 @@ class Route extends RoutesConfig {
 
     public $names_ = [];
 
+
+    public function __construct()
+    {
+
+    }
 
     static public function configure()
     {
@@ -71,26 +77,17 @@ class Route extends RoutesConfig {
 
     static public function group($name, $callback) 
     {
-        self::$group_path = "/".trim($name. "/");
+        self::$group_path = "/".trim($name, "/");
         $callback();
         self::$group_path = "";
     }
     
-    static public function httpAction($path, $controller, $get_as = null, $post_as = null)
+    static public function httpAction($path, $controller)
     {
         static::$uri_ = $path;
 
-        if(!is_null($get_as)) {
-            static::get($path, $controller)->as($get_as);
-        } else {
-            static::get($path, $controller);
-        }
-
-        if(!is_null($post_as)) {
-            static::post($path, $controller)->as($post_as);
-        } else {
-            static::post($path, $controller);
-        }
+        static::post($path, $controller);
+        return static::get($path, $controller);
     }
 
     static public function get($path, $controller)
@@ -105,14 +102,12 @@ class Route extends RoutesConfig {
     {
         $map = static::create_map($path, "post", $controller);
         static::mapRoute($map);
-
-        return static::route_modifier($map);
     }
 
 
-    static public function create_map($path, $method, $controller) {
+    static protected function create_map($path, $method, $controller) {
 
-        $path = trim($path. "/");
+        $path = "/".trim($path, "/");
 
         # check group path
         if(static::$group_path != "")
@@ -123,7 +118,7 @@ class Route extends RoutesConfig {
         return array( "url" => $path, "method" => $method, "action" => $controller);
     }
 
-    static public function mapRoute(Array $route) 
+    static protected function mapRoute(Array $route) 
     {
         $method = strtolower($route["method"]);
 
@@ -194,6 +189,7 @@ class Route extends RoutesConfig {
         if(static::$enable_subdomains) 
         {
             $domain = $_SERVER['HTTP_HOST'];
+            $domain = str_replace("www.", "",$domain);
 
             // Do some domain name checks here
 
@@ -228,17 +224,17 @@ class Route extends RoutesConfig {
     
                 $controller = static::$controller_namespace.$split_action[0];
                 $action = static::$controller_namespace.$path["action"];
+                $handler_method = $split_action[1];
     
                 //Call Coutroller to Load All MiddleWare and Auth
-                new $controller;
+                $handler_controller = new $controller;
+                $handler_controller->$handler_method( new Request($method) );
             }
             else 
             {
                 $action = $path["action"];
+                call_user_func($action, new Request($method) );
             }
-
-            call_user_func($action, new Request($method) );
-            
         } 
         else 
         {
@@ -279,18 +275,24 @@ class Route extends RoutesConfig {
                 $request = new Request($method);
                 $request->param = static::$route_lookup_list[$pattern]["param"];
 
+                if(gettype($path["action"]) == "string")
+                {
+                    $split_action = explode("::", $path["action"]);
+    
+                    $controller = static::$controller_namespace.$split_action[0];
+                    $action = static::$controller_namespace.$path["action"];
+                    $handler_method = $split_action[1];
+        
+                    //Call Coutroller to Load All MiddleWare and Auth
+                    $handler_controller = new $controller;
+                    $handler_controller->$handler_method( $request );
 
-                $split_action = explode("::", $path["action"]);
-
-                $controller = static::$controller_namespace.$split_action[0];
-                $action = static::$controller_namespace.$path["action"];
-
-
-                //Call Coutroller to Load All MiddleWare and Auth
-                new $controller();
-
-                
-                call_user_func($action, $request);
+                }
+                else 
+                {
+                    $action = $path["action"];
+                    call_user_func($action, $request);
+                }
 
                 return;
             }

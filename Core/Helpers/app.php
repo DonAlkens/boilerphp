@@ -361,3 +361,23 @@ if(!function_exists("hashing"))
         return Hash::create($string, $clean);
     }
 }
+
+if(!function_exists("pagination"))
+{
+    /**
+     * Returns current pagination propertis 
+     * 
+     */
+
+    function pagination() 
+    {
+        if(env("_pagination") != "") 
+        {
+            $properties = env("_pagination");
+            $response = json_decode($properties);
+            return $response;
+        }
+
+        return null;
+    }
+}

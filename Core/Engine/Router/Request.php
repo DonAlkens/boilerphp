@@ -56,7 +56,7 @@ class Request extends Validator
         
     }
 
-    public function init($method)
+    protected function init($method)
     {
         $this->setHeaders();
 
@@ -77,12 +77,10 @@ class Request extends Validator
         }
     }
 
-    public function setHeaders() {
-
+    protected function setHeaders() {
         foreach(getallheaders() as $name => $value) {
             $this->headers[$name] = $value;
         }
-        
     }
 
     public function json() 
@@ -117,12 +115,12 @@ class Request extends Validator
         return $all;
     }
 
-    public function get() 
+    protected function get() 
     {
         $this->map($_GET);
     }
 
-    public function post() 
+    protected function post() 
     {
         $this->map($_POST);
     }
@@ -131,18 +129,15 @@ class Request extends Validator
     {
         if(isset($_FILES[$index]))
         {
-            $file = $_FILES[$index];
-            if($file["name"] == "")
+            $file = json_decode(json_encode($_FILES[$index]));
+            if($file->name == "")
             {
                 $file = null;
             }
-
         }
         else 
         {
-
             $file = null;
-
         }
 
         return $file;
@@ -150,11 +145,9 @@ class Request extends Validator
 
     public function filename($index)
     {
-        if($this->file($index) != null) 
+        if($this->file($index)) 
         {
-
-            return $_FILES[$index]["name"];
-            
+            return $this->file($index)->name;
         }
         else 
         {
@@ -162,7 +155,7 @@ class Request extends Validator
         }
     }
 
-    public function map($data) 
+    protected function map($data) 
     {
         
         foreach ($data as $key => $value) 
@@ -180,16 +173,16 @@ class Request extends Validator
 
     public function location() 
     {
-        return $this->location = trim($_SERVER["REQUEST_URI"],"/");
+        return $this->_location = trim($_SERVER["REQUEST_URI"],"/");
     }
 
-    public function url($name = null) 
+    public function url($name = null)
     {
-        $this->url = $this->location();
+        $this->_url = $this->location();
 
         if($name != null) 
         {
-            if($this->url == $name) 
+            if($this->_url == $name) 
             {
                 return true;
             }
@@ -200,7 +193,7 @@ class Request extends Validator
         }
         else 
         {
-            return $this->url;
+            return $this->_url;
         }
     }
 

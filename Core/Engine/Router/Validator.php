@@ -8,11 +8,18 @@ class Validator
 {
 
     /**
-    * validations messages buy 
+    * validation status
+    *
+    * @var string
+    */
+    public $validation = false;
+
+    /**
+    * validations messages
     *
     * @var array
     */
-    public $validation_messages = array();
+    protected $validation_messages = array();
 
 
     /**
@@ -37,7 +44,6 @@ class Validator
      * */
     public function required($fields) 
     {
-
         $this->clearValidationLog();
 
         foreach($fields as $key => $validation) 
@@ -51,19 +57,24 @@ class Validator
                     $this->validatePropType($prop, $key);
                 }
             }
+            else 
+            {
+                $this->validationMessage($key, $key." is required!");
+                return;
+            }
         }
 
-        if(count($this->validation_messages)) 
+        if(count($this->validation_messages) > 0) 
         {
-            $this->validation = false;
-
             $this->setValidationLog();
-
-            return false;
+            $this->validation = false;
+        } 
+        else 
+        {
+            $this->validation = true;
         }
-
-        $this->validation = true;
-        return true;
+        
+        return $this->validation;
     }
 
 
@@ -97,6 +108,7 @@ class Validator
         if($this->$field == null || empty($this->$field))
         {
             $this->validationMessage($field, $field." is required!");
+            return;
         }
 
         else if($prop == "integer")

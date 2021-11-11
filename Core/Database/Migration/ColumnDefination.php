@@ -34,8 +34,13 @@ class ColumnDefination extends DataTypes {
 
     public function after($column) {
 
-        $this->query = concat([$this->trimmer($this->query), "AFTER",  "`$column`"]);
-
+        if(!is_null($this->query)) {
+            $this->query = concat([$this->trimmer($this->query), "AFTER",  "`$column`", ","]);
+        }
+        else 
+        {
+            $this->query = concat([$this->trimmer($this->query), "AFTER",  "`$column`"]);
+        }
     } 
     
     public function addColumn($name) {
@@ -55,23 +60,23 @@ class ColumnDefination extends DataTypes {
     }
 
     public function dropColumn($name) {
-        (new Schema)->run(concat(["ALTER TABLE `$this->table` DROP", "`$name`"]));
+        (new Schema)->query(concat(["ALTER TABLE `$this->table` DROP", "`$name`"]));
     }
 
     public function dropPrimaryKey() {
-        (new Schema)->run("ALTER TABLE `$this->table` DROP PRIMARY KEY");
+        (new Schema)->query("ALTER TABLE `$this->table` DROP PRIMARY KEY");
     }
 
     public function dropForeignKey($name) {
-        (new Schema)->run(concat(["ALTER TABLE `$this->table` DROP FOREIGN KEY", "`$name`"]));
+        (new Schema)->query(concat(["ALTER TABLE `$this->table` DROP FOREIGN KEY", "`$name`"]));
     }
 
     public function dropConstraint($name) {
-        (new Schema)->run(concat(["ALTER TABLE `$this->table` DROP CONSTRAINT IF EXISTS", "`$name`"]));
+        (new Schema)->query(concat(["ALTER TABLE `$this->table` DROP CONSTRAINT IF EXISTS", "`$name`"]));
     }
     
     public function dropIndex($name) {
-        (new Schema)->run(concat(["ALTER TABLE `$this->table` DROP INDEX IF EXISTS", "`$name`"]));
+        (new Schema)->query(concat(["ALTER TABLE `$this->table` DROP INDEX IF EXISTS", "`$name`"]));
     }
 
     public function timestamps() {

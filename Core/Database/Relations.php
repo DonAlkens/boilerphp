@@ -26,7 +26,7 @@ class Relations extends Schema {
         return $this;
     }
 
-    public function extractValue($object, $foreign_key) 
+    protected function extractValue($object, $foreign_key) 
     {
         return $object->$foreign_key;
     }
@@ -50,12 +50,12 @@ class Relations extends Schema {
         
     }
 
-    public function getRelationsName() 
+    protected function getRelationsName() 
     {
         return $this->name;
     }
 
-    public function setModelProperties($model) 
+    protected function setModelProperties($model) 
     {
         if($model) 
         {
@@ -71,7 +71,7 @@ class Relations extends Schema {
         return false;
     }
 
-    public function setKeys($key)
+    protected function setKeys($key)
     {
 
         if(!is_null($key)) 
@@ -133,7 +133,7 @@ class Relations extends Schema {
         return $this;
     }
 
-    public function pickAll() {
+    protected function pickAll() {
 
         $this->table = $this->_table;
 

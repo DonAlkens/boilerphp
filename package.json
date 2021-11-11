@@ -1,0 +1,21 @@
+{
+  "name": "boilerphp",
+  "version": "1.0.0",
+  "description": "A Simple & Scalabale Web and Mobile Application Framework for PHP Developer",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start" : "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DonAlkens/boilerphp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DonAlkens/boilerphp/issues"
+  },
+  "homepage": "https://github.com/DonAlkens/boilerphp#readme"
+}

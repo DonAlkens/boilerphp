@@ -116,7 +116,6 @@ class AppModules {
     {
         if(!empty($module))
         {
-            $module = trim($module);
             array_push($this->user_modules, $module);
         }
     }

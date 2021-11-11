@@ -593,7 +593,7 @@ class ActionHelpers implements ActionHelpersInterface {
             foreach($alters as $query)
             {
                 $migrationReflection = new MigrationReflection;
-                $migrationReflection->run($query);
+                $migrationReflection->query($query);
             }
         }
     }

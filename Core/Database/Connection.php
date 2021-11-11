@@ -101,12 +101,12 @@ class Connection extends QueryBuilder
 
     }
 
-    public function buildConnectionString() 
+    protected function buildConnectionString() 
     {
         $this->dataSource = $this->driver.":host=".$this->host.";dbname=".$this->dbname;
     }
 
-    public function checkDatabaseVariables(array $variables, object $dbConnectionVariables)
+    protected function checkDatabaseVariables(array $variables, object $dbConnectionVariables)
     {
         foreach($variables as $variable) {
             if(!isset($dbConnectionVariables->$variable)){
@@ -115,7 +115,7 @@ class Connection extends QueryBuilder
         }
     }
 
-    public function getConnectionVariable()
+    protected function getConnectionVariable()
     {
         $app_config = json_decode(file_get_contents("appsettings.json"));
 
@@ -137,7 +137,7 @@ class Connection extends QueryBuilder
         $this->dbname = $app_config->databaseConnection->database;
     }
 
-    public function getDbSelection($app_config) {
+    protected function getDbSelection($app_config) {
 
         if($this->dbConnection != null) 
         {
@@ -155,7 +155,7 @@ class Connection extends QueryBuilder
         return false;
     }
 
-    public function useDriver($driver) 
+    protected function useDriver($driver) 
     {
         $this->driver = $driver;
     }

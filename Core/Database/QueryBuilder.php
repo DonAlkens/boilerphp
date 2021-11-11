@@ -7,21 +7,21 @@ namespace App\Core\Database;
 class QueryBuilder extends DataTypes
 {
 
-	public $whereQuery = "";
+	protected $whereQuery = "";
 	
 
-	public function cleanQueryStrings()
+	protected function cleanQueryStrings()
 	{
 		isset($this->columns) ? $this->columns = trim($this->columns, ", ") : null;
 		isset($this->params) ? $this->params = trim($this->params, ", ") : null;
 	}
 
-	public function allQuery()
+	protected function allQuery()
 	{
 		$this->queryString = "SELECT * FROM $this->table ";
 	}
 
-	public function insertQuery($data)
+	protected function insertQuery($data)
 	{
 		$this->columns = "";
 		$this->params = "";
@@ -37,14 +37,13 @@ class QueryBuilder extends DataTypes
 		return $this->queryString;
 	}
 
-	public function selectQuery($fields)
+	protected function selectQuery($fields = '*')
 	{
-
 		$this->queryString = "SELECT $fields FROM $this->table ";
 		return $this->queryString;
 	}
 
-	public function updateQuery($data)
+	protected function updateQuery($data)
 	{
 		$this->columns = "";
 		foreach ($data as $column => $value) 
@@ -67,7 +66,7 @@ class QueryBuilder extends DataTypes
 	}
 
 
-	public function deleteQuery($data)
+	protected function deleteQuery($data)
 	{
 		$this->columns = "";
 
@@ -83,7 +82,7 @@ class QueryBuilder extends DataTypes
 		return $this->queryString;
 	}
 
-	public function searchQuery($key, $value, $operation)
+	protected function searchQuery($key, $value, $operation)
 	{
 
 		if (is_array($key)) 
@@ -124,9 +123,8 @@ class QueryBuilder extends DataTypes
 
 	}
 
-	public function whereQuery($key, $value, $operation = null)
+	protected function whereQuery($key, $value, $operation = null)
 	{
-
 		if (is_array($key)) 
 		{
 			$this->whereQuery = " WHERE ";
@@ -172,12 +170,12 @@ class QueryBuilder extends DataTypes
 
 	}
 
-	public function groupQuery($column)
+	protected function groupQuery($column)
 	{
 		$this->groupQuery = " GROUP BY `$column`";
 	}
 
-	public function orderQuery($key, $order, $limit)
+	protected function orderQuery($key, $order, $limit)
 	{
 		$this->orderQuery = " ORDER BY `$key` $order";
 		if($limit != null) {
@@ -185,11 +183,16 @@ class QueryBuilder extends DataTypes
 		}
 	}
 
-	public function queryString()
+	protected function limits($start, $end) 
+	{
+		$limits = $start.", ".$end;
+		$this->orderQuery .= " LIMIT ".$limits;
+	}
+
+	protected function queryString()
 	{
 		if (!empty($this->queryString)) 
 		{
-
 			if(isset($this->whereQuery)) 
 			{
 				$this->queryString .= $this->whereQuery;
@@ -212,7 +215,7 @@ class QueryBuilder extends DataTypes
 		return null;
 	}
 
-	public function dataFormatChecker($data, $value)
+	protected function dataFormatChecker($data, $value)
 	{
 
 		if (gettype($data) == "string") 
@@ -230,7 +233,7 @@ class QueryBuilder extends DataTypes
 		return $this->data = $data;
 	}
 
-	public function fieldFormatChecker($fields)
+	protected function fieldFormatChecker($fields)
 	{
 		if (is_null($fields)) 
 		{
@@ -240,13 +243,13 @@ class QueryBuilder extends DataTypes
 		return $this->fields = $fields;
 	}
 
-	public function resultTypeChecker($result)
+	protected function resultTypeChecker($result)
 	{
 		return gettype($result);
 	}
 
 
-	public function dropDatabaseTableQuery($table) {
+	protected function dropDatabaseTableQuery($table) {
 		return "SET FOREIGN_KEY_CHECKS = 1; DROP TABLE IF EXISTS `$table`; SET FOREIGN_KEY_CHECKS = 0; DROP TABLE IF EXISTS `$table`;";
 	}
 }

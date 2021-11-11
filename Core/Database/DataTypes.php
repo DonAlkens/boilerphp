@@ -178,7 +178,7 @@ class DataTypes {
     }
 
 
-    public function foreignKeyProccessor($table)
+    protected function foreignKeyProccessor($table)
     {
         if($this->foreignKey != "")
         {

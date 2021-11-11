@@ -2,3 +2,6 @@
 
 ./vendor/
 ./boilerphp.modules
+
+node_modules
+dist
