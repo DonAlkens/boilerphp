@@ -20,8 +20,9 @@ class UserTable extends Migration {
             $diagram->id();
             $diagram->column("firstname")->string();
             $diagram->column("lastname")->string();
-            $diagram->column("email")->string();
+            $diagram->column("email")->string()->unique();
             $diagram->column("password")->string();
+            $diagram->column("role_id")->bigInteger();
             $diagram->column("verified")->boolean();
             $diagram->timestamps();
 

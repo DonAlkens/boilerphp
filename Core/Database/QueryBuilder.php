@@ -4,7 +4,7 @@ namespace App\Core\Database;
 
 
 
-class QueryBuilder extends DataTypes
+class QueryBuilder
 {
 
 	protected $whereQuery = "";
