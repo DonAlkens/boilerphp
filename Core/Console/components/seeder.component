@@ -1,0 +1,22 @@
+<?php
+
+use App\Core\Database\Seeder;
+
+
+class [ClassName] extends Seeder {
+
+    /**
+     * seeds database table
+     * 
+     * @return void
+     */
+    public function run() {
+
+        
+
+    }
+
+}
+
+
+

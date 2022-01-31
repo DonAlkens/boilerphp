@@ -37,8 +37,9 @@ class QueryBuilder extends DataTypes
 		return $this->queryString;
 	}
 
-	protected function selectQuery($fields = '*')
+	protected function selectQuery($fields = "*")
 	{
+
 		$this->queryString = "SELECT $fields FROM $this->table ";
 		return $this->queryString;
 	}
@@ -125,6 +126,7 @@ class QueryBuilder extends DataTypes
 
 	protected function whereQuery($key, $value, $operation = null)
 	{
+
 		if (is_array($key)) 
 		{
 			$this->whereQuery = " WHERE ";
@@ -193,6 +195,7 @@ class QueryBuilder extends DataTypes
 	{
 		if (!empty($this->queryString)) 
 		{
+
 			if(isset($this->whereQuery)) 
 			{
 				$this->queryString .= $this->whereQuery;

@@ -30,7 +30,7 @@ class Actions extends ActionHelpers
             return true;
         }
 
-        print("Unable to create model " . $name);
+        print("Unable to create controller " . $name);
         return false;
     }
 
@@ -128,14 +128,22 @@ class Actions extends ActionHelpers
 
         $table = $this->tableFormating($name);
 
-        $file_name = $table . "_table.php";
+        if($flag == "--alter" || $flag == "--a") 
+        {
+            $file_name = $table . ".php";
+            $component = "migration.alter";
+        }
+        else 
+        {
+            $file_name = $table . "_table.php";
+            $component = "migration";
+        }
+
         $this->path = $this->path("migration") . time() . "_" . $file_name;
-
-
         $this->checkMigrationExistent($file_name);
 
 
-        if ($this->configureMigration($table, $this->path))
+        if ($this->configureMigration($table, $this->path, $component))
         {
 
             if (isset($this->run_flag) && $this->run_flag) {
@@ -190,6 +198,71 @@ class Actions extends ActionHelpers
         } else {
             $this->disableWebSocket($flag);
         }
+    }
+
+    public function seeder($name, $flag = null)
+    {
+
+        if (!is_null($flag)) {
+            if ($this->flagChecker("seeder", $flag)) {
+                $this->run_flag = true;
+            } else {
+                return $this->run_flag = false;
+            }
+        }
+
+        $path = $this->path("seeder") . $name . ".php";
+
+        if ($this->checkExistent($path)) {
+            echo "Seeder $name already exists";
+            exit;
+        }
+
+        if ($this->configureSeeder($name, $path)) {
+
+            if (isset($this->run_flag) && $this->run_flag) {
+                $this->flagHandler($name, $flag, "seeder", $path);
+            }
+
+            return true;
+        }
+
+        print("Unable to create seed file " . $name);
+        return false;
+    }
+
+    public function seed() 
+    {
+        $this->server->load_app_models();
+
+        if(isset($this->arguments[2])) {
+            
+            $name = $this->arguments[2];
+            $seed_file = "./database/Seeders/{$name}.php";
+
+            $this->requireOnce($seed_file);
+            $class = new ($this->FileClassName($seed_file)['class']);
+            $class->run();
+
+        }
+        else 
+        {
+            $all_seed_file = glob("./database/Seeders/*.php");
+            
+            if($all_seed_file) 
+            {
+                foreach($all_seed_file as $seed_file)
+                {
+                    $this->requireOnce($seed_file);
+                    $class = new ($this->FileClassName($seed_file)['class']);
+                    $class->run();
+                }
+            }
+        
+        }
+
+        echo "\nDatabase seeding completed!";
+        
     }
     
 }

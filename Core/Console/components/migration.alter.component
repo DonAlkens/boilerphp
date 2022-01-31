@@ -1,0 +1,37 @@
+<?php
+
+use App\Core\Database\Migration\Diagram;
+use App\Core\Database\Migration\Migration;
+use App\Core\Database\Migration\Table;
+
+
+class [ClassName] extends Migration {
+
+    /**
+     * modify database table
+     * 
+     * @return void
+     */
+    public function in() {
+
+        Table::modify("[TableName]", function(Diagram $diagram){
+            
+
+        });
+
+    }
+
+    /**
+     * out database table
+     * 
+     * @return void
+     */
+    public function out() {
+
+        
+    }
+
+}
+
+
+

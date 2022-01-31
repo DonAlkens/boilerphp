@@ -6,39 +6,54 @@ interface ActionHelpersInterface {
 
     /**
      * Confirguring notification structure and initialize new notification 
-     * @param notification_name 
-     * @param notification_path
+     * @param string $notification_name 
+     * 
+     * @param string $notification_path
      */
 
     public function configureNotification($notification_name, $notification_path);
 
     /**
      * Confirguring model structure and initialize new model 
-     * @param model_name 
-     * @param model_path
+     * @param string $model_name 
+     * 
+     * @param string model_path
      */
 
     public function configureModel($model_name, $model_path);
 
     /**
      * Confirguring migration structure and initialize new migration  
-     * @param migration_name
-     * @param migration_path
+     * @param string migration_name
+     * 
+     * @param string migration_path
+     * 
+     * @param string component
      */
 
-    public function configureMigration($migration_name, $migration_path);
+    public function configureMigration($migration_name, $migration_path, $component);
 
     /**
      * Confirguring controller structure and initialize new controller 
-     * @param controller_name
-     * @param controller_path
+     * @param string $controller_name
+     * 
+     * @param string $controller_path
      */
 
     public function configureController($controller_name, $controller_path);
 
     /**
+     * Confirguring seeder structure and initialize new seeder 
+     * @param string $seeder_name
+     * 
+     * @param string $seeder_path
+     */
+    public function configureSeeder($seeder_name, $seeder_path);
+
+    /**
      * checks and returns command length
-     * @param command 
+     * @param array $command 
+     * 
      * @return int
      */
 
@@ -46,7 +61,8 @@ interface ActionHelpersInterface {
 
     /**
      * reads the component file and get the components structure
-     * @param component_file_path
+     * @param $_path
+     * 
      * @return component
      */
 
@@ -54,7 +70,12 @@ interface ActionHelpersInterface {
 
      /**
      * handles flag and create mocules
-     * @param flag name action
+     * @param $flag 
+     * 
+     * @param $name 
+     * 
+     * @param action
+     * 
      * @return void
      */
 
@@ -78,7 +99,8 @@ interface ActionHelpersInterface {
 
      /**
      * require/include file 
-     * @param string filepath
+     * @param string $filepath
+     * 
      * @return void
      */
 

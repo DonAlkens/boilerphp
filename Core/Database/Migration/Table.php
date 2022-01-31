@@ -4,9 +4,15 @@ namespace App\Core\Database\Migration;
 
 use App\Core\Database\Schema;
 
-class Table extends Schema {
+
+class Table implements MigrationInterface {
+
+    
+    public static $alters = array();
+
 
     protected static $dbkey = "default";
+
 
     public function __construct($key = null)
     {
@@ -28,7 +34,7 @@ class Table extends Schema {
 
         $foreignKeysQuery = $diagram->foreignKeyProccessor($name);
         Table::createAlters($foreignKeysQuery);
-        (new Schema)->db(static::$dbkey)->run($tableQuery);
+        (new Schema)->db(static::$dbkey)->query($tableQuery);
     }
 
     public static function modify($name, $callback) {
@@ -44,7 +50,7 @@ class Table extends Schema {
         $foreignKeysQuery = $diagram->foreignKeyProccessor($name);
         Table::createAlters($foreignKeysQuery);
 
-        (new Schema)->db(static::$dbkey)->run($query);
+        (new Schema)->db(static::$dbkey)->query($query);
     }
 
     private static function createAlters($foreignKeysQuery) 

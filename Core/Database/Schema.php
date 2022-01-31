@@ -15,14 +15,6 @@ class Schema extends Connection
     * @var string
     *
     */
-    protected $result_data_format = "object";
-
-    /**
-    * Query formated by query builder
-    *
-    * @var string
-    *
-    */
     public $queryString = "";
 
     /**
@@ -41,8 +33,8 @@ class Schema extends Connection
         $this->useTable();
     }
 
-    public function attach($all = false, $fields = null) {
-
+    public function attachClass($all = false, $fields = null) 
+    {
         if($all == true) 
         {
             $this->allQuery();
@@ -76,61 +68,6 @@ class Schema extends Connection
 
     }
 
-    protected function useTable()
-    {
-        if($this->table == null) 
-        {
-            $namespace = explode("\\", get_class($this));
-            $namespace = str_split(end($namespace));
-
-            $format = "";
-            foreach($namespace as $key => $char) 
-            {
-                if(ctype_upper($char)) 
-                {
-                    $format .= "_".strtolower($char); 
-                    continue;
-                }
-
-                $format .= $char;
-            }
-
-            $table = trim($format, "_");
-            $lastchar = strtolower(substr($table, -1));
-            
-            if($lastchar == "y" && !in_array($table, $this->specialTableChars)) {
-                $table = substr($table, 0, (strlen($table) - 1))."ies";
-            }
-            else if($lastchar == "x" && !in_array($table, $this->specialTableChars)) {
-                $table .= "es";
-            }
-            else if($lastchar != "s" && !in_array($table, $this->specialTableChars)) {
-                $table .= "s";
-            }
-
-            $this->table = $table;
-        }
-    }
-
-    protected function positionCollection($key, $value) 
-    {
-
-        if(!is_null($key) && !is_null($value))
-        { 
-
-            $result =  $this->where($key, $value)->select();
-
-        } 
-        else 
-        {
-
-            $result = $this->select();
-
-        }
-
-        return $result;
-    }
-
     public function all()
     {
         $this->allQuery();
@@ -149,45 +86,6 @@ class Schema extends Connection
         {
             return $data;
         }
-
-    }
-
-    protected function bootRelations($class)
-    {
-        $class_name = get_class($class);
-
-        $clReflection = new ReflectionClass($class_name);
-
-        foreach($clReflection->getMethods() as $clMethod) {
-
-            if($clMethod->class == $class_name) {
-
-                $method = $clMethod->name;
-
-                if($method != '__construct')
-                {
-                    $mReflection = new ReflectionMethod($class_name, $method);
-                    $params = $mReflection->getParameters();
-
-                    if(count($params) == 0)
-                    {
-                        $result = $class->{$method}();
-                        $instance = $result;
-                        if(is_array($result)) 
-                        { 
-                            if(isset($result[0])) {
-                                $instance = $result[0];
-                            }
-                        }
-                        
-                        if($instance instanceof Model) 
-                        {
-                            $class->{$method} = $result;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public function count() 
@@ -199,21 +97,16 @@ class Schema extends Connection
         return $this->counter();
     }
 
-    public function clearInitalQuery()
-    {
-        $this->queryString = "";
-        $this->whereQuery = "";
-        $this->orderQuery = "";
-        $this->groupQuery = "";
-    }
-
     public function first($key = null, $value = null) 
     {
+
         $result = $this->positionCollection($key, $value);
 
         if($this->resultTypeChecker($result) == "object") 
         {
+
             return $result;
+
         }
 
         if($result != null) {
@@ -222,15 +115,19 @@ class Schema extends Connection
         }
 
         return null;
+
     }
 
     public function last($key = null, $value = null) 
     {
+
         $result = $this->positionCollection($key, $value);
 
         if($this->resultTypeChecker($result) == "object") 
         {
+
             return $result;
+
         }
 
         if($result != null) {
@@ -238,10 +135,12 @@ class Schema extends Connection
         }
 
         return null;
+
     }
 
     public function find($key, $value = null) 
     {
+
         if($value == null) 
         {
             $this->result = $this->where("id", $key)->select();
@@ -337,14 +236,21 @@ class Schema extends Connection
         ];
 
         $response = json_encode($data);
-        setEnv("_pagination", $response);
+        $response = json_decode($response);
+        $response->results = $result;
 
-        return $result;
+        return $response;
 
+    }
+
+    public function create(array $data) 
+    {
+        $this->insert($data);
     }
 
     public function insert(array $data)
     {
+
         if($data) 
         {
             if($this->insertQuery($data)) 
@@ -378,10 +284,12 @@ class Schema extends Connection
 
         if($this->fieldFormatChecker($fields)) 
         {
+
             if($this->selectQuery($this->fields))
             {
                 return $this->fetch();
             }
+
         }
 
         return null;
@@ -389,6 +297,7 @@ class Schema extends Connection
     
     public function update($data, $value = null)
     {
+
         if($this->dataFormatChecker($data, $value)) 
         {
             if($this->updateQuery($this->data)) 
@@ -474,33 +383,129 @@ class Schema extends Connection
 
     public function where($keys, $value = null) 
     {
+
         $this->whereQuery($keys, $value);
         return $this;
+
     }
 
     public function whereWithOperation($keys, $opration, $value = null) 
     {
+
         $this->whereQuery($keys, $value, $opration);
         return $this;
+
     }
 
-    public function get() {
+    public function get() 
+    {
         return $this->select();
     }
 
     public function toArray() 
     {
-        $this->result_data_format = "arrays";
+        $result = $this->fetch();
+        if($result) {
+            return (!is_array($result)) ? [$result] : $result;
+        } 
 
-        if($this->selectQuery()) 
+        return $result;
+    }
+
+    protected function useTable()
+    {
+        if($this->table == null) 
         {
-            $result = $this->fetch();
-            if($result) 
+            $namespace = explode("\\", get_class($this));
+            $namespace = str_split(end($namespace));
+
+            $format = "";
+            foreach($namespace as $key => $char) 
             {
-                return (!isset($result[0])) ? [$result] : $result;
+                if(ctype_upper($char)) 
+                {
+                    $format .= "_".strtolower($char); 
+                    continue;
+                }
+
+                $format .= $char;
+            }
+
+            $table = trim($format, "_");
+            $lastchar = strtolower(substr($table, -1));
+            
+            if($lastchar == "y" && !in_array($table, $this->specialTableChars)) {
+                $table = substr($table, 0, (strlen($table) - 1))."ies";
+            }
+            else if($lastchar == "x" && !in_array($table, $this->specialTableChars)) {
+                $table .= "es";
+            }
+            else if($lastchar != "s" && !in_array($table, $this->specialTableChars)) {
+                $table .= "s";
+            }
+
+            $this->table = $table;
+        }
+    }
+
+    protected function positionCollection($key, $value) 
+    {
+        if(!is_null($key) && !is_null($value))
+        { 
+            $result =  $this->where($key, $value)->select();
+        } 
+        else 
+        {
+            $result = $this->select();
+        }
+
+        return $result;
+    }
+
+    protected function bootRelations($class)
+    {
+        $class_name = get_class($class);
+
+        $clReflection = new ReflectionClass($class_name);
+
+        foreach($clReflection->getMethods() as $clMethod) {
+
+            if($clMethod->class == $class_name) {
+
+                $method = $clMethod->name;
+
+                if($method != '__construct')
+                {
+                    $mReflection = new ReflectionMethod($class_name, $method);
+                    $params = $mReflection->getParameters();
+
+                    if(count($params) == 0)
+                    {
+                        $result = $class->{$method}();
+                        $instance = $result;
+                        if(is_array($result)) 
+                        { 
+                            if(isset($result[0])) {
+                                $instance = $result[0];
+                            }
+                        }
+                        
+                        if($instance instanceof Model) 
+                        {
+                            $class->{$method} = $result;
+                        }
+                    }
+                }
             }
         }
-        return null;
+    }
+
+    protected function clearInitalQuery()
+    {
+        $this->queryString = "";
+        $this->whereQuery = "";
+        $this->orderQuery = "";
+        $this->groupQuery = "";
     }
 
     protected function resultFormatter($result, $multiple = false, $relations = false) 
@@ -508,25 +513,18 @@ class Schema extends Connection
         $data = [];
         $class = get_class($this);
 
-        if($this->result_data_format == "object") 
+        if($multiple == true) 
         {
-            if($multiple == true) 
+            foreach ($result as $instance) 
             {
-                foreach ($result as $instance) 
-                {
-                    $class = $this->newObject($class, $instance, $relations);
-                    array_push($data, $class);
-                }
-                return $data;
+                $class = $this->newObject($class, $instance, $relations);
+                array_push($data, $class);
             }
 
-            return $this->newObject($class, $result, $relations);
+            return $data;
         }
-        else if($this->result_data_format == "arrays") 
-        {
-            return $result;
-        }
-        
+
+        return $this->newObject($class, $result, $relations);
     }
 
     protected function newObject($name, $instance, $relations = false) 
@@ -537,17 +535,16 @@ class Schema extends Connection
             $class->$key = $value;
         }
 
-        // if($relations == false) {
-        //     $this->bootRelations($class);
-        // }
+        if($relations == false) {
+            $this->bootRelations($class);
+        }
 
         return $class;
-
     }
-
 
     protected function fetch($relations = false)
     {
+
         if($this->queryString()) 
         {
             $this->connect();
@@ -602,18 +599,15 @@ class Schema extends Connection
 
     protected function run($queryString)
     {
-
         $this->connect();
 
         $statement = $this->connection->prepare($queryString);
-
         if($statement->execute())
         {
             return true;
         }
 
         return false;
-
     }
 
     protected function save()
@@ -654,25 +648,19 @@ class Schema extends Connection
             $this->connect();
 
             $statement = $this->connection->prepare($querystring);
-            
             if($data != null) 
             {
-
                 if($statement->execute($data))
                 {
                     return $statement;
                 }
             } 
-            
             else 
-            
             {
-
                 if($statement->execute())
                 {
                     return $statement;
                 }
-
             }
         }
 

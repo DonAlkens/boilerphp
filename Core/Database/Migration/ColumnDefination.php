@@ -34,13 +34,8 @@ class ColumnDefination extends DataTypes {
 
     public function after($column) {
 
-        if(!is_null($this->query)) {
-            $this->query = concat([$this->trimmer($this->query), "AFTER",  "`$column`", ","]);
-        }
-        else 
-        {
-            $this->query = concat([$this->trimmer($this->query), "AFTER",  "`$column`"]);
-        }
+        $this->query = concat([$this->trimmer($this->query), "AFTER",  "`$column`"]);
+
     } 
     
     public function addColumn($name) {

@@ -11,6 +11,10 @@ use Console\Support\Interfaces\ActionHelpersInterface;
 
 class ActionHelpers implements ActionHelpersInterface {
 
+    public $arg_string = "";
+
+    protected $server;
+
     public $commands = array(
         "create", "start", "db", "activate", "disable"
     );
@@ -33,7 +37,8 @@ class ActionHelpers implements ActionHelpersInterface {
         "controller" => "configureController",
         "migration" => "configureMigration",
         "notification" => "configureNotification",
-        "socket" => "configureSocket"
+        "socket" => "configureSocket",
+        "seeder" => "configureSeeder"
     );
 
     public $db_configurations = array(
@@ -46,6 +51,7 @@ class ActionHelpers implements ActionHelpersInterface {
         "controller" => "./app/Controllers/",
         "migration" => "./database/Migrations/",
         "notification" => "./app/Notifications/",
+        "seeder" => "./database/Seeders/"
     );
 
     protected $specialTableChars = ["boy"];
@@ -107,6 +113,7 @@ class ActionHelpers implements ActionHelpersInterface {
     public function flagConfig($flag, $name) 
     {
         $task = $this->flags[$flag];
+        $configuration = $this->configurations[$task];
 
         if($task == "controller") 
         { 
@@ -128,16 +135,16 @@ class ActionHelpers implements ActionHelpersInterface {
             }
 
             $path = $this->path($task).time()."_".$file_name;
+            $this->$configuration($name, $path, $component = "migration");
+            return;
         }
 
-        $configuration = $this->configurations[$task];
         $this->$configuration($name, $path);
 
     }
 
     public function checkExistent($path) 
     {
-
         if(file_exists($path))
         { 
             return true;
@@ -185,10 +192,12 @@ class ActionHelpers implements ActionHelpersInterface {
 
     /**
      * usage: configures notification structure and inital setup
-     * @param string notification_name
-     * @param string notification_path
      * 
-     * @return void;
+     * @param string $notification_name
+     * 
+     * @param string $notification_path
+     * 
+     * @return void
      */
 
     public function configureNotification($notification_name, $notification_path)
@@ -209,8 +218,9 @@ class ActionHelpers implements ActionHelpersInterface {
 
     /**
      * usage: configures model structure and inital setup
-     * @param string model_name
-     * @param string model_path
+     * @param string $model_name
+     * 
+     * @param string $model_path
      * 
      * @return void;
      */
@@ -234,12 +244,16 @@ class ActionHelpers implements ActionHelpersInterface {
     
     /**
      * usage: configures migration structure and inital setup
-     * @param string migration_name
-     * @param string migration_path
+     * 
+     * @param string $migration_name
+     * 
+     * @param string $migration_path
+     * 
+     * @param string $component
      */
-    public function configureMigration($migration_name, $migration_path) 
+    public function configureMigration($migration_name, $migration_path, $component) 
     {
-        $component_path = "./Core/Console/components/migration.component";
+        $component_path = "./Core/Console/components/$component.component";
         if($this->readComponent($component_path)) 
         {
             $class_name = ucfirst($migration_name);
@@ -255,10 +269,25 @@ class ActionHelpers implements ActionHelpersInterface {
                 $class_name = $new_cl_name;
             }
 
-            $this->module = preg_replace("/\[ClassName\]/",$class_name."Table", $this->component);
-            
-            $table_name = $migration_name;
+            if($component !== "migration.alter") 
+            {
+                $class_name .= "Table";
+                $table_name = $migration_name;
+            }
+            else 
+            {
+                $arg_explode = explode("|", $this->arg_string);
+                $end_arg = end($arg_explode);
 
+                if(preg_match("/\-\-/", $end_arg)) {
+                    echo "Table name is required";
+                    exit;
+                }
+    
+                $table_name = $end_arg;
+            }
+
+            $this->module = preg_replace("/\[ClassName\]/",$class_name, $this->component);
             $this->module = preg_replace("/\[TableName\]/", strtolower($table_name), $this->module);
 
             if($this->writeModule($migration_path)) 
@@ -271,9 +300,10 @@ class ActionHelpers implements ActionHelpersInterface {
     }
 
     /**
-     * usage: configures model structure and inital setup
-     * @param string model_name
-     * @param string model_path
+     * usage: configures socket structure and inital setup
+     * @param string $socket_name
+     * 
+     * @param string $socket_path
      * 
      * @return void;
      */
@@ -296,7 +326,8 @@ class ActionHelpers implements ActionHelpersInterface {
 
     /**
      * usage: formats table name and file name
-     * @param string name
+     * @param string $name
+     * 
      * @return string table_name
      */
     public function tableFormating($name)
@@ -334,6 +365,7 @@ class ActionHelpers implements ActionHelpersInterface {
     /**
      * usage: checkes  is controller has namespace prefix
      * @param string controller_name
+     * 
      * @return string namespace
      */
     public function checkNamaspacePrefix($_name) 
@@ -364,7 +396,7 @@ class ActionHelpers implements ActionHelpersInterface {
 
     /**
      * usage: configures controller structure and inital setup
-     * @param string controller_name
+     * @param string $controller_name
      */
     public function configureController($controller_name, $controller_path) 
     {
@@ -403,6 +435,31 @@ class ActionHelpers implements ActionHelpersInterface {
             return false;
         }
 
+    }
+
+    /**
+     * usage: configures seeder structure and inital setup
+     * @param string $seeder_name
+     * 
+     * @param string $seeder_path
+     * 
+     * @return void;
+     */
+
+    public function configureSeeder($seeder_name, $seeder_path)
+    {
+        $component_path = "./Core/Console/components/seeder.component";
+
+        if($this->readComponent($component_path)) 
+        {
+            $this->module = preg_replace("/\[ClassName\]/",$seeder_name, $this->component);
+            if($this->writeModule($seeder_path)) 
+            {
+                echo "$seeder_name successfully created!\n";
+                return true;
+            }
+            return false;
+        }
     }
 
 
@@ -740,5 +797,15 @@ class ActionHelpers implements ActionHelpersInterface {
         }
 
         return false;
+    }
+
+    public function FileClassName($filename) 
+    {
+        $split = explode("/", $filename);
+        $ex = str_replace(".php", "", end($split));
+
+        $classname = $ex;
+
+        return array("class" => $classname, "file" => end($split));
     }
 }

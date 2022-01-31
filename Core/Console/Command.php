@@ -30,6 +30,8 @@ class Command extends Actions {
         $name = isset($parameters[0][1]) ? $parameters[0][1] : null; 
         $flag = isset($parameters[0][2]) ? $parameters[0][2] : null;
 
+        $this->arg_string = implode("|", $parameters[0]);
+
         if($action != null) {
             if($flag != null) {
                 if(array_key_exists($flag, $this->flags)) {
