@@ -1,19 +1,34 @@
-php manage create [controller | notification | model | socket ] <name> 
-flags:
-	--d to create migration for a model
-	--c to create a controller for a model or migration
-	--s to create socket for any create action name
-	--a to create all including migration, model, controller
+# Creating and generating app files.
+
+	php manage create [controller | model | migration | notification | socket ] <name> 
+
+	flags:
+		--d to create migration for a model 
+			php manage create model <Name> --d
+
+		--c to create a controller for a model or migration
+			php manage create model <Name> --c 
+
+		--s to create socket for any create action name
+			php manage create [controller | model | migration | notification ] <Name> --s
+
+		--a to create all including migration, model, controller
+			php manage create [controller | model | migration | notification ] <Name> --a
 	
-php manage db migrate
-flags: 
-	--new to drop tables and run fresh migration
-	
-php manage activate [websocket | third-party-library] 
-php manage disable [websocket | third-party-library]
+
+# Database management, migration and seeding tables.
+
+	** Run migrations
+		php manage db migrate
+		flags: 
+			--new to drop tables and run fresh migration
 
 
-if socket has been enable you'll be able to use [php socket <SocketName>] to run socket
+# Third-party library and websocket management, activation and disabling.
 
-LightWeight
-Unique & Different
+	php manage activate [websocket | third-party-library] 
+	php manage disable [websocket | third-party-library]
+
+
+	--if socket has been enable you'll be able to use [php socket <SocketName>] to run socket
+

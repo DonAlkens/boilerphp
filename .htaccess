@@ -5,3 +5,6 @@ DirectoryIndex /app.php
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.+)$ app.php [QSA,L]
+
+RewriteCond %{HTTP_HOST} ^(^.*)\.boilerphp.now
+RewriteRule ^(.*)$ app.php?uri=$1&hostName=%{HTTP_HOST}
