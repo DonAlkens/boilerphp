@@ -3,6 +3,27 @@
 use App\Config\ViewsConfig;
 
 
+function responseHeader($status) {
+
+    switch($status) {
+        case 200: 
+            header("HTTP/1.1 200 Ok!");
+            break;
+        case 400:
+            header("HTTP/1.1 404 Not Found");
+            break;
+        case 500:
+            header("HTTP/1.1 500 Server Error");
+            break;
+        case 301:
+            header("HTTP/1.1 301 Redirected");
+            break;
+        default: 
+            header("HTTP/1.1 200 Ok!");
+            break;
+    }
+}
+
 function get_view_path($filename) 
 {
 
@@ -48,8 +69,9 @@ function content($text)
     echo $text;
 }
 
-function Json($content)
+function Json($content, $status = 200)
 {
+    responseHeader($status);
     echo json_encode($content);
 }
 
@@ -72,10 +94,9 @@ function unhandledPost()
 
 function error404()
 {
-    header("HTTP/1.1 404 Not Found");
+    responseHeader(400);
     return view("errors/404");
 }
-
 
 function mailPage($view_file, $data = null) 
 {

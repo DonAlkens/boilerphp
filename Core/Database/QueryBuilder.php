@@ -4,11 +4,10 @@ namespace App\Core\Database;
 
 
 
-class QueryBuilder
+class QueryBuilder extends DataTypes
 {
 
 	protected $whereQuery = "";
-	
 
 	protected function cleanQueryStrings()
 	{
@@ -16,12 +15,14 @@ class QueryBuilder
 		isset($this->params) ? $this->params = trim($this->params, ", ") : null;
 	}
 
-	protected function allQuery()
+	public function allQuery()
 	{
-		$this->queryString = "SELECT * FROM $this->table ";
+		if($this->queryString == "") {
+			$this->queryString = "SELECT * FROM $this->table ";
+        }
 	}
 
-	protected function insertQuery($data)
+	public function insertQuery($data)
 	{
 		$this->columns = "";
 		$this->params = "";
@@ -37,14 +38,14 @@ class QueryBuilder
 		return $this->queryString;
 	}
 
-	protected function selectQuery($fields = "*")
+	public function selectQuery($fields = "*")
 	{
 
 		$this->queryString = "SELECT $fields FROM $this->table ";
 		return $this->queryString;
 	}
 
-	protected function updateQuery($data)
+	public function updateQuery($data)
 	{
 		$this->columns = "";
 		foreach ($data as $column => $value) 
@@ -67,7 +68,7 @@ class QueryBuilder
 	}
 
 
-	protected function deleteQuery($data)
+	public function deleteQuery($data)
 	{
 		$this->columns = "";
 
@@ -78,59 +79,50 @@ class QueryBuilder
 
 		$this->cleanQueryStrings();
 
-		$this->queryString = "DELETE FROM $this->table WHERE $this->columns";
+		$this->queryString = "SET FOREIGN_KEY_CHECKS = 0; DELETE FROM $this->table WHERE $this->columns";
 		$this->whereData = $data;
 		return $this->queryString;
 	}
 
-	protected function searchQuery($key, $value, $operation)
+	public function searchQuery($key, $value, $operation)
 	{
+
+		if($this->whereQuery == "") {
+			$this->whereQuery = " WHERE ";
+		}
 
 		if (is_array($key)) 
 		{
-			if($this->whereQuery == "")
-			{
-				$this->whereQuery = " WHERE ";
-			}
-			else 
-			{
-				$this->whereQuery .= " AND ";
-			}
 
 			$search = " ( ";
 			foreach ($key as $column => $val) 
 			{
 				$val = $operation[0].$val.$operation[1];
-				$search .= "`$column` LIKE '$val' OR ";
+				$search .= " `$column` LIKE '$val' OR ";
 			}
 
 			$search =  trim($search, "OR ");
 			$search .= " ) ";
-			$this->whereQuery .= $search;
+			$this->whereQuery .= $search." AND ";
 		} 
 		
 		else if (!is_array($key) && $value != null) 
 		{
 			$value = $operation[0].$value.$operation[1];
-			if($this->whereQuery == "")
-			{
-				$this->whereQuery = " WHERE `$key` LIKE '$value'";
-			}
-			else 
-			{
-				$this->whereQuery .= " AND `$key` LIKE '$value'";
-			}
+
+			$this->whereQuery .= " `$key` LIKE '$value' AND ";
 		}
 
 	}
 
-	protected function whereQuery($key, $value, $operation = null)
+	public function whereQuery($key, $value, $operation = null)
 	{
+		if($this->whereQuery == "") { 
+			$this->whereQuery = " WHERE "; 
+		}
 
 		if (is_array($key)) 
 		{
-			$this->whereQuery = " WHERE ";
-
 			$index = 0;
 			foreach ($key as $column => $val) 
 			{
@@ -138,46 +130,44 @@ class QueryBuilder
 				{
 					if(is_array($operation)){
 						$op = $operation[$index];
-						$this->whereQuery .= "`$column` $op :$column AND ";
+						$this->whereQuery .= " `$column` $op '$val' AND ";
 					}
 					else
 					{
-						$this->whereQuery .= "`$column` $operation :$column AND ";
+						$this->whereQuery .= " `$column` $operation '$val' AND ";
 					}
 				}
 				else 
 				{
-					$this->whereQuery .= "`$column` = :$column AND ";
+					$this->whereQuery .= " `$column` = :$column AND ";
+					$this->whereData = $key;
 				}
 
 				$index++;
 			}
 
-			$this->whereQuery = trim($this->whereQuery, "AND ");
-			$this->whereData = $key;
 		} 
-		
-		else if (!is_array($key) && $value != null) 
+		else if (!is_array($key)) 
 		{
 			if($operation != null) 
 			{
-				$this->whereQuery = " WHERE `$key` $operation :$key";
+				$this->whereQuery .= "`$key` $operation '$value' AND ";
 			}
 			else 
 			{
-				$this->whereQuery = " WHERE `$key` = :$key";
+				$this->whereQuery .= "`$key` = :$key AND ";
+				$this->whereData = array($key => $value);
 			}
-			$this->whereData = array($key => $value);
 		}
 
 	}
 
-	protected function groupQuery($column)
+	public function groupQuery($column)
 	{
 		$this->groupQuery = " GROUP BY `$column`";
 	}
 
-	protected function orderQuery($key, $order, $limit)
+	public function orderQuery($key, $order, $limit)
 	{
 		$this->orderQuery = " ORDER BY `$key` $order";
 		if($limit != null) {
@@ -185,20 +175,21 @@ class QueryBuilder
 		}
 	}
 
-	protected function limits($start, $end) 
+	public function limits($start, $end) 
 	{
 		$limits = $start.", ".$end;
 		$this->orderQuery .= " LIMIT ".$limits;
+		return $this;
 	}
 
-	protected function queryString()
+	public function queryString()
 	{
 		if (!empty($this->queryString)) 
 		{
 
 			if(isset($this->whereQuery)) 
 			{
-				$this->queryString .= $this->whereQuery;
+				$this->queryString .= trim($this->whereQuery, "AND ");
 			}
 			
 			if (isset($this->groupQuery)) 
