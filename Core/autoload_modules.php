@@ -6,7 +6,6 @@ class AppModules {
     public $configs = 
     [
         "configs::App",
-        "configs::ErrorsConfig",
         "configs::RoutesConfig",
         "configs::ViewsConfig",
         "configs::MailConfig",
