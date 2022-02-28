@@ -8,6 +8,18 @@ class Actions extends ActionHelpers
 {
 
     /**
+     * Create new app using command line manager
+     * @param $name
+     * Boolean response if app is created
+     * */
+    public function app($name) 
+    {
+
+        
+
+    }
+
+    /**
      * Create Controllers using command line manager
      * @param $name, $type
      * Boolean response if controller is created

@@ -1,6 +1,6 @@
 # Creating and generating app files.
 
-	php manage create [controller | model | migration | notification | socket ] <name> 
+	php manage create [app | controller | model | migration | notification | socket ] <name> 
 
 	flags:
 		--d to create migration for a model 

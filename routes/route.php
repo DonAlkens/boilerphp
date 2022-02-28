@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\Urls\Route;
+use App\User;
 
 /** 
  * Create all routes here
@@ -12,4 +13,11 @@ use App\Core\Urls\Route;
  * Happy coding :) 
  * */
 
-Route::get("/", "BaseController::index")->as("home");
+// $user = (new User)->find(1);
+Route::get("/home", "BaseController::index")->as("home");
+
+// Route::subdomain("*", function(){
+
+//     Route::get("/", "BaseController::home")->as("home2");
+
+// });
