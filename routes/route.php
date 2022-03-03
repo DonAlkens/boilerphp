@@ -1,8 +1,6 @@
 <?php
 
 use App\Core\Urls\Route;
-use App\Role;
-use App\User;
 
 /** 
  * Create all routes here
