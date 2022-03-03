@@ -15,13 +15,6 @@ class BaseController extends Controller
 
     public function index(Request $request) {
 
-        echo $request->param["india"];
-        return view("index");
-    }
-
-    public function home(Request $request) {
-
-        echo $request->_subdomain;
         return view("index");
     }
 

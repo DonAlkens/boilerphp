@@ -8,6 +8,12 @@ class MigrationReflection extends Migration {
 
     public $table = "migrations";
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->init();
+    }
+
     public function init() {
 
         $this->query("CREATE TABLE IF NOT EXISTS migrations(
