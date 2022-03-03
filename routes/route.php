@@ -14,6 +14,4 @@ use App\User;
  * Happy coding :) 
  * */
 
-Route::get("/", "BaseController::index")->as("index");
-Route::get("/home", "BaseController::index")->as("home");
-Route::get("/about", "BaseController::index")->as("about");
+Route::get("/", "BaseController::index")->as("home");
