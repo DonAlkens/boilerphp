@@ -71,6 +71,7 @@ function content($text)
 
 function Json($content, $status = 200)
 {
+    header('Content-Type: application/json; charset=utf-8');
     responseHeader($status);
     echo json_encode($content);
 }

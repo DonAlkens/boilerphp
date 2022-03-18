@@ -32,5 +32,4 @@ class Authentication
     {
         Session::set("auth", $user->id);
     }
-
 }

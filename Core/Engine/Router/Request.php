@@ -52,13 +52,12 @@ class Request extends Validator
 
         $this->method = strtoupper($method);
         $this->init($method);
-        $this->location();
         
     }
 
+
     protected function init($method)
     {
-        $this->setHeaders();
 
         switch($method)
         {
@@ -77,17 +76,32 @@ class Request extends Validator
         }
     }
 
-    protected function setHeaders() {
-        foreach(getallheaders() as $name => $value) {
-            $this->headers[$name] = $value;
-        }
+
+    public function headers() 
+    {
+        return $this->setHeaders();
     }
+
+
+    protected function setHeaders() 
+    {
+        
+        $headers = [];
+        
+        foreach(getallheaders() as $name => $value) {
+            $headers[$name] = $value;
+        }
+
+        return $headers;
+    }
+
 
     public function json() 
     {
         $data = json_decode(file_get_contents("php://input"), true);
         return $this->json = $data;
     }
+
 
     public function all()
     {
@@ -104,9 +118,12 @@ class Request extends Validator
         return $data;
     }
 
+
     public function without($keys)
     {
+
         $all = $this->all();
+
         foreach($keys as $key) 
         {
             unset($all[$key]);
@@ -115,15 +132,18 @@ class Request extends Validator
         return $all;
     }
 
+
     protected function get() 
     {
         $this->map($_GET);
     }
 
+
     protected function post() 
     {
         $this->map($_POST);
     }
+
 
     public function file($index)
     {
@@ -143,6 +163,7 @@ class Request extends Validator
         return $file;
     }
 
+
     public function filename($index)
     {
         if($this->file($index)) 
@@ -155,6 +176,7 @@ class Request extends Validator
         }
     }
 
+
     protected function map($data) 
     {
         
@@ -166,16 +188,19 @@ class Request extends Validator
         $this->json();
     }
 
+
     public function timestamp() 
     {
         return date("Y-m-d H:i:s");
     }
 
+
     public function location() 
     {
-        return $this->_location = trim($_SERVER["REQUEST_URI"],"/");
+        return trim($_SERVER["REQUEST_URI"],"/");
     }
 
+    
     public function url($name = null)
     {
         $this->_url = $this->location();

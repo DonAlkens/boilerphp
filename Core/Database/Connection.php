@@ -62,7 +62,7 @@ class Connection extends QueryBuilder
     
     public function __construct()
     {
-        $this->getConnectionVariable();
+        
     }
 
     public function db($name = null)
@@ -71,7 +71,6 @@ class Connection extends QueryBuilder
             $this->dbConnection = $name;
         }
 
-        $this->getConnectionVariable();
         $this->connect();
 
         return $this;
@@ -80,11 +79,13 @@ class Connection extends QueryBuilder
     public function connect()
     {
         if(!isset($this->connection)) {
-            $this->buildConnectionString();
-    
+            
             try {
+
+                list($host, $username, $password, $dbname) = $this->getConnectionVariable();
+                $this->buildConnectionString($host, $dbname);
     
-                $this->connection = new PDO($this->dataSource, $this->username, $this->password);
+                $this->connection = new PDO($this->dataSource, $username, $password);
         
                 // Set all attributes
                 $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -101,9 +102,9 @@ class Connection extends QueryBuilder
 
     }
 
-    protected function buildConnectionString() 
+    protected function buildConnectionString($host, $dbname) 
     {
-        $this->dataSource = $this->driver.":host=".$this->host.";dbname=".$this->dbname;
+        $this->dataSource = $this->driver.":host=".$host.";dbname=".$dbname;
     }
 
     protected function checkDatabaseVariables(array $variables, object $dbConnectionVariables)
@@ -129,12 +130,13 @@ class Connection extends QueryBuilder
             ["host", "username", "password", "database"], 
             $app_config->databaseConnection
         );
-
         
-        $this->host = $app_config->databaseConnection->host;
-        $this->username = $app_config->databaseConnection->username;
-        $this->password = $app_config->databaseConnection->password;
-        $this->dbname = $app_config->databaseConnection->database;
+        $host = $app_config->databaseConnection->host;
+        $username = $app_config->databaseConnection->username;
+        $password = $app_config->databaseConnection->password;
+        $dbname = $app_config->databaseConnection->database;
+
+        return [$host, $username, $password, $dbname];
     }
 
     protected function getDbSelection($app_config) {
@@ -171,7 +173,6 @@ class Connection extends QueryBuilder
    
    public function __wakeup() {
         //Since we can't serialize the connection we need to re-open it when we unserialise
-        $this->getConnectionVariable();
         $this->connect();
    }
 }

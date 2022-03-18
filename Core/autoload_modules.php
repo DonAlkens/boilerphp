@@ -13,16 +13,13 @@ class AppModules {
 
     public $modules =  
     [
+        "exceptions" => [
+            "Engine::Exceptions::UnAuthorizedRequestException"
+        ],
+
         "middlewares" => [
             "Engine::Middlewares::Session",
             "Engine::Middlewares::Cookie",
-        ],
-
-        "admin" => [
-            "Admin::Authentication",
-            "Admin::AuthProvider",
-            "Admin::Door",
-            "Admin::Auth"
         ],
 
         "helpers" => [
@@ -78,8 +75,16 @@ class AppModules {
 
         "support" => [
             "Support::Device::Browser"
-        ]
+        ],
 
+        "admin" => [
+            "Admin::Traits::AccessTokens",
+            "Admin::Traits::HasAccessTokens",
+            "Admin::Authentication",
+            "Admin::AuthProvider",
+            "Admin::Door",
+            "Admin::Auth"
+        ],
     ];
 
     public $router_modules =  

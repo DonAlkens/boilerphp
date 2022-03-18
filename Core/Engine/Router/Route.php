@@ -3,9 +3,11 @@
 namespace App\Core\Urls;
 
 
-use Error, Exception;
+use Exception;
 use App\Config\RoutesConfig;
-use App\Role;
+use App\Core\Database\Schema;
+use App\Core\Engine\Exceptions\UnAuthorizedRequestException;
+use Auth;
 
 class Route extends RoutesConfig
 {
@@ -15,33 +17,53 @@ class Route extends RoutesConfig
         "post"  =>  array()
     );
 
+
+
     static private $domains = array();
+
+
 
 
     static public $subdomain;
 
 
+
+
     static public $active_domain;
+
+
 
 
     static private $route_lookup_list;
 
 
+
+
     static private $controller_namespace = 'App\Action\Urls\Controllers\\';
+
+
 
 
     static private $group_path = "";
 
 
+
     static private $uri_;
+    
+    
+
+    static private $middleware = "";
+
 
 
     public $names_ = [];
 
 
+
     public function __construct()
     {
     }
+
 
     static public function configure()
     {
@@ -73,12 +95,21 @@ class Route extends RoutesConfig
         $this->set_route_name($name);
     }
 
+
+    static public function protected($middleware, $callback) 
+    {
+        static::$middleware = $middleware;
+        $callback();
+        static::$middleware = null;
+    }
+
     static public function group($name, $callback)
     {
-        self::$group_path = "/" . trim($name, "/");
+        static::$group_path = "/" . trim($name, "/");
         $callback();
-        self::$group_path = "";
+        static::$group_path = "";
     }
+
 
     static public function httpAction($path, $controller)
     {
@@ -136,6 +167,19 @@ class Route extends RoutesConfig
             # validate param by
             # @cheking duplicate key
             $properties["param"] = $params;
+        }
+
+        # if middlewere is set
+        if(static::$middleware != null) {
+            if(strpos(static::$middleware, '|')) {
+                $middlewares = explode('|', static::$middleware);
+            } 
+            else
+            {
+                $middlewares = [static::$middleware];
+            } 
+            
+            $properties["protection"] = $middlewares;
         }
 
         # checking if url has already been registered
@@ -201,10 +245,111 @@ class Route extends RoutesConfig
         static::listenHandler($lookup, $pattern, $request);
     }
 
-    static protected function listenHandler($lookup, $uri, $request)
+
+    protected static function authorize($path, Request $request) {
+            
+        $failed = false;
+
+        $protections = $path['protection'];
+        $headers = $request->headers();
+
+        $responseFormat = $headers["Accept"];
+
+        foreach($protections as $protection) {
+
+            $type = null;
+
+            if(strpos($protection, ':')) 
+            {
+                $xplode = explode(':', $protection);
+                $protection = $xplode[0];
+                $type = $xplode[1];
+            }
+
+            if(!array_key_exists($protection, $headers)) {
+                $failed = true;
+
+                if($responseFormat == 'application/json') {
+
+                    $response = [
+                        'success' => false,
+                        'message' => 'Unauthorized Request'
+                    ];
+                }
+
+                break;
+            }
+
+            if($protection == 'Authorization') {
+                
+                if($type == 'Bearer') {
+
+                    $authToken = trim(preg_replace("/Bearer/", '', $headers['Authorization']));
+                    $authUser = (new Schema)->table('auth_access_tokens')->find('token', $authToken);
+
+                    if($authUser) 
+                    {
+                        
+                        $user = (new $authUser->token_type)->find($authUser->token_id);
+
+                        if($user) {
+                            Auth::login($user);
+                        }
+                        else
+                        {
+                            $failed = true;
+                        }
+
+                        (new Schema)->table('auth_access_tokens')->where('id', $authUser->id)->update([
+                            'last_used_date' => $request->timestamp()
+                        ]);
+                    
+                    }
+                    else 
+                    {
+                        $failed = true;
+                    }
+                }
+            }
+        }
+
+        if($failed) {
+
+            if($responseFormat == 'application/json') {
+
+                if(!isset($response)) {
+
+                    $response = [
+                        'success' => false,
+                        'message' => 'Authorization failed: Incorrect credentials'
+                    ];
+                }
+
+                Json($response, 400);
+            } 
+            else 
+            {
+                // throw new UnAuthorizedRequestException("Unauthorized request detected!");
+                content('Authorization failed: Incorrect credentials');
+            }
+
+            return false;
+        }
+        
+        return true;
+    }
+
+    protected static function listenHandler($lookup, $uri, $request)
     {
 
         $path = $lookup[$uri];
+
+        if(isset($path['protection'])) {
+
+            if(!Route::authorize($path, $request)) {
+                exit;
+            }
+        }
 
         if (gettype($path["action"]) == "string") {
             $split_action = explode("::", $path["action"]);

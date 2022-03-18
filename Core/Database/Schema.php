@@ -2,7 +2,6 @@
 
 namespace App\Core\Database;
 
-use Exception;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -36,10 +35,10 @@ class Schema extends Connection
 
     public function __construct()
     {
-        parent::__construct();
         $this->clearInitalQuery();
-        $this->useTable();
+        parent::__construct();
     }
+
 
     public function attachClass($all = false, $fields = null) 
     {
@@ -76,41 +75,6 @@ class Schema extends Connection
 
     }
 
-    protected function useTable()
-    {
-        if($this->table == null) 
-        {
-            $namespace = explode("\\", get_class($this));
-            $namespace = str_split(end($namespace));
-
-            $format = "";
-            foreach($namespace as $key => $char) 
-            {
-                if(ctype_upper($char)) 
-                {
-                    $format .= "_".strtolower($char); 
-                    continue;
-                }
-
-                $format .= $char;
-            }
-
-            $table = trim($format, "_");
-            $lastchar = strtolower(substr($table, -1));
-            
-            if($lastchar == "y" && !in_array($table, $this->specialTableChars)) {
-                $table = substr($table, 0, (strlen($table) - 1))."ies";
-            }
-            else if($lastchar == "x" && !in_array($table, $this->specialTableChars)) {
-                $table .= "es";
-            }
-            else if($lastchar != "s" && !in_array($table, $this->specialTableChars)) {
-                $table .= "s";
-            }
-
-            $this->table = $table;
-        }
-    }
 
     protected function positionCollection($key, $value) 
     {
@@ -130,6 +94,7 @@ class Schema extends Connection
 
         return $result;
     }
+
 
     public function all()
     {
@@ -151,6 +116,7 @@ class Schema extends Connection
         }
 
     }
+
 
     protected function bootRelations($class)
     {
@@ -190,11 +156,13 @@ class Schema extends Connection
         }
     }
 
+
     public function count() 
     {
         $this->allQuery();
         return $this->counter();
     }
+
 
     public function clearInitalQuery()
     {
@@ -204,6 +172,7 @@ class Schema extends Connection
         $this->orderQuery = "";
         $this->groupQuery = "";
     }
+
 
     public function first($key = null, $value = null) 
     {
@@ -222,6 +191,7 @@ class Schema extends Connection
         return null;
     }
 
+
     public function last($key = null, $value = null) 
     {
         $result = $this->positionCollection($key, $value);
@@ -237,6 +207,7 @@ class Schema extends Connection
 
         return null;
     }
+
 
     public function find($key, $value = null) 
     {
@@ -257,17 +228,20 @@ class Schema extends Connection
         return null;
     }
 
+
     public function groupBy($column) 
     {
         $this->groupQuery($column);
         return $this;
     }
 
+
     public function orderBy($key, $order = "ASC", $limit = null) 
     {
         $this->orderQuery($key, $order, $limit);
         return $this;
     }
+
 
     public function sum($column) 
     {
@@ -282,6 +256,7 @@ class Schema extends Connection
 
         return $sum;
     }
+
 
     public function paginate($number, $page = 1) {
 
@@ -341,10 +316,14 @@ class Schema extends Connection
 
     }
 
-    public function insert(array $data)
+    public function create(array $data) {
+        return $this->insert($data);
+    }
+
+    protected function insert(array $data)
     {
         if($data) 
-        {
+        { 
             if($this->insertQuery($data)) 
             {
                 $this->connect();
@@ -371,6 +350,7 @@ class Schema extends Connection
         return false;
     }
 
+
     public function select($fields = null)
     {
 
@@ -385,6 +365,7 @@ class Schema extends Connection
         return null;
     }
     
+
     public function update($data, $value = null)
     {
         if($this->dataFormatChecker($data, $value)) 
@@ -419,6 +400,7 @@ class Schema extends Connection
         return true;
     }
     
+
     public function delete($key = null, $value = null)
     {
 
@@ -456,6 +438,7 @@ class Schema extends Connection
         return false;
     }
 
+
     public function search($keys, $value = null, $opration = ['%', '%']) 
     {
         if(is_array($keys))
@@ -470,11 +453,13 @@ class Schema extends Connection
 
     }
 
+
     public function where($keys, $value = null) 
     {
         $this->whereQuery($keys, $value);
         return $this;
     }
+
 
     public function whereWithOperation($keys, $opration, $value = null) 
     {
@@ -482,9 +467,11 @@ class Schema extends Connection
         return $this;
     }
 
+
     public function get() {
         return $this->select();
     }
+
 
     public function toArray() 
     {
@@ -500,6 +487,7 @@ class Schema extends Connection
         }
         return null;
     }
+
 
     protected function resultFormatter($result, $multiple = false, $relations = false) 
     {
@@ -527,6 +515,7 @@ class Schema extends Connection
         
     }
 
+
     protected function newObject($name, $instance, $relations = false) 
     {
         $class = new $name;
@@ -535,8 +524,10 @@ class Schema extends Connection
             $class->$key = $value;
         }
 
-        if($relations == false) {
-            $this->bootRelations($class);
+        if($this instanceof Model) {
+            if($relations == false) {
+                $this->bootRelations($class);
+            }
         }
 
         return $class;
@@ -576,6 +567,7 @@ class Schema extends Connection
 
     }
 
+
     protected function counter() 
     {
         if($this->queryString()) 
@@ -598,6 +590,7 @@ class Schema extends Connection
         return 0;
     }
 
+
     protected function run($queryString)
     {
 
@@ -613,6 +606,7 @@ class Schema extends Connection
         return false;
 
     }
+
 
     protected function save()
     {
@@ -638,12 +632,20 @@ class Schema extends Connection
 
     }
 
-    public function setTable($name)
+
+    public function table($name)
+    {
+        return $this->setTable($name);
+    }
+
+
+    protected function setTable($name)
     {
         $this->table = $name;
         return $this;
     }
     
+
     public function query($querystring, $data = null)
     {
 
@@ -677,6 +679,7 @@ class Schema extends Connection
         return null;
 
     }
+
 
     public function dropDatabaseTable($table) {
 

@@ -10,7 +10,7 @@ class RoutesConfig {
     * @var string
     *
     */
-    static public $domain = "";
+    static public $domain = 'boilerphp.now';
 
 
     /**
@@ -19,6 +19,6 @@ class RoutesConfig {
     * @var bool
     *
     */
-    static public $enable_subdomains = false;
+    static public $enable_subdomains = true;
 
 }

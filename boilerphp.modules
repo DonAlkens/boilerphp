@@ -13,6 +13,7 @@ RouteServices
 DeviceDetector
 API
 
+Routes Protector
 
 By Folders::
 Migrations
