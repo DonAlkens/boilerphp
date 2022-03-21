@@ -426,7 +426,7 @@ class Route extends RoutesConfig
         } else {
             # verify if the url pattern is registered
             # for url that have parameters
-            echo $pattern = Route::verifyPattern($uri, $method);
+            $pattern = Route::verifyPattern($uri, $method);
 
             # checking it pattern exists
             if (array_key_exists($pattern, static::$route_lookup_list)) {
