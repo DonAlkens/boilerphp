@@ -3,7 +3,7 @@
 namespace App\Admin\Auth;
 
 use App\Core\Database\Schema;
-
+use App\Hashing\Hash;
 
 trait AccessTokens
 { 
@@ -23,7 +23,8 @@ trait AccessTokens
         ];
 
         (new Schema)->table($this->_table)->create($token);
-        return $token['token'];
+        $encode = (new Hash)->getEncodedBase($token['token']);
+        return $encode;
     }
 
     // public function getToken() {

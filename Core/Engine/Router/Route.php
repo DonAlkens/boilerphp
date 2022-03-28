@@ -7,6 +7,7 @@ use Exception;
 use App\Config\RoutesConfig;
 use App\Core\Database\Schema;
 use App\Core\Engine\Exceptions\UnAuthorizedRequestException;
+use App\Hashing\Hash;
 use Auth;
 
 class Route extends RoutesConfig
@@ -285,6 +286,7 @@ class Route extends RoutesConfig
                 if($type == 'Bearer') {
 
                     $authToken = trim(preg_replace("/Bearer/", '', $headers['Authorization']));
+                    $authToken = (new Hash)->getDecodedBase($authToken);
                     $authUser = (new Schema)->table('auth_access_tokens')->find('token', $authToken);
 
                     if($authUser) 

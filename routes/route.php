@@ -15,13 +15,15 @@ use App\User;
 
 Route::get("/", "BaseController::index")->as("home");
 
-// Route::get('/access', function() {
-//     $token = (new User)->find(1)->createAccessToken('my_token');
-//     return print_r($token);
-// });
 
-// Route::protected('Authorization:Bearer', function(){
-//     Route::get('/protection', function(){
-//         return Json(["user" => auth()->id]);
-//     });
-// });
+Route::get('/access', function () {
+
+    $token = (new User)->find(1)->createAccessToken('my_token');
+    return Json([$token]);
+});
+
+Route::protected('Authorization:Bearer', function(){
+    Route::get('/protection', function(){
+        return Json(["user" => auth()->firstname]);
+    });
+});
