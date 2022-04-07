@@ -202,7 +202,7 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function configureNotification($notification_name, $notification_path)
     {
-        $component_path = "./Core/Console/components/notification.component";
+        $component_path = "./core/Console/components/notification.component";
 
         if($this->readComponent($component_path)) 
         {
@@ -227,7 +227,7 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function configureModel($model_name, $model_path) 
     {
-        $component_path = "./Core/Console/components/model.component";
+        $component_path = "./core/Console/components/model.component";
 
         if($this->readComponent($component_path)) 
         {
@@ -253,7 +253,7 @@ class ActionHelpers implements ActionHelpersInterface {
      */
     public function configureMigration($migration_name, $migration_path, $component) 
     {
-        $component_path = "./Core/Console/components/$component.component";
+        $component_path = "./core/Console/components/$component.component";
         if($this->readComponent($component_path)) 
         {
             $class_name = ucfirst($migration_name);
@@ -310,7 +310,7 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function configureSocket($socket_name, $socket_path) 
     {
-        $component_path = "./Core/Console/components/websocket/socket-skeleton.component";
+        $component_path = "./core/Console/components/websocket/socket-skeleton.component";
 
         if($this->readComponent($component_path)) 
         {
@@ -400,7 +400,7 @@ class ActionHelpers implements ActionHelpersInterface {
      */
     public function configureController($controller_name, $controller_path) 
     {
-        $component_path = "./Core/Console/components/controller.component";
+        $component_path = "./core/Console/components/controller.component";
 
         if($this->readComponent($component_path) !== "") 
         {
@@ -448,7 +448,7 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function configureSeeder($seeder_name, $seeder_path)
     {
-        $component_path = "./Core/Console/components/seeder.component";
+        $component_path = "./core/Console/components/seeder.component";
 
         if($this->readComponent($component_path)) 
         {
@@ -705,10 +705,10 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function enableThirdPartyLibrary()
     {
-        $component_path = "./Core/Console/components/enable-third-party.component";
+        $component_path = "./core/Console/components/enable-third-party.component";
         if($this->readComponent($component_path) !== "") 
         {
-            $path = "./Core/app_loader.php";
+            $path = "./core/app_loader.php";
             $this->module = $this->component;
             if($this->writeModule($path))
             {
@@ -723,10 +723,10 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function disableThirdPartyLibrary()
     {
-        $component_path = "./Core/Console/components/disable-third-party.component";
+        $component_path = "./core/Console/components/disable-third-party.component";
         if($this->readComponent($component_path) !== "") 
         {
-            $path = "./Core/app_loader.php";
+            $path = "./core/app_loader.php";
             $this->module = $this->component;
             if($this->writeModule($path))
             {
@@ -741,8 +741,8 @@ class ActionHelpers implements ActionHelpersInterface {
 
     public function enableWebSocket($flag = null) {
 
-        $component_path = "./Core/Console/components/websocket/socket-skeleton.component";
-        $manager_path = "./Core/Console/components/websocket/socket.component";
+        $component_path = "./core/Console/components/websocket/socket-skeleton.component";
+        $manager_path = "./core/Console/components/websocket/socket.component";
 
         if(!$this->checkExistent("./socket")) {
 

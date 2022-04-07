@@ -19,7 +19,7 @@ function responseHeader($status) {
             header("HTTP/1.1 301 Redirected");
             break;
         default: 
-            header("HTTP/1.1 200 Ok!");
+            header("HTTP/1.1 ". $status);
             break;
     }
 }
