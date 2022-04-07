@@ -82,8 +82,8 @@ class Connection extends QueryBuilder
             
             try {
 
-                list($host, $username, $password, $dbname) = $this->getConnectionVariable();
-                $this->buildConnectionString($host, $dbname);
+                list($host, $username, $password, $dbname, $port) = $this->getConnectionVariable();
+                $this->buildConnectionString($host, $dbname, $port);
     
                 $this->connection = new PDO($this->dataSource, $username, $password);
         
@@ -102,9 +102,9 @@ class Connection extends QueryBuilder
 
     }
 
-    protected function buildConnectionString($host, $dbname) 
+    protected function buildConnectionString($host, $dbname, $port) 
     {
-        $this->dataSource = $this->driver.":host=".$host.";dbname=".$dbname;
+        $this->dataSource = $this->driver.":host=".$host.";port=".$port.";dbname=".$dbname;
     }
 
     protected function checkDatabaseVariables(array $variables, object $dbConnectionVariables)
@@ -127,7 +127,7 @@ class Connection extends QueryBuilder
         }
 
         $this->checkDatabaseVariables(
-            ["host", "username", "password", "database"], 
+            ["host", "username", "password", "database", "port"], 
             $app_config->databaseConnection
         );
         
@@ -135,8 +135,9 @@ class Connection extends QueryBuilder
         $username = $app_config->databaseConnection->username;
         $password = $app_config->databaseConnection->password;
         $dbname = $app_config->databaseConnection->database;
+        $port = $app_config->databaseConnection->port;
 
-        return [$host, $username, $password, $dbname];
+        return [$host, $username, $password, $dbname, $port];
     }
 
     protected function getDbSelection($app_config) {
