@@ -101,11 +101,11 @@ if(!function_exists("forcast"))
         
         if($actual_date)
         {
-            $date = date($format, strtotime($actual_date. "+$interval days"));
+            $date = date($format, strtotime($actual_date. "+$interval"));
         }
         else 
         {
-            $date = date($format, strtotime("+$interval days"));
+            $date = date($format, strtotime("+$interval"));
         }
         
         $data["date"] = $date;
@@ -359,6 +359,27 @@ if(!function_exists("hashing"))
     function hashing($string, $clean = false)
     {
         return Hash::create($string, $clean);
+    }
+}
+
+if(!function_exists("toObject"))
+{
+    /** 
+     * returns encrypted string value
+     * 
+     * @param array $data 
+     * @return object
+    */
+    function toObject($data)
+    {
+        if(is_array($data)) {
+            $value = json_encode($data);
+            $object  = json_decode($value);
+
+            return $object;
+        }
+        
+        return null;
     }
 }
 

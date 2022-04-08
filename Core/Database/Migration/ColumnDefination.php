@@ -40,7 +40,11 @@ class ColumnDefination extends DataTypes {
     
     public function addColumn($name) {
 
-        $this->column = concat(["ADD", "`$name`"]);
+        if(isset($this->column)) { 
+            $this->column = concat([",", "ADD", "`$name`"]);
+        } else {
+            $this->column = concat(["ADD", "`$name`"]);
+        }
         $this->key = "$name";
         return $this;
 

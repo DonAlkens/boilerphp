@@ -31,6 +31,7 @@ class MailSender extends MailBuilder
         $this->smtpUsername = $app_config->mailAttributes->smtp->smtpUsername;
         $this->smtpPassword = $app_config->mailAttributes->smtp->smtpPassword;
         $this->smtpPort = $app_config->mailAttributes->smtp->smtpPort;
+        $this->smtpEncryption = $app_config->mailAttributes->smtp->smtpEncryption;
     }
 
     public function checkMailAttributes(array $variables, object $mailAttributes)
@@ -82,7 +83,7 @@ class MailSender extends MailBuilder
             $mail->SMTPAuth   = true;                      // Enable SMTP authentication
             $mail->Username   = $this->smtpUsername;                    // SMTP username
             $mail->Password   = $this->smtpPassword;                    // SMTP password
-            $mail->SMTPSecure = "ssl"; //PHPMailer::ENCRYPTION_STARTTLS;      // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+            $mail->SMTPSecure = $this->smtpEncryption; //PHPMailer::ENCRYPTION_STARTTLS;      // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
             $mail->Port       = $this->smtpPort;                         // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
             //Recipients
