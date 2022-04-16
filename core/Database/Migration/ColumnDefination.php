@@ -5,15 +5,16 @@ namespace App\Core\Database\Migration;
 use App\Core\Database\DataTypes;
 use App\Core\Database\Schema;
 
-class ColumnDefination extends DataTypes {
-    
+class ColumnDefination extends DataTypes
+{
 
-    public function column($name) {
 
-        $this->column = "`$name`"; 
+    public function column($name)
+    {
+
+        $this->column = "`$name`";
         $this->key = "$name";
         return $this;
-
     }
 
     /**
@@ -24,64 +25,73 @@ class ColumnDefination extends DataTypes {
      * 
      * @return $this
      */
-    public function field($name) {
+    public function field($name)
+    {
 
-        $this->column = "`$name`"; 
+        $this->column = "`$name`";
         $this->key = "$name";
         return $this;
-
     }
 
-    public function after($column) {
+    public function after($column)
+    {
+        return $this->query = concat([$this->trimmer($this->query), "AFTER",  "`$column`"]);
+    }
 
-        $this->query = concat([$this->trimmer($this->query), "AFTER",  "`$column`"]);
+    public function addColumn($name)
+    {
 
-    } 
-    
-    public function addColumn($name) {
+        $mode = 'ADD';
 
-        if(isset($this->column)) { 
-            $this->column = concat([",", "ADD", "`$name`"]);
-        } else {
-            $this->column = concat(["ADD", "`$name`"]);
+        if (!empty($this->query)) {
+            if (preg_match('/ADD/', $this->query)) {
+                $mode = ', ADD';
+            }
         }
+
+        $this->column = concat([$mode, "`$name`"]);
+
         $this->key = "$name";
         return $this;
-
     }
 
-    public function changeColumnName($current_name, $new_name) {
+    public function changeColumnName($current_name, $new_name)
+    {
 
         $this->column = concat(["CHANGE", "`$current_name`", "`$new_name`"]);
         $this->key = "$new_name";
         return $this;
-
     }
 
-    public function dropColumn($name) {
+    public function dropColumn($name)
+    {
         (new Schema)->query(concat(["ALTER TABLE `$this->table` DROP", "`$name`"]));
     }
 
-    public function dropPrimaryKey() {
+    public function dropPrimaryKey()
+    {
         (new Schema)->query("ALTER TABLE `$this->table` DROP PRIMARY KEY");
     }
 
-    public function dropForeignKey($name) {
+    public function dropForeignKey($name)
+    {
         (new Schema)->query(concat(["ALTER TABLE `$this->table` DROP FOREIGN KEY", "`$name`"]));
     }
 
-    public function dropConstraint($name) {
+    public function dropConstraint($name)
+    {
         (new Schema)->query(concat(["ALTER TABLE `$this->table` DROP CONSTRAINT IF EXISTS", "`$name`"]));
     }
-    
-    public function dropIndex($name) {
+
+    public function dropIndex($name)
+    {
         (new Schema)->query(concat(["ALTER TABLE `$this->table` DROP INDEX IF EXISTS", "`$name`"]));
     }
 
-    public function timestamps() {
+    public function timestamps()
+    {
 
         $this->column("created_date")->timestamp()->default("CURRENT_TIMESTAMP()");
         $this->column("updated_date")->timestamp()->default("CURRENT_TIMESTAMP()");
-
     }
 }

@@ -104,6 +104,7 @@ class Connection extends QueryBuilder
 
     protected function buildConnectionString($host, $dbname, $port) 
     {
+        $this->dbname = $dbname;
         $this->dataSource = $this->driver.":host=".$host.";port=".$port.";dbname=".$dbname;
     }
 
