@@ -13,7 +13,7 @@ class DataTypes {
     *
     */
 
-    public $query;
+    protected $query;
 
 
     /**
@@ -33,7 +33,7 @@ class DataTypes {
     *
     */
 
-    public $foreignKey = "";
+    protected $foreignKey = "";
     
 
     /**
@@ -42,7 +42,7 @@ class DataTypes {
     * @var string
     *
     */
-    public $primary_keys;
+    protected $primary_keys;
 
     /**
     * primary key mode
@@ -50,7 +50,7 @@ class DataTypes {
     * @var string
     *
     */
-    public $pk_mode = true;
+    protected $pk_mode = true;
 
     /**
     * default nullable contraint on datatypes
@@ -58,7 +58,7 @@ class DataTypes {
     * @var string
     *
     */
-    public $nullable = "NOT NULL";
+    protected $nullable = "NOT NULL";
 
 
     public function trimmer($str) 

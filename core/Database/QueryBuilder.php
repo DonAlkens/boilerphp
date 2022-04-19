@@ -7,7 +7,11 @@ namespace App\Core\Database;
 class QueryBuilder extends DataTypes
 {
 
+	protected $orderQuery = "";
+
 	protected $whereQuery = "";
+
+	protected $whereData = array();
 
 	protected function cleanQueryStrings()
 	{
@@ -17,9 +21,9 @@ class QueryBuilder extends DataTypes
 
 	public function allQuery()
 	{
-		if($this->queryString == "") {
+		if ($this->queryString == "") {
 			$this->queryString = "SELECT * FROM $this->table ";
-        }
+		}
 	}
 
 	public function insertQuery($data)
@@ -48,20 +52,16 @@ class QueryBuilder extends DataTypes
 	public function updateQuery($data)
 	{
 		$this->columns = "";
-		foreach ($data as $column => $value) 
-		{
+		foreach ($data as $column => $value) {
 			$this->columns .= "`$column` = :$column, ";
 		}
 
 		$this->cleanQueryStrings();
 
 		$this->queryString = "UPDATE $this->table SET $this->columns ";
-		if(isset($this->whereData))
-		{
+		if (isset($this->whereData)) {
 			$this->whereData = array_merge($data, $this->whereData);
-		}
-		else 
-		{
+		} else {
 			$this->whereData = $data;
 		}
 		return $this->queryString;
@@ -72,8 +72,7 @@ class QueryBuilder extends DataTypes
 	{
 		$this->columns = "";
 
-		foreach ($data as $column => $value) 
-		{
+		foreach ($data as $column => $value) {
 			$this->columns .= "`$column` = :$column, ";
 		}
 
@@ -87,79 +86,59 @@ class QueryBuilder extends DataTypes
 	public function searchQuery($key, $value, $operation)
 	{
 
-		if($this->whereQuery == "") {
+		if ($this->whereQuery == "") {
 			$this->whereQuery = " WHERE ";
 		}
 
-		if (is_array($key)) 
-		{
+		if (is_array($key)) {
 
 			$search = " ( ";
-			foreach ($key as $column => $val) 
-			{
-				$val = $operation[0].$val.$operation[1];
+			foreach ($key as $column => $val) {
+				$val = $operation[0] . $val . $operation[1];
 				$search .= " `$column` LIKE '$val' OR ";
 			}
 
 			$search =  trim($search, "OR ");
 			$search .= " ) ";
-			$this->whereQuery .= $search." AND ";
-		} 
-		
-		else if (!is_array($key) && $value != null) 
-		{
-			$value = $operation[0].$value.$operation[1];
+			$this->whereQuery .= $search . " AND ";
+		} else if (!is_array($key) && $value != null) {
+			$value = $operation[0] . $value . $operation[1];
 
 			$this->whereQuery .= " `$key` LIKE '$value' AND ";
 		}
-
 	}
 
 	public function whereQuery($key, $value, $operation = null)
 	{
-		if($this->whereQuery == "") { 
-			$this->whereQuery = " WHERE "; 
+		if ($this->whereQuery == "") {
+			$this->whereQuery = " WHERE ";
 		}
 
-		if (is_array($key)) 
-		{
+		if (is_array($key)) {
 			$index = 0;
-			foreach ($key as $column => $val) 
-			{
-				if($operation != null) 
-				{
-					if(is_array($operation)){
+			foreach ($key as $column => $val) {
+				if ($operation != null) {
+					if (is_array($operation)) {
 						$op = $operation[$index];
 						$this->whereQuery .= " `$column` $op '$val' AND ";
-					}
-					else
-					{
+					} else {
 						$this->whereQuery .= " `$column` $operation '$val' AND ";
 					}
-				}
-				else 
-				{
+				} else {
 					$this->whereQuery .= " `$column` = :$column AND ";
-					$this->whereData = $key;
+					$this->whereData = array_merge($this->whereData, $key);
 				}
 
 				$index++;
 			}
-
-		} 
-		else if (!is_array($key)) 
-		{
-			if($operation != null) 
-			{
+		} else if (!is_array($key)) {
+			if ($operation != null) {
 				$this->whereQuery .= "`$key` $operation '$value' AND ";
-			}
-			else 
-			{
+			} else {
 				$this->whereQuery .= "`$key` = :$key AND ";
-				$this->whereData = array($key => $value);
+				$this->whereData = array_merge($this->whereData, array($key => $value));
 			}
 		}
-
 	}
 
 	public function groupQuery($column)
@@ -170,35 +149,31 @@ class QueryBuilder extends DataTypes
 	public function orderQuery($key, $order, $limit)
 	{
 		$this->orderQuery = " ORDER BY `$key` $order";
-		if($limit != null) {
-			$this->orderQuery .= " LIMIT ".$limit;
+		if ($limit != null) {
+			$this->orderQuery .= " LIMIT " . $limit;
 		}
 	}
 
-	public function limits($start, $end) 
+	public function limits($start, $end)
 	{
-		$limits = $start.", ".$end;
-		$this->orderQuery .= " LIMIT ".$limits;
+		$limits = $start . ", " . $end;
+		$this->orderQuery .= " LIMIT " . $limits;
 		return $this;
 	}
 
 	public function queryString()
 	{
-		if (!empty($this->queryString)) 
-		{
+		if (!empty($this->queryString)) {
 
-			if(isset($this->whereQuery)) 
-			{
+			if (isset($this->whereQuery)) {
 				$this->queryString .= trim($this->whereQuery, "AND ");
 			}
-			
-			if (isset($this->groupQuery)) 
-			{
+
+			if (isset($this->groupQuery)) {
 				$this->queryString .= $this->groupQuery;
 			}
-			
-			if (isset($this->orderQuery)) 
-			{
+
+			if (isset($this->orderQuery)) {
 				$this->queryString .= $this->orderQuery;
 			}
 
@@ -212,14 +187,10 @@ class QueryBuilder extends DataTypes
 	protected function dataFormatChecker($data, $value)
 	{
 
-		if (gettype($data) == "string") 
-		{
-			if (!is_null($value)) 
-			{
+		if (gettype($data) == "string") {
+			if (!is_null($value)) {
 				return $this->data = array($data => $value);
-			} 
-			else 
-			{
+			} else {
 				// $this->valueIsNullException();
 			}
 		}
@@ -229,8 +200,7 @@ class QueryBuilder extends DataTypes
 
 	protected function fieldFormatChecker($fields)
 	{
-		if (is_null($fields)) 
-		{
+		if (is_null($fields)) {
 			$fields = "*";
 		}
 
@@ -243,7 +213,8 @@ class QueryBuilder extends DataTypes
 	}
 
 
-	protected function dropDatabaseTableQuery($table) {
+	protected function dropDatabaseTableQuery($table)
+	{
 		return "SET FOREIGN_KEY_CHECKS = 1; DROP TABLE IF EXISTS `$table`; SET FOREIGN_KEY_CHECKS = 0; DROP TABLE IF EXISTS `$table`;";
 	}
 }

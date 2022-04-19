@@ -9,28 +9,28 @@ class Schema extends Connection
 {
 
     /**
-    * Query formated by query builder
-    *
-    * @var string
-    *
-    */
+     * Query formated by query builder
+     *
+     * @var string
+     *
+     */
     protected $result_data_format = "object";
 
     /**
-    * Query formated by query builder
-    *
-    * @var string
-    *
-    */
-    public $queryString = "";
+     * Query formated by query builder
+     *
+     * @var string
+     *
+     */
+    protected $queryString = "";
 
     /**
-    * Database Schema table name
-    *
-    * @var string
-    *
-    */
-    public $table;
+     * Database Schema table name
+     *
+     * @var string
+     *
+     */
+    protected $table;
 
 
     public function __construct()
@@ -40,56 +40,41 @@ class Schema extends Connection
     }
 
 
-    public function attachClass($all = false, $fields = null) 
+    public function attachClass($all = false, $fields = null)
     {
-        if($all == true) 
-        {
+        if ($all == true) {
             $this->allQuery();
             $data = $this->fetch(true);
 
-            if(is_null($data)) 
-            {
+            if (is_null($data)) {
                 return $data;
             }
 
-            if(!is_array($data)) 
-            { 
-                return array($data); 
-            } 
-            else 
-            {
+            if (!is_array($data)) {
+                return array($data);
+            } else {
                 return $data;
             }
-        }
-        else 
-        {
+        } else {
 
-            if($this->fieldFormatChecker($fields)) 
-            {
-                if($this->selectQuery($this->fields))
-                {
+            if ($this->fieldFormatChecker($fields)) {
+                if ($this->selectQuery($this->fields)) {
                     return $this->fetch(true);
                 }
             }
         }
-
     }
 
 
-    protected function positionCollection($key, $value) 
+    protected function positionCollection($key, $value)
     {
 
-        if(!is_null($key) && !is_null($value))
-        { 
+        if (!is_null($key) && !is_null($value)) {
 
             $result =  $this->where($key, $value)->select();
-
-        } 
-        else 
-        {
+        } else {
 
             $result = $this->select();
-
         }
 
         return $result;
@@ -101,20 +86,15 @@ class Schema extends Connection
         $this->allQuery();
         $data = $this->fetch();
 
-        if(is_null($data)) 
-        {
+        if (is_null($data)) {
             return $data;
         }
 
-        if(!is_array($data)) 
-        { 
-            return array($data); 
-        } 
-        else 
-        {
+        if (!is_array($data)) {
+            return array($data);
+        } else {
             return $data;
         }
-
     }
 
 
@@ -124,30 +104,26 @@ class Schema extends Connection
 
         $clReflection = new ReflectionClass($class_name);
 
-        foreach($clReflection->getMethods() as $clMethod) {
+        foreach ($clReflection->getMethods() as $clMethod) {
 
-            if($clMethod->class == $class_name) {
+            if ($clMethod->class == $class_name) {
 
                 $method = $clMethod->name;
 
-                if($method != '__construct')
-                {
+                if ($method != '__construct') {
                     $mReflection = new ReflectionMethod($class_name, $method);
                     $params = $mReflection->getParameters();
 
-                    if(count($params) == 0)
-                    {
+                    if (count($params) == 0) {
                         $result = $class->{$method}();
                         $instance = $result;
-                        if(is_array($result)) 
-                        { 
-                            if(isset($result[0])) {
+                        if (is_array($result)) {
+                            if (isset($result[0])) {
                                 $instance = $result[0];
                             }
                         }
-                        
-                        if($instance instanceof Model) 
-                        {
+
+                        if ($instance instanceof Model) {
                             $class->{$method} = $result;
                         }
                     }
@@ -157,7 +133,7 @@ class Schema extends Connection
     }
 
 
-    public function count() 
+    public function count()
     {
         $this->allQuery();
         return $this->counter();
@@ -174,16 +150,15 @@ class Schema extends Connection
     }
 
 
-    public function first($key = null, $value = null) 
+    public function first($key = null, $value = null)
     {
         $result = $this->positionCollection($key, $value);
 
-        if($this->resultTypeChecker($result) == "object") 
-        {
+        if ($this->resultTypeChecker($result) == "object") {
             return $result;
         }
 
-        if($result != null) {
+        if ($result != null) {
 
             return array_shift($this->result);
         }
@@ -192,16 +167,15 @@ class Schema extends Connection
     }
 
 
-    public function last($key = null, $value = null) 
+    public function last($key = null, $value = null)
     {
         $result = $this->positionCollection($key, $value);
 
-        if($this->resultTypeChecker($result) == "object") 
-        {
+        if ($this->resultTypeChecker($result) == "object") {
             return $result;
         }
 
-        if($result != null) {
+        if ($result != null) {
             return array_pop($result);
         }
 
@@ -209,19 +183,15 @@ class Schema extends Connection
     }
 
 
-    public function find($key, $value = null) 
+    public function find($key, $value = null)
     {
-        if($value == null) 
-        {
+        if ($value == null) {
             $this->result = $this->where("id", $key)->select();
-        }
-        else 
-        {
+        } else {
             $this->result = $this->where($key, $value)->select();
         }
 
-        if($this->result !== null) 
-        {
+        if ($this->result !== null) {
             return $this->result;
         }
 
@@ -229,27 +199,26 @@ class Schema extends Connection
     }
 
 
-    public function groupBy($column) 
+    public function groupBy($column)
     {
         $this->groupQuery($column);
         return $this;
     }
 
 
-    public function orderBy($key, $order = "ASC", $limit = null) 
+    public function orderBy($key, $order = "ASC", $limit = null)
     {
         $this->orderQuery($key, $order, $limit);
         return $this;
     }
 
 
-    public function sum($column) 
+    public function sum($column)
     {
         $sum = 0;
         $data = $this->all();
-        if($data) 
-        {
-            foreach($data as $row) {
+        if ($data) {
+            foreach ($data as $row) {
                 $sum += $row->$column;
             }
         }
@@ -258,34 +227,34 @@ class Schema extends Connection
     }
 
 
-    public function paginate($number, $page = 1) {
+    public function paginate($number, $page = 1)
+    {
 
         $start = (($page - 1) * $number);
         $end = ($page * $number);
-       
-        $from = $page; $to = $number;
-        if($page > 1) { $from = ($start + 1); $to = $end; }
-        
-        $limits = $start.", ".$number;
-        
+
+        $from = $page;
+        $to = $number;
+        if ($page > 1) {
+            $from = ($start + 1);
+            $to = $end;
+        }
+
+        $limits = $start . ", " . $number;
+
         $this->allQuery();
 
-        if($this->orderQuery == "") 
-        {
+        if ($this->orderQuery == "") {
             $this->orderQuery("id", "asc", $limits);
-        } else 
-        {
+        } else {
             $this->limits($start, $number);
         }
 
         $result = $this->fetch();
 
-        if(!is_null($result) && !is_array($result)) 
-        { 
-            $result = array($result); 
-
-        } else if(!is_null($result))
-        {
+        if (!is_null($result) && !is_array($result)) {
+            $result = array($result);
+        } else if (!is_null($result)) {
             $result = $result;
         }
 
@@ -296,10 +265,16 @@ class Schema extends Connection
 
         $total_pages = floor($total_result / $number);
         $rem = ($total_result % $number);
-        if($rem > 0) { $total_pages += 1; }
+        if ($rem > 0) {
+            $total_pages += 1;
+        }
 
-        if($to > $total_result) { $to = $total_result; }
-        if($total_result == 0) { $from  = 0; }
+        if ($to > $total_result) {
+            $to = $total_result;
+        }
+        if ($total_result == 0) {
+            $from  = 0;
+        }
 
         $data = [
             "current_page" => $page,
@@ -313,38 +288,31 @@ class Schema extends Connection
         setEnv("_pagination", $response);
 
         return $result;
-
     }
 
-    public function create(array $data) {
+    public function create(array $data)
+    {
         return $this->insert($data);
     }
 
     protected function insert(array $data)
     {
-        if($data) 
-        { 
-            if($this->insertQuery($data)) 
-            {
+        if ($data) {
+            if ($this->insertQuery($data)) {
                 $this->connect();
 
                 $statement = $this->connection->prepare($this->queryString);
-                if($statement->execute($data))
-                {
+                if ($statement->execute($data)) {
                     $exec = $this->query("SELECT * FROM $this->table WHERE id = LAST_INSERT_ID()");
-                    if($exec)
-                    {
-                        if($exec->rowCount() > 0) 
-                        {
+                    if ($exec) {
+                        if ($exec->rowCount() > 0) {
                             return $this->resultFormatter($exec->fetch());
                         }
                     }
-
                 }
 
                 return null;
             }
-
         }
 
         return false;
@@ -354,36 +322,27 @@ class Schema extends Connection
     public function select($fields = null)
     {
 
-        if($this->fieldFormatChecker($fields)) 
-        {
-            if($this->selectQuery($this->fields))
-            {
+        if ($this->fieldFormatChecker($fields)) {
+            if ($this->selectQuery($this->fields)) {
                 return $this->fetch();
             }
         }
 
         return null;
     }
-    
+
 
     public function update($data, $value = null)
     {
-        if($this->dataFormatChecker($data, $value)) 
-        {
-            if($this->updateQuery($this->data)) 
-            {
+        if ($this->dataFormatChecker($data, $value)) {
+            if ($this->updateQuery($this->data)) {
                 $this->connect();
-                
-                if(empty($this->whereQuery))
-                {
+
+                if (empty($this->whereQuery)) {
                     return $this->where("id", $this->id)->update($this->data);
-                }
-                else
-                {
-                    if($this->save())
-                    {
-                        if(isset($this->id))
-                        {
+                } else {
+                    if ($this->save()) {
+                        if (isset($this->id)) {
                             return $this->find($this->id);
                         }
 
@@ -391,45 +350,35 @@ class Schema extends Connection
                     }
                 }
             }
-        }
-        else
-        {
+        } else {
             return false;
         }
 
         return true;
     }
-    
+
 
     public function delete($key = null, $value = null)
     {
 
-        if(is_null($key) && is_null($value))
-        {
-            if(isset($this->id)) 
-            {
-                $key = "id"; $value = $this->id;
-            }
-            else 
-            {
+        if (is_null($key) && is_null($value)) {
+            if (isset($this->id)) {
+                $key = "id";
+                $value = $this->id;
+            } else {
                 // throwable error for parameter expected
             }
-        }
-        elseif(is_null($value)) 
-        { 
-            $value = $key; 
-            $key = "id"; 
+        } elseif (is_null($value)) {
+            $value = $key;
+            $key = "id";
         }
 
-        if($this->dataFormatChecker($key, $value)) 
-        {
-            if($this->deleteQuery($this->data))
-            {
+        if ($this->dataFormatChecker($key, $value)) {
+            if ($this->deleteQuery($this->data)) {
                 $this->connect();
 
                 $statement = $this->connection->prepare($this->queryString);
-                if($statement->execute($this->whereData))
-                {
+                if ($statement->execute($this->whereData)) {
                     return true;
                 }
             }
@@ -439,49 +388,46 @@ class Schema extends Connection
     }
 
 
-    public function search($keys, $value = null, $opration = ['%', '%']) 
+    public function search($keys, $value = null, $opration = ['%', '%'])
     {
-        if(is_array($keys))
-        {
-            if($value != null && is_array($value)) {
+        if (is_array($keys)) {
+            if ($value != null && is_array($value)) {
                 $opration = $value;
             }
         }
 
         $this->searchQuery($keys, $value, $opration);
         return $this;
-
     }
 
 
-    public function where($keys, $value = null) 
+    public function where($keys, $value = null)
     {
         $this->whereQuery($keys, $value);
         return $this;
     }
 
 
-    public function whereWithOperation($keys, $opration, $value = null) 
+    public function whereWithOperation($keys, $opration, $value = null)
     {
         $this->whereQuery($keys, $value, $opration);
         return $this;
     }
 
 
-    public function get() {
+    public function get()
+    {
         return $this->select();
     }
 
 
-    public function toArray() 
+    public function toArray()
     {
         $this->result_data_format = "arrays";
 
-        if($this->selectQuery()) 
-        {
+        if ($this->selectQuery()) {
             $result = $this->fetch();
-            if($result) 
-            {
+            if ($result) {
                 return (!isset($result[0])) ? [$result] : $result;
             }
         }
@@ -489,17 +435,14 @@ class Schema extends Connection
     }
 
 
-    protected function resultFormatter($result, $multiple = false, $relations = false) 
+    protected function resultFormatter($result, $multiple = false, $relations = false)
     {
         $data = [];
         $class = get_class($this);
 
-        if($this->result_data_format == "object") 
-        {
-            if($multiple == true) 
-            {
-                foreach ($result as $instance) 
-                {
+        if ($this->result_data_format == "object") {
+            if ($multiple == true) {
+                foreach ($result as $instance) {
                     $class = $this->newObject($class, $instance, $relations);
                     array_push($data, $class);
                 }
@@ -507,84 +450,69 @@ class Schema extends Connection
             }
 
             return $this->newObject($class, $result, $relations);
-        }
-        else if($this->result_data_format == "arrays") 
-        {
+        } else if ($this->result_data_format == "arrays") {
             return $result;
         }
-        
     }
 
 
-    protected function newObject($name, $instance, $relations = false) 
+    protected function newObject($name, $instance, $relations = false)
     {
         $class = new $name;
-        foreach ($instance as $key => $value) 
-        {
+        foreach ($instance as $key => $value) {
             $class->$key = $value;
         }
 
-        if($this instanceof Model) {
+        if ($this instanceof Model) {
             if($relations == false) {
                 $this->bootRelations($class);
             }
         }
 
         return $class;
-
     }
 
 
     protected function fetch($relations = false)
     {
-        if($this->queryString()) 
-        {
+        if ($this->queryString()) {
             $this->connect();
 
             $statement = $this->connection->prepare($this->queryString);
 
             (isset($this->whereData))
-            ? $exec = $statement->execute($this->whereData)
-            : $exec = $statement->execute();
+                ? $exec = $statement->execute($this->whereData)
+                : $exec = $statement->execute();
 
-            if($exec)
-            {
+            if ($exec) {
                 $this->clearInitalQuery();
-                if($statement->rowCount() > 0) 
-                {
+                if ($statement->rowCount() > 0) {
 
-                    return ($statement->rowCount() > 1)  
-                    ? $this->resultFormatter($statement->fetchAll(), true, $relations) 
-                    : $this->resultFormatter($statement->fetch(), false, $relations);
-                    
+                    return ($statement->rowCount() > 1)
+                        ? $this->resultFormatter($statement->fetchAll(), true, $relations)
+                        : $this->resultFormatter($statement->fetch(), false, $relations);
                 }
-
-            } 
-            
+            }
         }
-        
-        return null;
 
+        return null;
     }
 
 
-    protected function counter() 
+    protected function counter()
     {
-        if($this->queryString()) 
-        {
+        if ($this->queryString()) {
             $this->connect();
 
             $statement = $this->connection->prepare($this->queryString);
 
             (isset($this->whereData))
-            ? $exec = $statement->execute($this->whereData)
-            : $exec = $statement->execute();
+                ? $exec = $statement->execute($this->whereData)
+                : $exec = $statement->execute();
 
-            if($exec)
-            {
+            if ($exec) {
                 return ($statement->rowCount());
-            } 
-            
+            }
         }
 
         return 0;
@@ -598,38 +526,32 @@ class Schema extends Connection
 
         $statement = $this->connection->prepare($queryString);
 
-        if($statement->execute())
-        {
+        if ($statement->execute()) {
             return true;
         }
 
         return false;
-
     }
 
 
     protected function save()
     {
 
-        if ($this->queryString()) 
-        {
+        if ($this->queryString()) {
             $this->connect();
 
             $statement = $this->connection->prepare($this->queryString);
 
             (isset($this->whereData))
-            ? $exec = $statement->execute($this->whereData)
-            : $exec = $statement->execute();
+                ? $exec = $statement->execute($this->whereData)
+                : $exec = $statement->execute();
 
-            if($exec)
-            {
+            if ($exec) {
                 return true;
             }
 
             return false;
-
         }
-
     }
 
 
@@ -644,47 +566,37 @@ class Schema extends Connection
         $this->table = $name;
         return $this;
     }
-    
+
 
     public function query($querystring, $data = null)
     {
 
-        if ($querystring !== "") 
-        {
+        if ($querystring !== "") {
             $this->connect();
 
             $statement = $this->connection->prepare($querystring);
-            
-            if($data != null) 
-            {
 
-                if($statement->execute($data))
-                {
+            if ($data != null) {
+
+                if ($statement->execute($data)) {
                     return $statement;
                 }
-            } 
-            
-            else 
-            
-            {
+            } else {
 
-                if($statement->execute())
-                {
+                if ($statement->execute()) {
                     return $statement;
                 }
-
             }
         }
 
         return null;
-
     }
 
 
-    public function dropDatabaseTable($table) {
+    public function dropDatabaseTable($table)
+    {
 
         $this->query($this->dropDatabaseTableQuery($table));
-        
     }
 
 

@@ -170,11 +170,22 @@ class Fs
 				{
 					$uploadFile = $path . $new_name;
 
-					if (move_uploaded_file($file_tmp, $uploadFile)) 
-					{
-						self::$filename = $new_name;
-						return true;
+					if(isset($properties['crop'])) {
+						$width = $properties['crop'][0];
+						$height = $properties['crop'][1];
+						self::$filename = (new Image($new_name))
+							->setPath($path)
+							->crop($file_tmp, $width, $height);
 					}
+					else 
+					{
+						if (move_uploaded_file($file_tmp, $uploadFile)) 
+						{
+							self::$filename = $new_name;
+							return true;
+						}
+					}
+
 				} 
 				
 				else if (!in_array($new_name_ext, $extensions)) 
@@ -265,9 +276,21 @@ class Fs
 				}
 				
 
-				if (move_uploaded_file($file_tmp, $uploadFile)) 
-				{
+				if(isset($properties['crop'])) {
+					$width = $properties['crop'][0];
+					$height = $properties['crop'][1];
+					$file_name = (new Image($file_name))
+						->setPath($path)
+						->crop($file_tmp, $width, $height);
+					
 					array_push(static::$filelist, $file_name);
+				}
+				else 
+				{
+					if (move_uploaded_file($file_tmp, $uploadFile)) 
+					{
+						array_push(static::$filelist, $file_name);
+					}
 				}
 			} 
 		}
