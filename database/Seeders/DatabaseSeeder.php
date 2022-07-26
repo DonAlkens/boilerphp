@@ -3,20 +3,16 @@
 use App\Core\Database\Seeder;
 
 
-class TestSeeder extends Seeder {
+class DatabaseSeeder extends Seeder
+{
 
     /**
      * seeds database table
      * 
      * @return void
      */
-    public function run() {
-
+    public function run()
+    {
         
-
     }
-
 }
-
-
-
