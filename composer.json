@@ -1,6 +1,6 @@
 {
     "name": "boiler/boiler",
-    "description": "A PHP Framework for web applications",
+    "description": "Simple PHP framework for webapps",
     "type": "project",
     "authors": [
         {
