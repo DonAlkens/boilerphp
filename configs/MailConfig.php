@@ -17,7 +17,7 @@ class MailConfig
     * @var string
     *
     */
-    public $fromName = "boiler";
+    public $fromName = "Boiler";
 
 
     /**
@@ -42,7 +42,7 @@ class MailConfig
     * @var string
     *
     */
-    public $replyTo = "no-reply@example.com";
+    public $replyTo = "no-reply@boiler.com";
 
 
     /**

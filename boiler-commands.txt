@@ -21,7 +21,8 @@
 	** Run migrations
 		php manage db migrate
 		flags: 
-			--new to drop tables and run fresh migration
+			--new|--fresh to drop tables and run fresh migration
+			--rollback to rollback tables and migrations, optional keys to specify [--steps=int] [--target=migration-file]
 
 
 # Third-party library and websocket management, activation and disabling.

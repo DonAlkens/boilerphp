@@ -1,0 +1,27 @@
+{
+	"name": "Boiler",
+	"short_name": "Wearslot",
+	"description": "Online marketplace for quality fashion and beauty products and services.",
+	"theme_color": "#8950FC",
+	"background_color": "#fff",
+	"start_url": "http://boiler.com/",
+	"display": "standalone",
+	"orientation": "portrait-primary",
+	"icons": [
+		{
+			"src": "image/100x100.png",
+			"type": "image/png",
+			"sizes": "100x100"
+		},
+		{
+			"src": "image/200x200.png",
+			"type": "image/png",
+			"sizes": "200x200"
+		},
+		{
+			"src": "image/96x96.png",
+			"type": "image/png",
+			"sizes": "96x96"
+		}
+	]
+}

@@ -1,6 +1,21 @@
 <?php
 
-require __DIR__."/core/app_loader.php";
+/*
+* -----------------------------------------------------
+* Include App class
+* -----------------------------------------------------
+*/ 
+require __DIR__."/../configs/App.php";
+
+
+/*
+* ------------------------------------
+* Load all third party modules
+* install buy composer package manager
+* ------------------------------------
+*/ 
+require __DIR__."/../vendor/autoload.php";
+
 
 /*
 * -----------------------------------------------------
@@ -9,13 +24,15 @@ require __DIR__."/core/app_loader.php";
 */ 
 use App\Core\Server;
 
+
 /*
 * -----------------------------------------------------
 * Initialize App Server
 * -----------------------------------------------------
 */ 
 
-$server = new Server(new App\Core\Modules\AppModules, $debug = true);
+$server = new Server($debug = true);
+
 
 /*
 * --------------------------------------------------------
