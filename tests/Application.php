@@ -13,7 +13,7 @@ trait Application
 
     $console = new Console(server: new Server(), verbose: false);
 
-    $console->command('db migrate --new');
+    $console->command('migrate --fresh');
 		$console->command('db seed');
 
   }
